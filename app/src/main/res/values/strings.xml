@@ -1,3 +1,3 @@
 <resources>
-    <string name="app_name">Music Player</string>
+    <string name="mp.app.name">Music Player</string>
 </resources>

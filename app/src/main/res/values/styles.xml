@@ -3,11 +3,35 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/theme.dark_blue.colorPrimary</item>
-        <item name="colorPrimaryDark">@color/theme.dark_blue.colorPrimaryDark</item>
-        <item name="colorAccent">@color/theme.dark_blue.colorAccent</item>
+        <item name="colorPrimary">@color/mp.theme.dark_blue.colorPrimary</item>
+        <item name="colorPrimaryDark">@color/mp.theme.dark_blue.colorPrimaryDark</item>
+        <item name="colorAccent">@color/mp.theme.dark_blue.colorAccent</item>
 
-        <item name="android:windowBackground">@color/theme.dark_blue.background</item>
+        <item name="android:windowBackground">@color/mp.theme.dark_blue.background</item>
+    </style>
+
+    <style name="MP.Theme" parent="AppTheme"/>
+
+
+    <!-- Widget -->
+
+    <!--<style name="MP.Theme.Widget.Toolbar" parent="ThemeOverlay.AppCompat.Light">-->
+    <!--<item name="fontPath">@string/mp.font.roboto.monospace.regular</item>-->
+    <!--<item name="fontPath">@string/mp.font.roboto.thin</item>-->
+    <!--</style>-->
+
+    <!-- TextAppearance -->
+
+    <style name="MP.Theme.TextAppearance">
+        <item name="fontPath">@string/mp.font.roboto.monospace.regular</item>
+    </style>
+
+    <style name="MP.Theme.TextAppearance.Toolbar">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="MP.Theme.TextAppearance.Light.Toolbar.Title" parent="MP.Theme.TextAppearance.Toolbar">
+        <item name="android:textColor">@color/mp.theme.dark_blue.colorAccent</item>
     </style>
 
 </resources>
