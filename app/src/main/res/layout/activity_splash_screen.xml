@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="io.github.ryanhoo.music.SplashScreenActivity">
+
+    <android.support.v7.widget.Toolbar
+        xmlns:toolbar="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        toolbar:titleTextColor="@color/theme.dark_blue.colorAccent"
+        toolbar:title="@string/app_name"
+        android:background="@color/theme.dark_blue.colorPrimary"
+        />
+
+    <TextView
+        android:layout_below="@+id/toolbar"
+        android:text="Hello World!"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_vertical_margin"
+        android:textSize="40sp"
+        android:textColor="@color/theme.dark_blue.colorAccent"
+        />
+</RelativeLayout>

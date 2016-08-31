@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="theme.dark_blue.colorPrimary">#4C718C</color>
+    <color name="theme.dark_blue.colorPrimaryDark">#4C718C</color>
+    <color name="theme.dark_blue.colorAccent">#DDF9FF</color>
+    <color name="theme.dark_blue.background">#4C718C</color>
+</resources>
