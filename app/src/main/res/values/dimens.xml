@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Common -->
+    <dimen name="mp.divider.line">0.5dp</dimen>
+    <dimen name="mp.divider.small">4dp</dimen>
+    <dimen name="mp.divider.normal">8dp</dimen>
+    <dimen name="mp.divider.large">16dp</dimen>
+    <dimen name="mp.divider.xlarge">24dp</dimen>
+
+</resources>

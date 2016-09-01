@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -8,6 +8,10 @@
         <item name="colorAccent">@color/mp.theme.dark_blue.colorAccent</item>
 
         <item name="android:windowBackground">@color/mp.theme.dark_blue.background</item>
+
+        <item name="android:colorControlHighlight" tools:targetApi="lollipop">
+            @color/mp.theme.dark_blue.colorControlHighlight
+        </item>
     </style>
 
     <style name="MP.Theme" parent="AppTheme"/>
@@ -15,10 +19,27 @@
 
     <!-- Widget -->
 
-    <!--<style name="MP.Theme.Widget.Toolbar" parent="ThemeOverlay.AppCompat.Light">-->
-    <!--<item name="fontPath">@string/mp.font.roboto.monospace.regular</item>-->
-    <!--<item name="fontPath">@string/mp.font.roboto.thin</item>-->
-    <!--</style>-->
+    <style name="MP.Theme.Widget"/>
+
+    <!-- Widget - Divider -->
+
+    <style name="MP.Theme.Widget.Divider">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">0dp</item>
+    </style>
+
+    <style name="MP.Theme.Widget.Divider.Line">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="MP.Theme.Widget.Divider.Line.Vertical">
+        <item name="android:layout_height">@dimen/mp.divider.line</item>
+    </style>
+
+    <style name="MP.Theme.Widget.Divider.Line.Horizontal">
+        <item name="android:layout_width">@dimen/mp.divider.line</item>
+    </style>
 
     <!-- TextAppearance -->
 

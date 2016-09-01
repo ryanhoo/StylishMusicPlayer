@@ -1,3 +1,18 @@
 <resources>
     <string name="mp.app.name">Music Player</string>
+
+    <!-- Activity/Fragment Titles -->
+    <string name="mp.fragment.title.play_list">Play List</string>
+    <string name="mp.fragment.title.music">Music</string>
+    <string name="mp.fragment.title.local_files">Local Files</string>
+    <string name="mp.fragment.title.settings">Settings</string>
+
+    <!-- Main -->
+    <string-array name="mp_main_titles">
+        <item>@string/mp.fragment.title.play_list</item>
+        <item>@string/mp.fragment.title.music</item>
+        <item>@string/mp.fragment.title.local_files</item>
+        <item>@string/mp.fragment.title.settings</item>
+    </string-array>
+
 </resources>

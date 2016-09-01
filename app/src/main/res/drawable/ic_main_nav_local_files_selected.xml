@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+        android:width="24dp"
+        android:height="24dp"
+        android:viewportWidth="24"
+        android:viewportHeight="24">
+
+    <group
+        android:translateX="-240.000000"
+        android:translateY="-35.000000">
+        <group
+            android:translateY="24.000000">
+            <group
+                android:translateX="240.000000"
+                android:translateY="11.000000">
+                <path
+                    android:name="Bounds"
+                    android:fillColor="#FFFFFF"
+                    android:fillAlpha="0.12"
+                    android:pathData="M 12 0 C 18.627416998 0 24 5.37258300203 24 12 C 24 18.627416998 18.627416998 24 12 24 C 5.37258300203 24 0 18.627416998 0 12 C 0 5.37258300203 5.37258300203 0 12 0 Z"/>
+                <path
+                    android:name="Shape"
+                    android:fillColor="#FFFFFF"
+                    android:pathData="M17.8333333,7.16666667 L13.1666667,7.16666667 L12,6 L8.5,6 C7.85566779,6
+7.33333333,6.52233446 7.33333333,7.16666667 L7.33333333,14.1666667
+C7.33333333,14.8109989 7.85566779,15.3333333 8.5,15.3333333
+L17.8333333,15.3333333 C18.4776655,15.3333333 19,14.8109989 19,14.1666667
+L19,8.33333333 C19,7.68900113 18.4776655,7.16666667 17.8333333,7.16666667
+L17.8333333,7.16666667 Z M6.16666667,8.33333333 L5,8.33333333 L5,11.25 L5,11.25
+L5,16.5 C5,17.1443322 5.52233446,17.6666667 6.16666667,17.6666667
+L16.6666667,17.6666667 L16.6666667,16.5 L6.16666667,16.5 L6.16666667,8.33333333
+L6.16666667,8.33333333 Z"/>
+            </group>
+        </group>
+    </group>
+</vector>

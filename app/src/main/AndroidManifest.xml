@@ -9,7 +9,9 @@
         android:supportsRtl="true"
         android:name=".MusicPlayerApplication"
         android:theme="@style/MP.Theme">
-        <activity android:name=".ui.SplashScreenActivity">
+        <activity
+            android:name=".ui.main.MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

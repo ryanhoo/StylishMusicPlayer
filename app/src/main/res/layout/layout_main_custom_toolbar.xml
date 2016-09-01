@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RadioGroup
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/radio_group_controls"
+    android:orientation="horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="?android:attr/actionBarSize"
+    android:layout_gravity="end"
+    android:gravity="center_vertical"
+    tools:showIn="@layout/activity_main"
+    android:divider="@drawable/common_divider_large_horizontal"
+    android:showDividers="beginning|middle|end"
+    >
+
+    <RadioButton
+        android:id="@+id/radio_button_play_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:button="@drawable/selector_main_nav_play_list"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        tools:button="@drawable/ic_main_nav_play_list_selected"
+        tools:checked="true"
+        />
+
+
+    <RadioButton
+        android:id="@+id/radio_button_music"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:button="@drawable/selector_main_nav_music"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        tools:button="@drawable/ic_main_nav_music"
+        />
+
+    <RadioButton
+        android:id="@+id/radio_button_local_files"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:button="@drawable/selector_main_nav_local_files"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        tools:button="@drawable/ic_main_nav_local_files"
+        />
+
+    <RadioButton
+        android:id="@+id/radio_button_settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:button="@drawable/selector_main_nav_settings"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        tools:button="@drawable/ic_main_nav_settings"
+        />
+</RadioGroup>
