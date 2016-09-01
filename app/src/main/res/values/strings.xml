@@ -15,4 +15,8 @@
         <item>@string/mp.fragment.title.settings</item>
     </string-array>
 
+    <!-- Local Files -->
+    <string name="mp.local_files.segmented.all">All</string>
+    <string name="mp.local_files.segmented.folder">Folder</string>
+
 </resources>

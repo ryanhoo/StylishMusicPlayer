@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Common -->
-    <dimen name="mp.divider.line">0.5dp</dimen>
+    <dimen name="mp.divider.line">1px</dimen>
     <dimen name="mp.divider.small">4dp</dimen>
     <dimen name="mp.divider.normal">8dp</dimen>
     <dimen name="mp.divider.large">16dp</dimen>
     <dimen name="mp.divider.xlarge">24dp</dimen>
+
+    <dimen name="mp.padding.small">4dp</dimen>
+    <dimen name="mp.padding.normal">8dp</dimen>
+    <dimen name="mp.padding.large">16dp</dimen>
+    <dimen name="mp.padding.xlarge">24dp</dimen>
+
+    <dimen name="mp.margin.small">4dp</dimen>
+    <dimen name="mp.margin.normal">8dp</dimen>
+    <dimen name="mp.margin.large">16dp</dimen>
+    <dimen name="mp.margin.xlarge">24dp</dimen>
 
     <dimen name="mp.toolbar.paddingTop">0dp</dimen>
 </resources>

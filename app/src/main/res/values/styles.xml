@@ -28,6 +28,7 @@
     <style name="MP.Theme.Widget.Divider">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">0dp</item>
+        <item name="android:background">@color/mp.line</item>
     </style>
 
     <style name="MP.Theme.Widget.Divider.Line">
@@ -41,6 +42,28 @@
 
     <style name="MP.Theme.Widget.Divider.Line.Horizontal">
         <item name="android:layout_width">@dimen/mp.divider.line</item>
+    </style>
+
+
+    <style name="MP.Theme.Widget.SegmentedControl">
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/selector_segmented_control_item_text</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:minWidth">100dp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:paddingLeft">@dimen/mp.padding.normal</item>
+        <item name="android:paddingRight">@dimen/mp.padding.normal</item>
+        <item name="android:button">@null</item>
+    </style>
+
+    <style name="MP.Theme.Widget.SegmentedControl.Left">
+        <item name="android:background">@drawable/selector_segmented_left</item>
+    </style>
+
+    <style name="MP.Theme.Widget.SegmentedControl.Right">
+        <item name="android:background">@drawable/selector_segmented_right</item>
     </style>
 
     <!-- TextAppearance -->
