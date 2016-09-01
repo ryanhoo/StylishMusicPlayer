@@ -7,11 +7,12 @@
     <color name="black">#000000</color>
 
     <!-- Theme - Dark Blue -->
-    <color name="mp.theme.dark_blue.background">#4C718C</color>
+    <color name="mp.theme.dark_blue.background">#4B6E88</color>
+    <color name="mp.theme.dark_blue.gradientColor">#507E9F</color>
     <color name="mp.theme.dark_blue.colorControlHighlight">#7AFFFFFF</color>
 
-    <color name="mp.theme.dark_blue.colorPrimary">#4C718C</color>
-    <color name="mp.theme.dark_blue.colorPrimaryDark">#4C718C</color>
+    <color name="mp.theme.dark_blue.colorPrimary">#4B6E88</color>
+    <color name="mp.theme.dark_blue.colorPrimaryDark">#4B6E88</color>
     <color name="mp.theme.dark_blue.colorAccent">#DDF9FF</color>
 
 </resources>

@@ -12,6 +12,8 @@
         <item name="android:colorControlHighlight" tools:targetApi="lollipop">
             @color/mp.theme.dark_blue.colorControlHighlight
         </item>
+
+        <item name="android:statusBarColor" tools:targetApi="lollipop">@color/transparent</item>
     </style>
 
     <style name="MP.Theme" parent="AppTheme"/>

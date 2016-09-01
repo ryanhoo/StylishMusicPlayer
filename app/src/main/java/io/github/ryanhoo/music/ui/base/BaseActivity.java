@@ -1,12 +1,19 @@
 package io.github.ryanhoo.music.ui.base;
 
 import android.content.Context;
+import android.graphics.PixelFormat;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.view.MenuItem;
+import android.view.Window;
+import io.github.ryanhoo.music.R;
+import io.github.ryanhoo.music.utils.GradientUtils;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -25,6 +32,26 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
+    @Override
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        // https://crazygui.wordpress.com/2010/09/05/high-quality-radial-gradient-in-android/
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        // int screenWidth = displayMetrics.widthPixels;
+        int screenHeight = displayMetrics.heightPixels;
+
+        Window window = getWindow();
+        GradientDrawable gradientBackgroundDrawable = GradientUtils.create(
+                ContextCompat.getColor(this, R.color.mp_theme_dark_blue_gradientColor),
+                ContextCompat.getColor(this, R.color.mp_theme_dark_blue_background),
+                screenHeight / 2, // (int) Math.hypot(screenWidth / 2, screenHeight / 2),
+                0.5f,
+                0.5f
+        );
+        window.setBackgroundDrawable(gradientBackgroundDrawable);
+        window.setFormat(PixelFormat.RGBA_8888);
     }
 
     @Override

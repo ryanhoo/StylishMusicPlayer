@@ -7,4 +7,5 @@
     <dimen name="mp.divider.large">16dp</dimen>
     <dimen name="mp.divider.xlarge">24dp</dimen>
 
+    <dimen name="mp.toolbar.paddingTop">0dp</dimen>
 </resources>
