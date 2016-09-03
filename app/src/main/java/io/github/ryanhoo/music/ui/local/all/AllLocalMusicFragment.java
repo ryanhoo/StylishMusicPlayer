@@ -23,6 +23,7 @@ import io.github.ryanhoo.music.ui.common.DefaultDividerDecoration;
 import io.github.ryanhoo.music.ui.widget.RecyclerViewFastScroller;
 import rx.Observable;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
@@ -110,7 +111,7 @@ public class AllLocalMusicFragment extends BaseFragment implements LoaderManager
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        Observable.just(cursor)
+        Subscription subscription = Observable.just(cursor)
                 .flatMap(new Func1<Cursor, Observable<List<Music>>>() {
                     @Override
                     public Observable<List<Music>> call(Cursor cursor) {
@@ -144,7 +145,7 @@ public class AllLocalMusicFragment extends BaseFragment implements LoaderManager
                         onMusicLoaded(musicList);
                     }
                 });
-
+        addSubscription(subscription);
     }
 
     @Override
