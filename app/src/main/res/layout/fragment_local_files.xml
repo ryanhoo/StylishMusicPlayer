@@ -36,51 +36,17 @@
         android:layout_below="@+id/radio_group_segmented_control"
         />
 
-    <android.support.v7.widget.RecyclerView
-        xmlns:recyclerView="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/recycler_view"
+    <FrameLayout
+        android:id="@+id/layout_fragment_container_all"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/divider"
-        android:paddingTop="@dimen/mp.padding.large"
-        android:clipToPadding="false"
-        recyclerView:layoutManager="@string/mp.list.layoutManager.linear"
-        tools:listitem="@layout/item_local_music"
+        />
+    <FrameLayout
+        android:id="@+id/layout_fragment_container_folder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/divider"
         />
 
-    <io.github.ryanhoo.music.ui.widget.RecyclerViewFastScroller
-        android:id="@+id/fast_scroller"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:paddingTop="@dimen/mp.padding.large"
-        android:layout_below="@+id/divider"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        >
-
-        <TextView
-            android:id="@+id/bubble"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minWidth="56dp"
-            android:minHeight="56dp"
-            android:gravity="center"
-            android:layout_marginRight="@dimen/mp.padding.large"
-            android:layout_marginEnd="@dimen/mp.padding.large"
-            android:padding="@dimen/mp.padding.normal"
-            android:background="@drawable/fast_scroller_bubble"
-            android:textColor="?attr/colorAccent"
-            android:textSize="20sp"
-            tools:text="A"
-            />
-
-        <ImageView
-            android:id="@+id/handle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/mp.padding.small"
-            android:paddingStart="@dimen/mp.padding.small"
-            android:src="@drawable/fast_scroller_indicator"
-            tools:ignore="RtlSymmetry"/>
-    </io.github.ryanhoo.music.ui.widget.RecyclerViewFastScroller>
 </RelativeLayout>
