@@ -2,6 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="@dimen/mp.list.itemHeight"
     android:background="@color/mp.list.background"
@@ -14,14 +15,14 @@
         android:layout_marginBottom="@dimen/mp.divider.line"
         />
 
-    <ImageView
+    <android.support.v7.widget.AppCompatImageView
         android:id="@+id/image_view_folder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/mp.padding.large"
         android:layout_marginRight="@dimen/mp.padding.large"
-        android:src="@drawable/ic_folder"
+        app:srcCompat="@drawable/ic_folder"
         />
 
     <LinearLayout
@@ -51,7 +52,7 @@
             />
     </LinearLayout>
 
-    <ImageButton
+    <android.support.v7.widget.AppCompatImageView
         android:id="@+id/image_button_action"
         android:layout_width="24dp"
         android:layout_height="24dp"
@@ -60,7 +61,8 @@
         android:layout_alignParentEnd="true"
         android:layout_marginRight="@dimen/mp.margin.large"
         android:layout_marginEnd="@dimen/mp.margin.large"
-        android:src="@drawable/ic_list_item_action"
+        android:scaleType="center"
+        app:srcCompat="@drawable/ic_list_item_action"
         android:background="?attr/selectableItemBackgroundBorderless"
         />
 </RelativeLayout>

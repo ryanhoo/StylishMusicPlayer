@@ -2,7 +2,7 @@ package io.github.ryanhoo.music.ui.local.filesystem;
 
 import android.content.Context;
 import android.view.View;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.BindView;
@@ -28,8 +28,8 @@ public class FileItemView extends RelativeLayout implements IAdapterView<File> {
     private static final String DATE_FORMAT = "yyyy-MM-dd";
     private static SimpleDateFormat DATE_FORMATTER;
 
-    @BindView(R.id.image_button_file)
-    ImageButton imageButtonFile;
+    @BindView(R.id.image_view_file)
+    ImageView imageViewFile;
     @BindView(R.id.text_view_name)
     TextView textViewName;
     @BindView(R.id.text_view_info)
@@ -51,7 +51,7 @@ public class FileItemView extends RelativeLayout implements IAdapterView<File> {
     public void bind(File file, int position) {
         textViewName.setText(file.getName());
         if (file.isDirectory()) {
-            imageButtonFile.setImageResource(R.drawable.ic_folder);
+            imageViewFile.setImageResource(R.drawable.ic_folder);
             File[] files = file.listFiles(SystemFileFilter.DEFAULT_INSTANCE);
             int itemCount = files == null ? 0 : files.length;
             textViewInfo.setText(getContext().getResources().getQuantityString(
@@ -62,11 +62,11 @@ public class FileItemView extends RelativeLayout implements IAdapterView<File> {
             ));
         } else {
             if (FileUtils.isMusic(file)) {
-                imageButtonFile.setImageResource(R.drawable.ic_file_music);
+                imageViewFile.setImageResource(R.drawable.ic_file_music);
             } else if (FileUtils.isLyric(file)) {
-                imageButtonFile.setImageResource(R.drawable.ic_file_lyric);
+                imageViewFile.setImageResource(R.drawable.ic_file_lyric);
             } else {
-                imageButtonFile.setImageResource(R.drawable.ic_file);
+                imageViewFile.setImageResource(R.drawable.ic_file);
             }
             textViewInfo.setText(FileUtils.readableFileSize(file.length()));
         }

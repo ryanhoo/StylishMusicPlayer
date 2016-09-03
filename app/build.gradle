@@ -3,15 +3,15 @@ apply plugin: 'android-apt'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.0"
+    buildToolsVersion "24.0.2"
 
     defaultConfig {
         applicationId 'io.github.ryanhoo.music'
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 2016083101
+        versionCode 2016090401
         versionName '1.9.0'
-        vectorDrawables.useSupportLibrary true
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {
