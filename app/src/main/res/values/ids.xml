@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <item name="text_view_summary" type="id"/>
     <item name="recycler_view" type="id"/>
 </resources>

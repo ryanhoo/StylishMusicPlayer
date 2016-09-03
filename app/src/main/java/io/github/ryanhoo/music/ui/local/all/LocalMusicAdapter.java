@@ -3,7 +3,7 @@ package io.github.ryanhoo.music.ui.local.all;
 import android.content.Context;
 import io.github.ryanhoo.music.R;
 import io.github.ryanhoo.music.data.model.Music;
-import io.github.ryanhoo.music.ui.common.AbstractCommonAdapter;
+import io.github.ryanhoo.music.ui.common.AbstractSummaryAdapter;
 import io.github.ryanhoo.music.ui.widget.RecyclerViewFastScroller;
 
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.List;
  * Time: 8:21 PM
  * Desc: LocalMusicAdapter
  */
-public class LocalMusicAdapter extends AbstractCommonAdapter<Music, LocalMusicItemView>
+public class LocalMusicAdapter extends AbstractSummaryAdapter<Music, LocalMusicItemView>
         implements RecyclerViewFastScroller.BubbleTextGetter {
 
     Context mContext;

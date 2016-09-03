@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+
+    <FrameLayout
+        android:id="@+id/layout_add_folder"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/mp.list.itemHeight"
+        android:background="@color/mp.list.background"
+        >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/selectableItemBackground"
+            />
+
+        <TextView
+            style="@style/MP.Theme.TextAppearance.List.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_list_add"
+            android:drawableStart="@drawable/ic_list_add"
+            android:drawablePadding="@dimen/mp.padding.large"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/mp.local_files.folder_list.add_folder"
+            />
+    </FrameLayout>
+
+    <TextView
+        style="@style/MP.Theme.TextAppearance.List.EndSummary"
+        tools:text="3 folders in total"
+        />
+</LinearLayout>

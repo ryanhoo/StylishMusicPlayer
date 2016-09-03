@@ -24,4 +24,5 @@
     <string name="mp.local_files.music_list.end_summary_formatter">%d songs in total</string>
     <string name="mp.local_files.folder_list.end_summary_formatter">%d folders in total</string>
     <string name="mp.local_files.folder_list.item_info_formatter" formatted="false">%d songs | %s</string>
+    <string name="mp.local_files.folder_list.add_folder">Add Folder</string>
 </resources>

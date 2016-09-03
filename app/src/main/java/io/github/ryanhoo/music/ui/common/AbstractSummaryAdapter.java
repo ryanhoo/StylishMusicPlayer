@@ -18,7 +18,7 @@ import java.util.List;
  * Time: 6:00 PM
  * Desc: AbstractCommonAdapter
  */
-public abstract class AbstractCommonAdapter<T, V extends IAdapterView> extends ListAdapter<T, V> {
+public abstract class AbstractSummaryAdapter<T, V extends IAdapterView> extends ListAdapter<T, V> {
 
     protected static final int VIEW_TYPE_ITEM = 1; // Normal list item
     protected static final int VIEW_TYPE_END = 2;  // End summary item, e.g. '2 items in total'
@@ -30,7 +30,7 @@ public abstract class AbstractCommonAdapter<T, V extends IAdapterView> extends L
     private boolean hasEndSummary;
     private TextView textViewEndSummary;
 
-    public AbstractCommonAdapter(Context context, List<T> data) {
+    public AbstractSummaryAdapter(Context context, List<T> data) {
         super(context, data);
         mContext = context;
     }

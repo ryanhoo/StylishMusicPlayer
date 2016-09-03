@@ -95,6 +95,7 @@
     </style>
 
     <style name="MP.Theme.TextAppearance.List.EndSummary">
+        <item name="android:id">@id/text_view_summary</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/mp.text.hint</item>
