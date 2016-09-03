@@ -25,4 +25,10 @@
         recyclerView:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:listitem="@layout/item_local_file"
         />
+
+    <TextView
+        style="@style/MP.Theme.TextAppearance.List.Empty"
+        android:text="@string/mp.local_files.file_system.empty"
+        tools:visibility="visible"
+        />
 </android.support.design.widget.CoordinatorLayout>

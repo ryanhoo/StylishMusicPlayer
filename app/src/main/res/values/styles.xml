@@ -124,4 +124,16 @@
         <item name="android:textSize">@dimen/mp.text.list.hint</item>
         <item name="android:singleLine">true</item>
     </style>
+
+    <style name="MP.Theme.TextAppearance.List.Empty">
+        <item name="android:id">@id/text_view_empty</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">@dimen/mp.margin.xlarge</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/mp.text.hint</item>
+        <item name="android:gravity">center</item>
+        <item name="android:visibility">gone</item>
+    </style>
 </resources>

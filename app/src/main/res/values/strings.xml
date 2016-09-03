@@ -28,6 +28,8 @@
     <string name="mp.local_files.folder_list.item_info_formatter" formatted="false">%d songs | %s</string>
     <string name="mp.local_files.folder_list.add_folder">Add Folder</string>
 
+    <string name="mp.local_files.file_system.empty">No files under this directory</string>
+
     <!-- Local Files - File System -->
     <plurals name="mp_directory_items_formatter">
         <item quantity="zero">%d item</item>

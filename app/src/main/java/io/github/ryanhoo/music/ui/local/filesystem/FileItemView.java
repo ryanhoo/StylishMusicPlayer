@@ -52,7 +52,7 @@ public class FileItemView extends RelativeLayout implements IAdapterView<File> {
         textViewName.setText(file.getName());
         if (file.isDirectory()) {
             imageButtonFile.setImageResource(R.drawable.ic_folder);
-            File[] files = file.listFiles();
+            File[] files = file.listFiles(SystemFileFilter.DEFAULT_INSTANCE);
             int itemCount = files == null ? 0 : files.length;
             textViewInfo.setText(getContext().getResources().getQuantityString(
                     R.plurals.mp_directory_items_formatter,
