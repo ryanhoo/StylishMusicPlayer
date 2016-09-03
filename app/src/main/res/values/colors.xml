@@ -16,6 +16,9 @@
     <color name="mp.theme.dark_blue.colorAccent">#DDF9FF</color>
 
     <color name="mp.line">#3DDDF9FF</color>
+    <color name="mp.list.background">#1FDDF9FF</color>
+
+    <color name="mp.text.hint">#9CBDCC</color>
 
     <!-- Segmented Control -->
     <color name="mp.widget.segmented.default">?attr/colorAccent</color>

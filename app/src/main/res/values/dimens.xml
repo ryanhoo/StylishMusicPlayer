@@ -17,6 +17,10 @@
     <dimen name="mp.margin.large">16dp</dimen>
     <dimen name="mp.margin.xlarge">24dp</dimen>
 
+    <dimen name="mp.text.list.title">14sp</dimen>
+    <dimen name="mp.text.list.hint">12sp</dimen>
+    <dimen name="mp.text.hint">12sp</dimen>
+
     <dimen name="mp.toolbar.paddingTop">0dp</dimen>
 
     <dimen name="mp.list.itemHeight">54dp</dimen>

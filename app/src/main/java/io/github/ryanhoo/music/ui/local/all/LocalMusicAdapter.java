@@ -1,8 +1,9 @@
 package io.github.ryanhoo.music.ui.local.all;
 
 import android.content.Context;
+import io.github.ryanhoo.music.R;
 import io.github.ryanhoo.music.data.model.Music;
-import io.github.ryanhoo.music.ui.base.adapter.ListAdapter;
+import io.github.ryanhoo.music.ui.common.AbstractCommonAdapter;
 import io.github.ryanhoo.music.ui.widget.RecyclerViewFastScroller;
 
 import java.util.List;
@@ -14,10 +15,19 @@ import java.util.List;
  * Time: 8:21 PM
  * Desc: LocalMusicAdapter
  */
-public class LocalMusicAdapter extends ListAdapter<Music, LocalMusicItemView> implements RecyclerViewFastScroller.BubbleTextGetter {
+public class LocalMusicAdapter extends AbstractCommonAdapter<Music, LocalMusicItemView>
+        implements RecyclerViewFastScroller.BubbleTextGetter {
+
+    Context mContext;
 
     public LocalMusicAdapter(Context context, List<Music> data) {
         super(context, data);
+        mContext = context;
+    }
+
+    @Override
+    protected String getEndSummaryText(int dataCount) {
+        return mContext.getString(R.string.mp_local_files_music_list_end_summary_formatter, dataCount);
     }
 
     @Override
@@ -27,6 +37,10 @@ public class LocalMusicAdapter extends ListAdapter<Music, LocalMusicItemView> im
 
     @Override
     public String getTextToShowInBubble(int position) {
-        return getItem(position).getDisplayName().substring(0, 1);
+        Music item = getItem(position);
+        if (position > 0 && item == null) {
+            item = getItem(position - 1);
+        }
+        return item.getDisplayName().substring(0, 1);
     }
 }

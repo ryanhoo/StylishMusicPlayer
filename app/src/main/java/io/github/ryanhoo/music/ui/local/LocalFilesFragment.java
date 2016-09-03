@@ -20,7 +20,7 @@ import io.github.ryanhoo.music.R;
 import io.github.ryanhoo.music.data.model.Music;
 import io.github.ryanhoo.music.ui.base.BaseFragment;
 import io.github.ryanhoo.music.ui.base.adapter.OnItemClickListener;
-import io.github.ryanhoo.music.ui.common.DefaultListItemDecoration;
+import io.github.ryanhoo.music.ui.common.DefaultDividerDecoration;
 import io.github.ryanhoo.music.ui.local.all.LocalMusicAdapter;
 import io.github.ryanhoo.music.ui.widget.RecyclerViewFastScroller;
 import rx.Observable;
@@ -97,11 +97,9 @@ public class LocalFilesFragment extends BaseFragment implements LoaderManager.Lo
             }
         });
         recyclerView.setAdapter(mAdapter);
-        recyclerView.addItemDecoration(new DefaultListItemDecoration());
+        recyclerView.addItemDecoration(new DefaultDividerDecoration());
 
-        // RecyclerViewFastScroller fastScroller = new RecyclerViewFastScroller(getActivity());
         fastScroller.setRecyclerView(recyclerView);
-        // fastScroller.setViewsToUse(R.layout.layout_fast_scrollbar, R.id.text_view_bubble, R.id.image_view_handle);
     }
 
     @Override

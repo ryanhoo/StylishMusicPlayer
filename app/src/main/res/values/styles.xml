@@ -80,4 +80,28 @@
         <item name="android:textColor">@color/mp.theme.dark_blue.colorAccent</item>
     </style>
 
+    <style name="MP.Theme.TextAppearance.List">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="MP.Theme.TextAppearance.List.EndSummary">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/mp.text.hint</item>
+        <item name="android:textSize">@dimen/mp.text.hint</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">@dimen/mp.padding.large</item>
+    </style>
+
+    <style name="MP.Theme.TextAppearance.List.Title">
+        <item name="android:textColor">?attr/colorAccent</item>
+        <item name="android:textSize">@dimen/mp.text.list.title</item>
+        <item name="android:singleLine">true</item>
+    </style>
+    <style name="MP.Theme.TextAppearance.List.Hint">
+        <item name="android:textColor">@color/mp.text.hint</item>
+        <item name="android:textSize">@dimen/mp.text.list.hint</item>
+        <item name="android:singleLine">true</item>
+    </style>
 </resources>
