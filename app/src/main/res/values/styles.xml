@@ -9,6 +9,7 @@
 
         <item name="android:windowBackground">@color/mp.theme.dark_blue.background</item>
 
+        <item name="colorControlNormal">?attr/colorAccent</item>
         <item name="android:colorControlHighlight" tools:targetApi="lollipop">
             @color/mp.theme.dark_blue.colorControlHighlight
         </item>
@@ -58,12 +59,20 @@
         <item name="android:button">@null</item>
     </style>
 
+    <style name="MP.Theme.Widget.Toolbar">
+        <item name="android:id">@id/toolbar</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">?android:attr/actionBarSize</item>
+        <item name="titleTextAppearance">@style/MP.Theme.TextAppearance.Light.Toolbar.Title</item>
+    </style>
+
     <style name="MP.Theme.Widget.RecyclerView">
         <item name="android:id">@id/recycler_view</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:scrollbars">vertical</item>
         <item name="android:scrollbarThumbVertical">@color/mp.list.scrollThumb</item>
+        <item name="android:scrollbarSize">@dimen/mp.list.scrollbarSize</item>
         <item name="layoutManager">@string/mp.list.layoutManager.linear</item>
     </style>
 
@@ -109,6 +118,7 @@
         <item name="android:textSize">@dimen/mp.text.list.title</item>
         <item name="android:singleLine">true</item>
     </style>
+
     <style name="MP.Theme.TextAppearance.List.Hint">
         <item name="android:textColor">@color/mp.text.hint</item>
         <item name="android:textSize">@dimen/mp.text.list.hint</item>

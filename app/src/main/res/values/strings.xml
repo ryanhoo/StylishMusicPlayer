@@ -9,6 +9,8 @@
     <string name="mp.fragment.title.local_files">Local Files</string>
     <string name="mp.fragment.title.settings">Settings</string>
 
+    <string name="mp.activity.title.system_files">SDCard</string>
+
     <!-- Main -->
     <string-array name="mp_main_titles">
         <item>@string/mp.fragment.title.play_list</item>
@@ -25,4 +27,11 @@
     <string name="mp.local_files.folder_list.end_summary_formatter">%d folders in total</string>
     <string name="mp.local_files.folder_list.item_info_formatter" formatted="false">%d songs | %s</string>
     <string name="mp.local_files.folder_list.add_folder">Add Folder</string>
+
+    <!-- Local Files - File System -->
+    <plurals name="mp_directory_items_formatter">
+        <item quantity="zero">%d item</item>
+        <item quantity="one">%d item</item>
+        <item quantity="other">%d items</item>
+    </plurals>
 </resources>

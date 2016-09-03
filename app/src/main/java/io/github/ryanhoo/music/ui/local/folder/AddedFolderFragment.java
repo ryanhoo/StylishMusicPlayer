@@ -1,5 +1,6 @@
 package io.github.ryanhoo.music.ui.local.folder;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
@@ -14,6 +15,7 @@ import io.github.ryanhoo.music.data.model.Folder;
 import io.github.ryanhoo.music.ui.base.BaseFragment;
 import io.github.ryanhoo.music.ui.base.adapter.OnItemClickListener;
 import io.github.ryanhoo.music.ui.common.DefaultDividerDecoration;
+import io.github.ryanhoo.music.ui.local.filesystem.SystemFileActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +62,12 @@ public class AddedFolderFragment extends BaseFragment {
             @Override
             public void onItemClick(int position) {
                 // TODO
+            }
+        });
+        mAdapter.setAddFolderCallback(new AddedFolderAdapter.AddFolderCallback() {
+            @Override
+            public void onAddFolder() {
+                startActivity(new Intent(getActivity(), SystemFileActivity.class));
             }
         });
         recyclerView.setAdapter(mAdapter);

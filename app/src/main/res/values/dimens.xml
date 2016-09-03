@@ -23,5 +23,8 @@
 
     <dimen name="mp.toolbar.paddingTop">0dp</dimen>
 
+    <dimen name="mp.material.marginLeft">72dp</dimen>
+
     <dimen name="mp.list.itemHeight">54dp</dimen>
+    <dimen name="mp.list.scrollbarSize">4dp</dimen>
 </resources>
