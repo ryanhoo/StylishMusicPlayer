@@ -1,6 +1,8 @@
 <resources>
     <string name="mp.app.name">Music Player</string>
 
+    <string name="mp.list.layoutManager.linear">LinearLayoutManager</string>
+
     <!-- Activity/Fragment Titles -->
     <string name="mp.fragment.title.play_list">Play List</string>
     <string name="mp.fragment.title.music">Music</string>

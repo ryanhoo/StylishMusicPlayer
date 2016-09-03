@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/mp.list.itemHeight"
+    android:background="?attr/selectableItemBackground"
+    android:paddingLeft="@dimen/mp.padding.large"
+    android:paddingRight="@dimen/mp.padding.large"
+    >
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        >
+
+        <TextView
+            android:id="@+id/text_view_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#DDF9FF"
+            android:textSize="14sp"
+            tools:text="A little bit longer"
+            />
+
+        <TextView
+            android:id="@+id/text_view_artist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/mp.margin.small"
+            android:textColor="#9CBDCC"
+            android:textSize="12sp"
+            tools:text="A little bit longer"
+            />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/text_view_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="@dimen/mp.margin.normal"
+        android:textColor="#9CBDCC"
+        android:textSize="12sp"
+        tools:text="A little bit longer"
+        />
+</RelativeLayout>

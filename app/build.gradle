@@ -8,7 +8,7 @@ android {
     defaultConfig {
         applicationId 'io.github.ryanhoo.music'
         minSdkVersion 16
-        targetSdkVersion 24
+        targetSdkVersion 22
         versionCode 2016083101
         versionName '1.9.0'
         vectorDrawables.useSupportLibrary true

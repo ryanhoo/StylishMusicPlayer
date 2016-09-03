@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="6dp"
+    android:height="60dp"
+    android:viewportWidth="6"
+    android:viewportHeight="60"
+    >
+
+    <group
+            android:translateX="-353.999911"
+            android:translateY="-144.000000">
+        <group
+                android:translateY="121.000000">
+            <group
+                    android:translateX="354.000000"
+                    android:translateY="1.000000">
+                <path
+                    android:name="Scroll-Indicator"
+                    android:fillColor="#DDF9FF"
+                    android:pathData="M-0,49.5258032 C-0.0193129404,35.2129191 3.11721383,22 3.11721383,22
+L5.99991117,22 L5.99991117,82 L2.99995559,82 C2.99995559,82
+0.0193129378,63.8386873 -0,49.5258032 Z" />
+            </group>
+        </group>
+    </group>
+</vector>

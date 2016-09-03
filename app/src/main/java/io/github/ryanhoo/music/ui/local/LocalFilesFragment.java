@@ -1,7 +1,15 @@
 package io.github.ryanhoo.music.ui.local;
 
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +17,20 @@ import android.widget.RadioButton;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.ryanhoo.music.R;
+import io.github.ryanhoo.music.data.model.Music;
 import io.github.ryanhoo.music.ui.base.BaseFragment;
+import io.github.ryanhoo.music.ui.base.adapter.OnItemClickListener;
+import io.github.ryanhoo.music.ui.common.DefaultListItemDecoration;
+import io.github.ryanhoo.music.ui.local.all.LocalMusicAdapter;
+import io.github.ryanhoo.music.ui.widget.RecyclerViewFastScroller;
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created with Android Studio.
@@ -18,12 +39,40 @@ import io.github.ryanhoo.music.ui.base.BaseFragment;
  * Time: 9:58 PM
  * Desc: LocalFilesFragment
  */
-public class LocalFilesFragment extends BaseFragment {
+public class LocalFilesFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
+
+    private static final String TAG = "LocalFilesFragment";
+
+    private static final int URL_LOAD_LOCAL_MUSIC = 0;
+    private static final Uri MEDIA_URI = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+    private static final String WHERE = MediaStore.Audio.Media.IS_MUSIC + "=1 AND "
+            + MediaStore.Audio.Media.SIZE + ">0";
+    private static final String ORDER_BY = MediaStore.Audio.Media.DISPLAY_NAME + " ASC";
+    private static String[] PROJECTIONS = {
+            MediaStore.Audio.Media._ID,
+            MediaStore.Audio.Media.DATA, // the real path
+            MediaStore.Audio.Media.TITLE,
+            MediaStore.Audio.Media.DISPLAY_NAME,
+            MediaStore.Audio.Media.MIME_TYPE,
+            MediaStore.Audio.Media.ARTIST,
+            MediaStore.Audio.Media.ALBUM,
+            MediaStore.Audio.Media.IS_RINGTONE,
+            MediaStore.Audio.Media.IS_MUSIC,
+            MediaStore.Audio.Media.IS_NOTIFICATION,
+            MediaStore.Audio.Media.DURATION,
+            MediaStore.Audio.Media.SIZE
+    };
 
     @BindView(R.id.radio_button_all)
     RadioButton radioButtonAll;
     @BindView(R.id.radio_button_folder)
     RadioButton radioButtonFolder;
+    @BindView(R.id.recycler_view)
+    RecyclerView recyclerView;
+    @BindView(R.id.fast_scroller)
+    RecyclerViewFastScroller fastScroller;
+
+    LocalMusicAdapter mAdapter;
 
     @Nullable
     @Override
@@ -37,5 +86,104 @@ public class LocalFilesFragment extends BaseFragment {
         ButterKnife.bind(this, view);
 
         radioButtonAll.setChecked(true);
+
+        getLoaderManager().initLoader(URL_LOAD_LOCAL_MUSIC, null, this);
+
+        mAdapter = new LocalMusicAdapter(getActivity(), null);
+        mAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                // TODO
+            }
+        });
+        recyclerView.setAdapter(mAdapter);
+        recyclerView.addItemDecoration(new DefaultListItemDecoration());
+
+        // RecyclerViewFastScroller fastScroller = new RecyclerViewFastScroller(getActivity());
+        fastScroller.setRecyclerView(recyclerView);
+        // fastScroller.setViewsToUse(R.layout.layout_fast_scrollbar, R.id.text_view_bubble, R.id.image_view_handle);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        if (id != URL_LOAD_LOCAL_MUSIC) return null;
+
+        return new CursorLoader(
+                getActivity(),
+                MEDIA_URI,
+                PROJECTIONS,
+                WHERE,
+                null,
+                ORDER_BY
+        );
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        Observable.just(cursor)
+                .flatMap(new Func1<Cursor, Observable<List<Music>>>() {
+                    @Override
+                    public Observable<List<Music>> call(Cursor cursor) {
+                        List<Music> musicList = new ArrayList<>();
+                        if (cursor != null && cursor.getCount() > 0) {
+                            cursor.moveToFirst();
+                            do {
+                                Music music = cursorToMusic(cursor);
+                                musicList.add(music);
+                            } while (cursor.moveToNext());
+                        }
+                        Log.d(TAG, "onLoadFinished: " + musicList.size());
+                        return Observable.just(musicList);
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<Music>>() {
+                    @Override
+                    public void onCompleted() {
+                        // TODO progress dismiss
+                    }
+
+                    @Override
+                    public void onError(Throwable throwable) {
+                        Log.e(TAG, "onError: ", throwable);
+                    }
+
+                    @Override
+                    public void onNext(List<Music> musicList) {
+                        onMusicLoaded(musicList);
+                    }
+                });
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        // Empty
+    }
+
+    // UI
+
+    private void onMusicLoaded(List<Music> musicList) {
+        mAdapter.setData(musicList);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    // Utils
+
+    private Music cursorToMusic(Cursor cursor) {
+        Music music = new Music();
+        music.setTitle(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE)));
+        String displayName = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME));
+        if (displayName.endsWith(".mp3")) {
+            displayName = displayName.substring(0, displayName.length() - 4);
+        }
+        music.setDisplayName(displayName);
+        music.setArtist(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST)));
+        music.setAlbum(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM)));
+        music.setPath(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)));
+        music.setDuration(cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION)));
+        music.setSize(cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE)));
+        return music;
     }
 }
