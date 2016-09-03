@@ -1,5 +1,7 @@
 package io.github.ryanhoo.music.ui.local.filesystem;
 
+import android.support.annotation.UiThread;
+
 import java.io.File;
 import java.util.List;
 
@@ -10,6 +12,7 @@ import java.util.List;
  * Time: 12:58 AM
  * Desc: FileTreeStack
  */
+@UiThread
 public class FileTreeStack {
 
     private Node mFirstNode;
@@ -35,7 +38,7 @@ public class FileTreeStack {
         return mSize;
     }
 
-    class Node {
+    static class Node {
         FileTreeSnapshot snapshot;
         Node next;
     }

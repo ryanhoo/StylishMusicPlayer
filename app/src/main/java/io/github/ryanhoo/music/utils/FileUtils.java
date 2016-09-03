@@ -1,5 +1,6 @@
 package io.github.ryanhoo.music.utils;
 
+import java.io.File;
 import java.text.DecimalFormat;
 
 /**
@@ -13,13 +14,23 @@ public class FileUtils {
 
     /**
      * http://stackoverflow.com/a/5599842/2290191
+     *
      * @param size Original file size in byte
      * @return Readable file size in formats
-     * */
+     */
     public static String readableFileSize(long size) {
         if (size <= 0) return "0";
         final String[] units = new String[]{"b", "kb", "M", "G", "T"};
         int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
         return new DecimalFormat("#,##0.##").format(size / Math.pow(1024, digitGroups)) + " " + units[digitGroups];
+    }
+
+    public static boolean isMusic(File file) {
+        final String REGEX = "(.*/)*.+\\.(mp3|ogg|wav|aac)$";
+        return file.getName().matches(REGEX);
+    }
+
+    public static boolean isLyric(File file) {
+        return file.getName().toLowerCase().endsWith(".lrc");
     }
 }

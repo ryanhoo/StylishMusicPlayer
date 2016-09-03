@@ -61,7 +61,13 @@ public class FileItemView extends RelativeLayout implements IAdapterView<File> {
                     itemCount  // other
             ));
         } else {
-            imageButtonFile.setImageResource(R.drawable.ic_file);
+            if (FileUtils.isMusic(file)) {
+                imageButtonFile.setImageResource(R.drawable.ic_file_music);
+            } else if (FileUtils.isLyric(file)) {
+                imageButtonFile.setImageResource(R.drawable.ic_file_lyric);
+            } else {
+                imageButtonFile.setImageResource(R.drawable.ic_file);
+            }
             textViewInfo.setText(FileUtils.readableFileSize(file.length()));
         }
         Date lastModified = new Date(file.lastModified());
