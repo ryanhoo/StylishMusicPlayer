@@ -33,6 +33,12 @@ public abstract class AbstractSummaryAdapter<T, V extends IAdapterView> extends 
     public AbstractSummaryAdapter(Context context, List<T> data) {
         super(context, data);
         mContext = context;
+        registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                updateSummaryText();
+            }
+        });
     }
 
     /**
@@ -46,8 +52,14 @@ public abstract class AbstractSummaryAdapter<T, V extends IAdapterView> extends 
             textViewEndSummary.setLayoutParams(new RecyclerView.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         }
-        textViewEndSummary.setText(getEndSummaryText(super.getItemCount()));
+        updateSummaryText();
         return textViewEndSummary;
+    }
+
+    private void updateSummaryText() {
+        if (textViewEndSummary != null) {
+            textViewEndSummary.setText(getEndSummaryText(super.getItemCount()));
+        }
     }
 
     @Override

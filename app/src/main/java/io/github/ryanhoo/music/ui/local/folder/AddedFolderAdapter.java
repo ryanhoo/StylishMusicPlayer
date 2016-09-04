@@ -1,6 +1,7 @@
 package io.github.ryanhoo.music.ui.local.folder;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 import io.github.ryanhoo.music.R;
@@ -28,6 +29,12 @@ public class AddedFolderAdapter extends AbstractFooterAdapter<Folder, AddedFolde
     public AddedFolderAdapter(Context context, List<Folder> data) {
         super(context, data);
         mContext = context;
+        registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                updateFooterView();
+            }
+        });
     }
 
     @Override
@@ -58,6 +65,13 @@ public class AddedFolderAdapter extends AbstractFooterAdapter<Folder, AddedFolde
             });
             textViewSummary = (TextView) mFooterView.findViewById(R.id.text_view_summary);
         }
+        updateFooterView();
+        return mFooterView;
+    }
+
+    private void updateFooterView() {
+        if (textViewSummary == null) return;
+
         int itemCount = getItemCount() - 1; // real data count
         if (itemCount > 1) {
             textViewSummary.setVisibility(View.VISIBLE);
@@ -65,7 +79,6 @@ public class AddedFolderAdapter extends AbstractFooterAdapter<Folder, AddedFolde
         } else {
             textViewSummary.setVisibility(View.GONE);
         }
-        return mFooterView;
     }
 
     // Callback
