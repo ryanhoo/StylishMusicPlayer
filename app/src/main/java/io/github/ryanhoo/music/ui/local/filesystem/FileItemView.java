@@ -23,7 +23,7 @@ import java.util.Locale;
  * Time: 11:03 PM
  * Desc: FilItemView
  */
-public class FileItemView extends RelativeLayout implements IAdapterView<File> {
+public class FileItemView extends RelativeLayout implements IAdapterView<FileWrapper> {
 
     private static final String DATE_FORMAT = "yyyy-MM-dd";
     private static SimpleDateFormat DATE_FORMATTER;
@@ -48,19 +48,21 @@ public class FileItemView extends RelativeLayout implements IAdapterView<File> {
     }
 
     @Override
-    public void bind(File file, int position) {
-        textViewName.setText(file.getName());
+    public void bind(FileWrapper fileWrapper, int position) {
+        final File file = fileWrapper.file;
+        final boolean isItemSelected = fileWrapper.selected;
         if (file.isDirectory()) {
-            imageViewFile.setImageResource(R.drawable.ic_folder);
+            setSelected(isItemSelected);
+            imageViewFile.setImageResource(isItemSelected ? R.drawable.ic_folder_selected : R.drawable.ic_folder);
             File[] files = file.listFiles(SystemFileFilter.DEFAULT_INSTANCE);
             int itemCount = files == null ? 0 : files.length;
             textViewInfo.setText(getContext().getResources().getQuantityString(
                     R.plurals.mp_directory_items_formatter,
-                    itemCount, // zero
                     itemCount, // one
                     itemCount  // other
             ));
         } else {
+            setSelected(false);
             if (FileUtils.isMusic(file)) {
                 imageViewFile.setImageResource(R.drawable.ic_file_music);
             } else if (FileUtils.isLyric(file)) {
@@ -70,6 +72,7 @@ public class FileItemView extends RelativeLayout implements IAdapterView<File> {
             }
             textViewInfo.setText(FileUtils.readableFileSize(file.length()));
         }
+        textViewName.setText(file.getName());
         Date lastModified = new Date(file.lastModified());
         textViewDate.setText(DATE_FORMATTER.format(lastModified));
     }

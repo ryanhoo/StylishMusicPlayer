@@ -21,8 +21,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:label="@string/mp.activity.title.system_files"
-            android:name=".ui.local.filesystem.SystemFileActivity"
+            android:label="@string/mp.activity.title.file_system"
+            android:name=".ui.local.filesystem.FileSystemActivity"
             android:screenOrientation="portrait"
             />
     </application>

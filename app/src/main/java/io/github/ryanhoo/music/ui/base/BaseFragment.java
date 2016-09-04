@@ -1,7 +1,10 @@
 package io.github.ryanhoo.music.ui.base;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.View;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 
@@ -22,11 +25,21 @@ public abstract class BaseFragment extends Fragment {
     }
 
     @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        addSubscription(subscribeEvents());
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         if (mSubscriptions != null) {
             mSubscriptions.clear();
         }
+    }
+
+    protected Subscription subscribeEvents() {
+        return null;
     }
 
     protected void addSubscription(Subscription subscription) {

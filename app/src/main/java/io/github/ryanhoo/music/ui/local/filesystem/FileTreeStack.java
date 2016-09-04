@@ -45,7 +45,7 @@ public class FileTreeStack {
 
     static class FileTreeSnapshot {
         public File parent;
-        public List<File> files;
+        public List<FileWrapper> files;
         public int scrollOffset;
     }
 }

@@ -33,8 +33,7 @@ public abstract class ListAdapter<T, V extends IAdapterView> extends RecyclerVie
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         final View itemView = (View) createView(mContext);
-        final RecyclerView.ViewHolder holder = new RecyclerView.ViewHolder(itemView) {
-        };
+        final RecyclerView.ViewHolder holder = new RecyclerView.ViewHolder(itemView) {};
         if (mItemClickListener != null) {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

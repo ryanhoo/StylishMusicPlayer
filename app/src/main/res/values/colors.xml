@@ -9,15 +9,26 @@
     <!-- Theme - Dark Blue -->
     <color name="mp.theme.dark_blue.background">#3C5F78</color>
     <color name="mp.theme.dark_blue.gradientColor">#507E9F</color>
+    <color name="mp.theme.dark_blue.colorControlActivated">#7AFFFFFF</color>
     <color name="mp.theme.dark_blue.colorControlHighlight">#7AFFFFFF</color>
 
     <color name="mp.theme.dark_blue.colorPrimary">#3C5F78</color>
     <color name="mp.theme.dark_blue.colorPrimaryDark">#3C5F78</color>
     <color name="mp.theme.dark_blue.colorAccent">#DDF9FF</color>
+    <color name="mp.theme.dark_blue.textColorPrimary">#DDF9FF</color>
+    <color name="mp.theme.dark_blue.textColorSecondary">#3C5F78</color>
+
+    <color name="mp.theme.dark_blue.actionMode.statusBarColor">#9CBDCC</color>
+    <color name="mp.theme.dark_blue.actionMode.background">#9CBDCC</color>
 
     <color name="mp.line">#3DDDF9FF</color>
     <color name="mp.list.background">#1ADDF9FF</color>
+    <color name="mp.list.background.selected">#6CDDF9FF</color>
     <color name="mp.list.scrollThumb">#99DDF9FF</color>
+    <color name="mp.list.text.title">#DDF9FF</color>
+    <color name="mp.list.text.title.selected">#3C5F78</color>
+    <color name="mp.list.text.hint">#9CBDCC</color>
+    <color name="mp.list.text.hint.selected">#7C3C5F78</color>
 
     <color name="mp.text.hint">#9CBDCC</color>
 
