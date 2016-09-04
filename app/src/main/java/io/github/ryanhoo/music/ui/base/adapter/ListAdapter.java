@@ -20,6 +20,7 @@ public abstract class ListAdapter<T, V extends IAdapterView> extends RecyclerVie
     private List<T> mData;
 
     private OnItemClickListener mItemClickListener;
+    private OnItemLongClickListener mItemLongClickListener;
     private int mLastItemClickPosition = RecyclerView.NO_POSITION;
 
     public ListAdapter(Context context, List<T> data) {
@@ -32,7 +33,8 @@ public abstract class ListAdapter<T, V extends IAdapterView> extends RecyclerVie
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         final View itemView = (View) createView(mContext);
-        final RecyclerView.ViewHolder holder = new RecyclerView.ViewHolder(itemView) {};
+        final RecyclerView.ViewHolder holder = new RecyclerView.ViewHolder(itemView) {
+        };
         if (mItemClickListener != null) {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -42,6 +44,18 @@ public abstract class ListAdapter<T, V extends IAdapterView> extends RecyclerVie
                         mLastItemClickPosition = position;
                         mItemClickListener.onItemClick(position);
                     }
+                }
+            });
+        }
+        if (mItemLongClickListener != null) {
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    int position = holder.getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        mItemLongClickListener.onItemClick(position);
+                    }
+                    return false;
                 }
             });
         }
@@ -102,5 +116,13 @@ public abstract class ListAdapter<T, V extends IAdapterView> extends RecyclerVie
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         mItemClickListener = listener;
+    }
+
+    public OnItemLongClickListener getItemLongClickListener() {
+        return mItemLongClickListener;
+    }
+
+    public void setOnItemLongClickListener(OnItemLongClickListener listener) {
+        mItemLongClickListener = listener;
     }
 }
