@@ -7,7 +7,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.ryanhoo.music.R;
-import io.github.ryanhoo.music.data.model.Music;
+import io.github.ryanhoo.music.data.model.Song;
 import io.github.ryanhoo.music.ui.base.adapter.IAdapterView;
 import io.github.ryanhoo.music.utils.TimeUtils;
 
@@ -18,7 +18,7 @@ import io.github.ryanhoo.music.utils.TimeUtils;
  * Time: 5:58 PM
  * Desc: LocalMusicItemView
  */
-public class LocalMusicItemView extends RelativeLayout implements IAdapterView<Music> {
+public class LocalMusicItemView extends RelativeLayout implements IAdapterView<Song> {
 
     @BindView(R.id.text_view_name)
     TextView textViewName;
@@ -34,9 +34,9 @@ public class LocalMusicItemView extends RelativeLayout implements IAdapterView<M
     }
 
     @Override
-    public void bind(Music music, int position) {
-        textViewName.setText(music.getDisplayName());
-        textViewArtist.setText(music.getArtist());
-        textViewDuration.setText(TimeUtils.formatDuration(music.getDuration()));
+    public void bind(Song song, int position) {
+        textViewName.setText(song.getDisplayName());
+        textViewArtist.setText(song.getArtist());
+        textViewDuration.setText(TimeUtils.formatDuration(song.getDuration()));
     }
 }

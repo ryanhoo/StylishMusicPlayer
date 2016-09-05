@@ -2,7 +2,7 @@ package io.github.ryanhoo.music.ui.local.all;
 
 import android.content.Context;
 import io.github.ryanhoo.music.R;
-import io.github.ryanhoo.music.data.model.Music;
+import io.github.ryanhoo.music.data.model.Song;
 import io.github.ryanhoo.music.ui.common.AbstractSummaryAdapter;
 import io.github.ryanhoo.music.ui.widget.RecyclerViewFastScroller;
 
@@ -15,12 +15,12 @@ import java.util.List;
  * Time: 8:21 PM
  * Desc: LocalMusicAdapter
  */
-public class LocalMusicAdapter extends AbstractSummaryAdapter<Music, LocalMusicItemView>
+public class LocalMusicAdapter extends AbstractSummaryAdapter<Song, LocalMusicItemView>
         implements RecyclerViewFastScroller.BubbleTextGetter {
 
     Context mContext;
 
-    public LocalMusicAdapter(Context context, List<Music> data) {
+    public LocalMusicAdapter(Context context, List<Song> data) {
         super(context, data);
         mContext = context;
     }
@@ -37,7 +37,7 @@ public class LocalMusicAdapter extends AbstractSummaryAdapter<Music, LocalMusicI
 
     @Override
     public String getTextToShowInBubble(int position) {
-        Music item = getItem(position);
+        Song item = getItem(position);
         if (position > 0 && item == null) {
             item = getItem(position - 1);
         }

@@ -5,9 +5,9 @@ package io.github.ryanhoo.music.data.model;
  * User: ryan.hoo.j@gmail.com
  * Date: 9/2/16
  * Time: 4:01 PM
- * Desc: Music
+ * Desc: Song
  */
-public class Music {
+public class Song {
 
     private String id;
 
@@ -25,7 +25,7 @@ public class Music {
 
     private int size;
 
-    public Music() {
+    public Song() {
         // Empty
     }
 

@@ -16,7 +16,7 @@ import android.view.ViewGroup;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.ryanhoo.music.R;
-import io.github.ryanhoo.music.data.model.Music;
+import io.github.ryanhoo.music.data.model.Song;
 import io.github.ryanhoo.music.ui.base.BaseFragment;
 import io.github.ryanhoo.music.ui.base.adapter.OnItemClickListener;
 import io.github.ryanhoo.music.ui.common.DefaultDividerDecoration;
@@ -112,24 +112,24 @@ public class AllLocalMusicFragment extends BaseFragment implements LoaderManager
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         Subscription subscription = Observable.just(cursor)
-                .flatMap(new Func1<Cursor, Observable<List<Music>>>() {
+                .flatMap(new Func1<Cursor, Observable<List<Song>>>() {
                     @Override
-                    public Observable<List<Music>> call(Cursor cursor) {
-                        List<Music> musicList = new ArrayList<>();
+                    public Observable<List<Song>> call(Cursor cursor) {
+                        List<Song> songList = new ArrayList<>();
                         if (cursor != null && cursor.getCount() > 0) {
                             cursor.moveToFirst();
                             do {
-                                Music music = cursorToMusic(cursor);
-                                musicList.add(music);
+                                Song song = cursorToMusic(cursor);
+                                songList.add(song);
                             } while (cursor.moveToNext());
                         }
-                        Log.d(TAG, "onLoadFinished: " + musicList.size());
-                        return Observable.just(musicList);
+                        Log.d(TAG, "onLoadFinished: " + songList.size());
+                        return Observable.just(songList);
                     }
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<Music>>() {
+                .subscribe(new Subscriber<List<Song>>() {
                     @Override
                     public void onCompleted() {
                         // TODO progress dismiss
@@ -141,7 +141,7 @@ public class AllLocalMusicFragment extends BaseFragment implements LoaderManager
                     }
 
                     @Override
-                    public void onNext(List<Music> musicList) {
+                    public void onNext(List<Song> musicList) {
                         onMusicLoaded(musicList);
                     }
                 });
@@ -155,26 +155,26 @@ public class AllLocalMusicFragment extends BaseFragment implements LoaderManager
 
     // UI
 
-    private void onMusicLoaded(List<Music> musicList) {
-        mAdapter.setData(musicList);
+    private void onMusicLoaded(List<Song> songList) {
+        mAdapter.setData(songList);
         mAdapter.notifyDataSetChanged();
     }
 
     // Utils
 
-    private Music cursorToMusic(Cursor cursor) {
-        Music music = new Music();
-        music.setTitle(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE)));
+    private Song cursorToMusic(Cursor cursor) {
+        Song song = new Song();
+        song.setTitle(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE)));
         String displayName = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME));
         if (displayName.endsWith(".mp3")) {
             displayName = displayName.substring(0, displayName.length() - 4);
         }
-        music.setDisplayName(displayName);
-        music.setArtist(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST)));
-        music.setAlbum(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM)));
-        music.setPath(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)));
-        music.setDuration(cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION)));
-        music.setSize(cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE)));
-        return music;
+        song.setDisplayName(displayName);
+        song.setArtist(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST)));
+        song.setAlbum(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM)));
+        song.setPath(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)));
+        song.setDuration(cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION)));
+        song.setSize(cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE)));
+        return song;
     }
 }
