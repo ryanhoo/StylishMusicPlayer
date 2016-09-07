@@ -16,7 +16,9 @@ import android.view.ViewGroup;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.ryanhoo.music.R;
+import io.github.ryanhoo.music.RxBus;
 import io.github.ryanhoo.music.data.model.Song;
+import io.github.ryanhoo.music.event.PlaySongEvent;
 import io.github.ryanhoo.music.ui.base.BaseFragment;
 import io.github.ryanhoo.music.ui.base.adapter.OnItemClickListener;
 import io.github.ryanhoo.music.ui.common.DefaultDividerDecoration;
@@ -87,6 +89,8 @@ public class AllLocalMusicFragment extends BaseFragment implements LoaderManager
             @Override
             public void onItemClick(int position) {
                 // TODO
+                Song song = mAdapter.getItem(position);
+                RxBus.getInstance().post(new PlaySongEvent(song));
             }
         });
         recyclerView.setAdapter(mAdapter);

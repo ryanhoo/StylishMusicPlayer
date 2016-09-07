@@ -19,6 +19,10 @@
         <item>@string/mp.fragment.title.settings</item>
     </string-array>
 
+    <!-- Music -->
+
+    <string name="mp.music.default_duration">00:00</string>
+
     <!-- Local Files -->
     <string name="mp.local_files.segmented.all">All</string>
     <string name="mp.local_files.segmented.folder">Folder</string>
