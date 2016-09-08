@@ -18,7 +18,7 @@ import io.github.ryanhoo.music.data.model.Song;
 import io.github.ryanhoo.music.event.PlaySongEvent;
 import io.github.ryanhoo.music.player.Player;
 import io.github.ryanhoo.music.ui.base.BaseFragment;
-import io.github.ryanhoo.music.ui.widget.AlbumImageView;
+import io.github.ryanhoo.music.ui.widget.ShadowImageView;
 import io.github.ryanhoo.music.utils.TimeUtils;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -36,7 +36,7 @@ public class MusicPlayerFragment extends BaseFragment implements Player.Callback
     private static final String TAG = "MusicPlayerFragment";
 
     @BindView(R.id.image_view_album)
-    AlbumImageView imageViewAlbum;
+    ShadowImageView imageViewAlbum;
     @BindView(R.id.text_view_name)
     TextView textViewName;
     @BindView(R.id.text_view_artist)

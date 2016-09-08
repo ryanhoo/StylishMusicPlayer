@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Music -->
+    <dimen name="mp.music.seekBar.marginTop">12dp</dimen>
+    <dimen name="mp.music.playControls.marginTop">8dp</dimen>
+    <dimen name="mp.music.playControls.marginBottom">0dp</dimen>
+
+</resources>

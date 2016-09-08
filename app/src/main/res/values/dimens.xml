@@ -27,4 +27,11 @@
 
     <dimen name="mp.list.itemHeight">54dp</dimen>
     <dimen name="mp.list.scrollbarSize">4dp</dimen>
+
+    <!-- Music -->
+    <dimen name="mp.music.album.size">260dp</dimen>
+    <dimen name="mp.music.seekBar.marginTop">50dp</dimen>
+    <dimen name="mp.music.playControls.marginTop">24dp</dimen>
+    <dimen name="mp.music.playControls.marginBottom">8dp</dimen>
+
 </resources>

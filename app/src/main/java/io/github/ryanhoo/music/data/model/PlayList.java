@@ -20,7 +20,7 @@ public class PlayList {
     private static Random DICE = new Random();
     public static final int NO_POSITION = -1;
 
-    private List<Song> songs;
+    private List<Song> songs = new ArrayList<>();
 
     private int playingIndex = -1;
 
