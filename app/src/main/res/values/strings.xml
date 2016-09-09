@@ -11,6 +11,15 @@
 
     <string name="mp.activity.title.file_system">SDCard</string>
 
+    <!-- Play Lists -->
+    <string name="mp.play_list.favorite">Favorite</string>
+    <string name="mp.play_list.footer.add">Add play list</string>
+    <string name="mp.play_list.footer.end_summary_formatter">%d songs in total</string>
+    <plurals name="mp_play_list_items_formatter">
+        <item quantity="one">%d song</item>
+        <item quantity="other">%d songs</item>
+    </plurals>
+
     <!-- Main -->
     <string-array name="mp_main_titles">
         <item>@string/mp.fragment.title.play_list</item>

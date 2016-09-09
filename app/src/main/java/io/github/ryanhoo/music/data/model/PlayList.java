@@ -17,8 +17,14 @@ import java.util.Random;
  */
 public class PlayList {
 
+    // Play List: Favorite
+    public static final int FAVORIT_PLAY_LIST_ID = -1;
+
     private static Random DICE = new Random();
     public static final int NO_POSITION = -1;
+
+    private int id;
+    private String name;
 
     private List<Song> songs = new ArrayList<>();
 
@@ -30,8 +36,20 @@ public class PlayList {
         // EMPTY
     }
 
-    public static int getNoPosition() {
-        return NO_POSITION;
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @NonNull
@@ -66,6 +84,14 @@ public class PlayList {
     }
 
     // Utils
+
+    public boolean isFavorite() {
+        return getId() == FAVORIT_PLAY_LIST_ID;
+    }
+
+    public int getItemCount() {
+        return songs == null ? 0 : songs.size();
+    }
 
     /**
      * Prepare to play
