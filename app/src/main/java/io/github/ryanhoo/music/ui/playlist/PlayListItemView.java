@@ -7,9 +7,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.github.ryanhoo.music.R;
 import io.github.ryanhoo.music.data.model.PlayList;
 import io.github.ryanhoo.music.ui.base.adapter.IAdapterView;
+import io.github.ryanhoo.music.utils.ViewUtils;
 
 /**
  * Created with Android Studio.
@@ -37,9 +39,16 @@ public class PlayListItemView extends RelativeLayout implements IAdapterView<Pla
     public void bind(PlayList item, int position) {
         if (item.isFavorite()) {
             imageViewAlbum.setImageResource(R.drawable.ic_favorite_yes);
+        } else {
+            imageViewAlbum.setImageDrawable(ViewUtils.generateAlbumDrawable(getContext(), item.getName()));
         }
         textViewName.setText(item.getName());
         textViewInfo.setText(getResources().getQuantityString(
                 R.plurals.mp_play_list_items_formatter, item.getItemCount(), item.getItemCount()));
+    }
+
+    @OnClick(R.id.image_button_action)
+    public void onItemAction(View view) {
+
     }
 }

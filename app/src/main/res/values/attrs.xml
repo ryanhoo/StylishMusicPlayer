@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Character View -->
+    <declare-styleable name="CharacterView">
+        <attr name="character" format="string"/>
+        <attr name="characterTextColor" format="color"/>
+        <attr name="backgroundRoundAsCircle" format="boolean"/>
+        <attr name="backgroundColor" format="color"/>
+        <attr name="backgroundRadius" format="dimension"/>
+        <attr name="characterPadding" format="dimension"/>
+    </declare-styleable>
+</resources>

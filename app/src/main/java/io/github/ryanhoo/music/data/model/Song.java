@@ -1,5 +1,8 @@
 package io.github.ryanhoo.music.data.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created with Android Studio.
  * User: ryan.hoo.j@gmail.com
@@ -7,7 +10,7 @@ package io.github.ryanhoo.music.data.model;
  * Time: 4:01 PM
  * Desc: Song
  */
-public class Song {
+public class Song implements Parcelable {
 
     private String id;
 
@@ -27,6 +30,10 @@ public class Song {
 
     public Song() {
         // Empty
+    }
+
+    public Song(Parcel in) {
+        readFromParcel(in);
     }
 
     public String getId() {
@@ -92,4 +99,44 @@ public class Song {
     public void setSize(int size) {
         this.size = size;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.id);
+        dest.writeString(this.title);
+        dest.writeString(this.displayName);
+        dest.writeString(this.artist);
+        dest.writeString(this.album);
+        dest.writeString(this.path);
+        dest.writeInt(this.duration);
+        dest.writeInt(this.size);
+    }
+
+    private void readFromParcel(Parcel in) {
+        this.id = in.readString();
+        this.title = in.readString();
+        this.displayName = in.readString();
+        this.artist = in.readString();
+        this.album = in.readString();
+        this.path = in.readString();
+        this.duration = in.readInt();
+        this.size = in.readInt();
+    }
+
+    public static final Parcelable.Creator<Song> CREATOR = new Parcelable.Creator<Song>() {
+        @Override
+        public Song createFromParcel(Parcel source) {
+            return new Song(source);
+        }
+
+        @Override
+        public Song[] newArray(int size) {
+            return new Song[size];
+        }
+    };
 }

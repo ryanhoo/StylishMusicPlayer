@@ -3,6 +3,11 @@
 
     <string name="mp.list.layoutManager.linear">LinearLayoutManager</string>
 
+    <!-- Common -->
+
+    <string name="mp.cancel">Cancel</string>
+    <string name="mp.Confirm">Confirm</string>
+
     <!-- Activity/Fragment Titles -->
     <string name="mp.fragment.title.play_list">Play List</string>
     <string name="mp.fragment.title.music">Music</string>
@@ -14,7 +19,12 @@
     <!-- Play Lists -->
     <string name="mp.play_list.favorite">Favorite</string>
     <string name="mp.play_list.footer.add">Add play list</string>
-    <string name="mp.play_list.footer.end_summary_formatter">%d songs in total</string>
+    <string name="mp.play_list.footer.end_summary_formatter">%d play lists in total</string>
+
+    <string name="mp.play_list.create">Create play list</string>
+    <string name="mp.play_list.edit">Edit play list</string>
+    <string name="mp.play_list.dialog.hint">Play list name</string>
+
     <plurals name="mp_play_list_items_formatter">
         <item quantity="one">%d song</item>
         <item quantity="other">%d songs</item>

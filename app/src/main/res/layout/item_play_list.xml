@@ -23,7 +23,7 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/mp.padding.large"
         android:layout_marginRight="@dimen/mp.padding.large"
-        app:srcCompat="@drawable/ic_favorite_yes"
+        tools:src="@drawable/ic_favorite_yes"
         />
 
     <LinearLayout

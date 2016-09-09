@@ -1,5 +1,7 @@
 package io.github.ryanhoo.music.data.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import io.github.ryanhoo.music.player.PlayMode;
@@ -15,10 +17,10 @@ import java.util.Random;
  * Time: 5:53 PM
  * Desc: PlayList
  */
-public class PlayList {
+public class PlayList implements Parcelable {
 
     // Play List: Favorite
-    public static final int FAVORIT_PLAY_LIST_ID = -1;
+    public static final int FAVORITE_PLAY_LIST_ID = -1;
 
     private static Random DICE = new Random();
     public static final int NO_POSITION = -1;
@@ -34,6 +36,10 @@ public class PlayList {
 
     public PlayList() {
         // EMPTY
+    }
+
+    public PlayList(Parcel in) {
+        readFromParcel(in);
     }
 
     public int getId() {
@@ -86,7 +92,7 @@ public class PlayList {
     // Utils
 
     public boolean isFavorite() {
-        return getId() == FAVORIT_PLAY_LIST_ID;
+        return getId() == FAVORITE_PLAY_LIST_ID;
     }
 
     public int getItemCount() {
@@ -151,4 +157,41 @@ public class PlayList {
         }
         return randomIndex;
     }
+
+    // Parcelable
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.id);
+        dest.writeString(this.name);
+        dest.writeTypedList(this.songs);
+        dest.writeInt(this.playingIndex);
+        dest.writeInt(this.playMode == null ? -1 : this.playMode.ordinal());
+    }
+
+    private void readFromParcel(Parcel in) {
+        this.id = in.readInt();
+        this.name = in.readString();
+        this.songs = in.createTypedArrayList(Song.CREATOR);
+        this.playingIndex = in.readInt();
+        int tmpPlayMode = in.readInt();
+        this.playMode = tmpPlayMode == -1 ? null : PlayMode.values()[tmpPlayMode];
+    }
+
+    public static final Parcelable.Creator<PlayList> CREATOR = new Parcelable.Creator<PlayList>() {
+        @Override
+        public PlayList createFromParcel(Parcel source) {
+            return new PlayList(source);
+        }
+
+        @Override
+        public PlayList[] newArray(int size) {
+            return new PlayList[size];
+        }
+    };
 }

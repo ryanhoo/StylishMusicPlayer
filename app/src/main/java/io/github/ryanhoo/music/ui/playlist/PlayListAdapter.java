@@ -35,7 +35,6 @@ public class PlayListAdapter extends AbstractFooterAdapter<PlayList, PlayListIte
                 updateFooterView();
             }
         });
-
     }
 
     @Override
@@ -69,7 +68,7 @@ public class PlayListAdapter extends AbstractFooterAdapter<PlayList, PlayListIte
         return mFooterView;
     }
 
-    private void updateFooterView() {
+    public void updateFooterView() {
         if (textViewSummary == null) return;
 
         int itemCount = getItemCount() - 1; // real data count

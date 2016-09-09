@@ -26,7 +26,7 @@ import java.util.List;
  * Time: 9:58 PM
  * Desc: PlayListFragment
  */
-public class PlayListFragment extends BaseFragment {
+public class PlayListFragment extends BaseFragment implements EditPlayListDialogFragment.Callback {
 
 
     @BindView(R.id.recycler_view)
@@ -60,11 +60,26 @@ public class PlayListFragment extends BaseFragment {
         mAdapter.setAddPlayListCallback(new PlayListAdapter.AddPlayListCallback() {
             @Override
             public void onAddPlayList() {
-                // TODO
-                Toast.makeText(getActivity(), "Add play list", Toast.LENGTH_SHORT).show();
+                EditPlayListDialogFragment.createPlayList()
+                        .setCallback(PlayListFragment.this)
+                        .show(getFragmentManager().beginTransaction(), "CreatePlayList");
             }
         });
         recyclerView.setAdapter(mAdapter);
         recyclerView.addItemDecoration(new DefaultDividerDecoration());
+    }
+
+    // Create or Edit Play List Callbacks
+
+    @Override
+    public void onCreated(PlayList playList) {
+        mAdapter.getData().add(playList);
+        mAdapter.notifyItemInserted(mAdapter.getData().size() - 1);
+        mAdapter.updateFooterView();
+    }
+
+    @Override
+    public void onEdited(PlayList playList) {
+
     }
 }

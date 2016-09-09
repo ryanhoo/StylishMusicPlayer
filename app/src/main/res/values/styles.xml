@@ -22,6 +22,9 @@
         <item name="windowActionModeOverlay">true</item>
         <item name="actionModeStyle">@style/MP.Theme.Widget.ActionMode</item>
         <item name="actionModeCloseButtonStyle">@style/MP.Theme.Widget.ActionMode.CloseButton</item>
+
+        <!-- AlertDialog -->
+        <item name="alertDialogTheme">@style/MP.Theme.Widget.AlertDialog</item>
     </style>
 
     <style name="MP.Theme" parent="AppTheme"/>
@@ -83,6 +86,10 @@
 
     <style name="MP.Theme.Widget.ActionMode.CloseButton" parent="@style/Widget.AppCompat.ActionButton.CloseMode">
         <item name="android:tint">@color/mp.theme.dark_blue.colorPrimary</item>
+    </style>
+
+    <style name="MP.Theme.Widget.AlertDialog" parent="ThemeOverlay.AppCompat.Dialog.Alert">
+        <item name="android:background">@color/mp.theme.dark_blue.background</item>
     </style>
 
     <style name="MP.Theme.Widget.RecyclerView">
