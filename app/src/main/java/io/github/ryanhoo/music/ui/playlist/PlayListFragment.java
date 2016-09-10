@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -17,11 +18,9 @@ import io.github.ryanhoo.music.event.PlayListCreatedEvent;
 import io.github.ryanhoo.music.ui.base.BaseFragment;
 import io.github.ryanhoo.music.ui.base.adapter.OnItemClickListener;
 import io.github.ryanhoo.music.ui.common.DefaultDividerDecoration;
-import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
-import rx.schedulers.Schedulers;
 
 import java.util.List;
 
@@ -32,14 +31,17 @@ import java.util.List;
  * Time: 9:58 PM
  * Desc: PlayListFragment
  */
-public class PlayListFragment extends BaseFragment implements EditPlayListDialogFragment.Callback {
-
+public class PlayListFragment extends BaseFragment implements PlayListContract.View, EditPlayListDialogFragment.Callback {
 
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
+    @BindView(R.id.progress_bar)
+    ProgressBar progressBar;
 
     private PlayListAdapter mAdapter;
     private int mEditIndex;
+
+    PlayListContract.Presenter mPresenter;
 
     @Nullable
     @Override
@@ -74,7 +76,13 @@ public class PlayListFragment extends BaseFragment implements EditPlayListDialog
         recyclerView.setAdapter(mAdapter);
         recyclerView.addItemDecoration(new DefaultDividerDecoration());
 
-        loadPlayLists();
+        new PlayListPresenter(AppRepository.getInstance(), this).subscribe();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mPresenter.unsubscribe();
     }
 
     // RxBus Events
@@ -100,84 +108,57 @@ public class PlayListFragment extends BaseFragment implements EditPlayListDialog
         mAdapter.updateFooterView();
     }
 
-    // Request Data
-
-    private void loadPlayLists() {
-        Subscription subscription = AppRepository.getInstance().playLists()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<PlayList>>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onNext(List<PlayList> playLists) {
-                        mAdapter.setData(playLists);
-                        mAdapter.notifyDataSetChanged();
-                    }
-                });
-        addSubscription(subscription);
-    }
-
     // Create or Edit Play List Callbacks
 
     @Override
     public void onCreated(final PlayList playList) {
-        Subscription subscription = AppRepository.getInstance()
-                .create(playList)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<PlayList>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onNext(PlayList result) {
-                        mAdapter.getData().add(result);
-                        mAdapter.notifyItemInserted(mAdapter.getData().size() - 1);
-                        mAdapter.updateFooterView();
-                    }
-                });
-        addSubscription(subscription);
+        mPresenter.createPlayList(playList);
     }
 
     @Override
     public void onEdited(final PlayList playList) {
-        Subscription subscription = AppRepository.getInstance()
-                .update(playList)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<PlayList>() {
-                    @Override
-                    public void onCompleted() {
-                    }
+        mPresenter.editPlayList(playList);
+    }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
+    // MVP View
 
-                    @Override
-                    public void onNext(PlayList result) {
-                        mAdapter.getData().set(mEditIndex, result);
-                        mAdapter.notifyItemChanged(mEditIndex);
-                        mAdapter.updateFooterView();
-                    }
-                });
-        addSubscription(subscription);
+    @Override
+    public void showLoading() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideLoading() {
+        progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void handleError(Throwable error) {
+        Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onPlayListsLoaded(List<PlayList> playLists) {
+        mAdapter.setData(playLists);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onPlayListCreated(PlayList playList) {
+        mAdapter.getData().add(playList);
+        mAdapter.notifyItemInserted(mAdapter.getData().size() - 1);
+        mAdapter.updateFooterView();
+    }
+
+    @Override
+    public void onPlayListEdited(PlayList playList) {
+        mAdapter.getData().set(mEditIndex, playList);
+        mAdapter.notifyItemChanged(mEditIndex);
+        mAdapter.updateFooterView();
+    }
+
+    @Override
+    public void setPresenter(PlayListContract.Presenter presenter) {
+        mPresenter = presenter;
     }
 }
