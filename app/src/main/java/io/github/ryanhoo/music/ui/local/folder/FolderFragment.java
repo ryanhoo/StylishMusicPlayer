@@ -20,6 +20,7 @@ import io.github.ryanhoo.music.event.PlayListCreatedEvent;
 import io.github.ryanhoo.music.ui.base.BaseFragment;
 import io.github.ryanhoo.music.ui.base.adapter.OnItemClickListener;
 import io.github.ryanhoo.music.ui.common.DefaultDividerDecoration;
+import io.github.ryanhoo.music.ui.details.PlayListDetailsActivity;
 import io.github.ryanhoo.music.ui.local.filesystem.FileSystemActivity;
 import io.github.ryanhoo.music.ui.playlist.EditPlayListDialogFragment;
 import rx.Subscription;
@@ -65,7 +66,8 @@ public class FolderFragment extends BaseFragment implements FolderContract.View,
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                // TODO
+                Folder folder = mAdapter.getItem(position);
+                startActivity(PlayListDetailsActivity.launchIntentForFolder(getActivity(), folder));
             }
         });
         mAdapter.setAddFolderCallback(this);

@@ -25,6 +25,9 @@
             android:name=".ui.local.filesystem.FileSystemActivity"
             android:screenOrientation="portrait"
             />
+        <activity
+            android:name=".ui.details.PlayListDetailsActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

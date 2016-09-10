@@ -31,6 +31,10 @@
         <item quantity="other">%d songs</item>
     </plurals>
 
+    <!-- Play Lists - Details -->
+    <string name="mp.play_list.details.empty">No music here, go add some!</string>
+    <string name="mp.play_list.details.footer.end_summary_formatter">%d songs in total</string>
+
     <!-- Main -->
     <string-array name="mp_main_titles">
         <item>@string/mp.fragment.title.play_list</item>
