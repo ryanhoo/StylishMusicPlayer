@@ -1,7 +1,13 @@
 package io.github.ryanhoo.music.utils;
 
+import android.media.MediaMetadataRetriever;
+import io.github.ryanhoo.music.data.model.Song;
+
 import java.io.File;
+import java.io.FileFilter;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created with Android Studio.
@@ -32,5 +38,49 @@ public class FileUtils {
 
     public static boolean isLyric(File file) {
         return file.getName().toLowerCase().endsWith(".lrc");
+    }
+
+    public static List<Song> musicFiles(File dir) {
+        List<Song> songs = new ArrayList<>();
+        if (dir != null && dir.isDirectory()) {
+            final File[] files = dir.listFiles(new FileFilter() {
+                @Override
+                public boolean accept(File item) {
+                    return item.isFile() && isMusic(item);
+                }
+            });
+            for (File file : files) {
+                Song song = fileToMusic(file);
+                if (song != null) {
+                    songs.add(song);
+                }
+            }
+        }
+        return songs;
+    }
+
+    public static Song fileToMusic(File file) {
+        if (file.length() == 0) return null;
+
+        MediaMetadataRetriever metadataRetriever = new MediaMetadataRetriever();
+        metadataRetriever.setDataSource(file.getAbsolutePath());
+
+        String title = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
+        String displayName = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
+        String artist = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
+        String album = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM);
+        int duration = Integer.parseInt(metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
+
+        if (duration == 0) return null;
+
+        Song song = new Song();
+        song.setTitle(title);
+        song.setDisplayName(displayName);
+        song.setArtist(artist);
+        song.setPath(file.getAbsolutePath());
+        song.setAlbum(album);
+        song.setDuration(duration);
+        song.setSize((int) file.length());
+        return song;
     }
 }

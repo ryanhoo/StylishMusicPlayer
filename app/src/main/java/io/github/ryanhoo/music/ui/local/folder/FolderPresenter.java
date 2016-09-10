@@ -2,7 +2,9 @@ package io.github.ryanhoo.music.ui.local.folder;
 
 import io.github.ryanhoo.music.data.model.Folder;
 import io.github.ryanhoo.music.data.model.PlayList;
+import io.github.ryanhoo.music.data.model.Song;
 import io.github.ryanhoo.music.data.source.AppRepository;
+import io.github.ryanhoo.music.utils.FileUtils;
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
@@ -52,6 +54,17 @@ public class FolderPresenter implements FolderContract.Presenter {
     public void loadFolders() {
         Subscription subscription = mRepository.folders()
                 .subscribeOn(Schedulers.io())
+                .doOnNext(new Action1<List<Folder>>() {
+                    @Override
+                    public void call(List<Folder> folders) {
+                        Collections.sort(folders, new Comparator<Folder>() {
+                            @Override
+                            public int compare(Folder f1, Folder f2) {
+                                return f1.getName().compareToIgnoreCase(f2.getName());
+                            }
+                        });
+                    }
+                })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<List<Folder>>() {
                     @Override
@@ -98,6 +111,9 @@ public class FolderPresenter implements FolderContract.Presenter {
                         Folder folder = new Folder();
                         folder.setName(file.getName());
                         folder.setPath(file.getAbsolutePath());
+                        List<Song> musicFiles = FileUtils.musicFiles(file);
+                        folder.setSongs(musicFiles);
+                        folder.setNumOfSongs(musicFiles.size());
                         return Observable.just(folder);
                     }
                 })

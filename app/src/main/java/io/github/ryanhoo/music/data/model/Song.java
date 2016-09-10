@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import com.litesuits.orm.db.annotation.PrimaryKey;
 import com.litesuits.orm.db.annotation.Table;
+import com.litesuits.orm.db.annotation.Unique;
 import com.litesuits.orm.db.enums.AssignType;
 
 /**
@@ -16,8 +17,11 @@ import com.litesuits.orm.db.enums.AssignType;
 @Table("song")
 public class Song implements Parcelable {
 
-    @PrimaryKey(AssignType.BY_MYSELF)
-    private String id;
+    @PrimaryKey(AssignType.AUTO_INCREMENT)
+    private int id;
+
+    @Unique
+    private String systemId;
 
     private String title;
 
@@ -41,11 +45,19 @@ public class Song implements Parcelable {
         readFromParcel(in);
     }
 
-    public String getId() {
+    public String getSystemId() {
+        return systemId;
+    }
+
+    public void setSystemId(String systemId) {
+        this.systemId = systemId;
+    }
+
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -112,7 +124,8 @@ public class Song implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.id);
+        dest.writeInt(this.id);
+        dest.writeString(this.systemId);
         dest.writeString(this.title);
         dest.writeString(this.displayName);
         dest.writeString(this.artist);
@@ -123,7 +136,8 @@ public class Song implements Parcelable {
     }
 
     private void readFromParcel(Parcel in) {
-        this.id = in.readString();
+        this.id = in.readInt();
+        this.systemId = in.readString();
         this.title = in.readString();
         this.displayName = in.readString();
         this.artist = in.readString();

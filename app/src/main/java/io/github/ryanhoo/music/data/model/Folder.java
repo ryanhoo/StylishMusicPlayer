@@ -2,13 +2,13 @@ package io.github.ryanhoo.music.data.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import com.litesuits.orm.db.annotation.Column;
-import com.litesuits.orm.db.annotation.PrimaryKey;
-import com.litesuits.orm.db.annotation.Table;
-import com.litesuits.orm.db.annotation.Unique;
+import com.litesuits.orm.db.annotation.*;
 import com.litesuits.orm.db.enums.AssignType;
+import com.litesuits.orm.db.enums.Relation;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created with Android Studio.
@@ -32,6 +32,10 @@ public class Folder implements Parcelable {
     private String path;
 
     private int numOfSongs;
+
+    @MapCollection(ArrayList.class)
+    @Mapping(Relation.OneToMany)
+    private List<Song> songs = new ArrayList<>();
 
     private Date createdAt;
 
@@ -80,6 +84,14 @@ public class Folder implements Parcelable {
         this.numOfSongs = numOfSongs;
     }
 
+    public List<Song> getSongs() {
+        return songs;
+    }
+
+    public void setSongs(List<Song> songs) {
+        this.songs = songs;
+    }
+
     public Date getCreatedAt() {
         return createdAt;
     }
@@ -99,6 +111,7 @@ public class Folder implements Parcelable {
         dest.writeString(this.name);
         dest.writeString(this.path);
         dest.writeInt(this.numOfSongs);
+        dest.writeTypedList(this.songs);
         dest.writeLong(this.createdAt != null ? this.createdAt.getTime() : -1);
     }
 
@@ -107,6 +120,7 @@ public class Folder implements Parcelable {
         this.name = in.readString();
         this.path = in.readString();
         this.numOfSongs = in.readInt();
+        this.songs = in.createTypedArrayList(Song.CREATOR);
         long tmpCreatedAt = in.readLong();
         this.createdAt = tmpCreatedAt == -1 ? null : new Date(tmpCreatedAt);
     }
