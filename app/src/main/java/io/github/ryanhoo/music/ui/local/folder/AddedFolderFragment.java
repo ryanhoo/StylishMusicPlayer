@@ -4,21 +4,25 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
+import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.ryanhoo.music.R;
 import io.github.ryanhoo.music.RxBus;
 import io.github.ryanhoo.music.data.model.Folder;
+import io.github.ryanhoo.music.data.model.PlayList;
+import io.github.ryanhoo.music.data.source.AppRepository;
 import io.github.ryanhoo.music.event.AddFolderEvent;
+import io.github.ryanhoo.music.event.PlayListCreatedEvent;
 import io.github.ryanhoo.music.ui.base.BaseFragment;
 import io.github.ryanhoo.music.ui.base.adapter.OnItemClickListener;
 import io.github.ryanhoo.music.ui.common.DefaultDividerDecoration;
 import io.github.ryanhoo.music.ui.local.filesystem.FileSystemActivity;
+import io.github.ryanhoo.music.ui.playlist.EditPlayListDialogFragment;
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
@@ -40,7 +44,8 @@ import java.util.List;
  * Time: 7:29 PM
  * Desc: AddedFolderFragment
  */
-public class AddedFolderFragment extends BaseFragment {
+public class AddedFolderFragment extends BaseFragment implements AddedFolderAdapter.AddFolderCallback,
+        EditPlayListDialogFragment.Callback {
 
     private static final String TAG = "AddedFolderFragment";
 
@@ -79,12 +84,7 @@ public class AddedFolderFragment extends BaseFragment {
                 // TODO
             }
         });
-        mAdapter.setAddFolderCallback(new AddedFolderAdapter.AddFolderCallback() {
-            @Override
-            public void onAddFolder() {
-                startActivity(new Intent(getActivity(), FileSystemActivity.class));
-            }
-        });
+        mAdapter.setAddFolderCallback(this);
         recyclerView.setAdapter(mAdapter);
         recyclerView.addItemDecoration(new DefaultDividerDecoration());
     }
@@ -162,5 +162,68 @@ public class AddedFolderFragment extends BaseFragment {
                     }
                 });
         addSubscription(subscription);
+    }
+
+    // Adapter Callbacks
+
+    @Override
+    public void onAction(View actionView, int position) {
+        final Folder folder = mAdapter.getItem(position);
+        PopupMenu actionMenu = new PopupMenu(getActivity(), actionView, Gravity.END | Gravity.BOTTOM);
+        actionMenu.inflate(R.menu.folders_action);
+        actionMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if (item.getItemId() == R.id.menu_item_add_play_list) {
+                    PlayList playList = new PlayList();
+                    playList.setName(folder.getName());
+                    EditPlayListDialogFragment.editPlayList(playList)
+                            .setCallback(AddedFolderFragment.this)
+                            .show(getFragmentManager().beginTransaction(), "CreatePlayList");
+                } else if (item.getItemId() == R.id.menu_item_delete) {
+
+                }
+                return true;
+            }
+        });
+        actionMenu.show();
+    }
+
+    @Override
+    public void onAddFolder() {
+        startActivity(new Intent(getActivity(), FileSystemActivity.class));
+    }
+
+    // Create or Edit play list
+
+    @Override
+    public void onEdited(final PlayList playList) {
+        Subscription subscription = AppRepository.getInstance()
+                .create(playList)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Boolean>() {
+                    @Override
+                    public void onCompleted() {}
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onNext(Boolean result) {
+                        if (result) {
+                            Toast.makeText(getActivity(), playList.getName() + " created", Toast.LENGTH_SHORT).show();
+                            RxBus.getInstance().post(new PlayListCreatedEvent(playList));
+                        }
+                    }
+                });
+        addSubscription(subscription);
+    }
+
+    @Override
+    public void onCreated(PlayList playList) {
+        // Empty
     }
 }

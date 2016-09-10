@@ -30,6 +30,8 @@
     <color name="mp.list.text.hint">#9CBDCC</color>
     <color name="mp.list.text.hint.selected">#7C3C5F78</color>
 
+    <color name="mp.popupMenu.background">#B4D2E0</color>
+
     <color name="mp.text.hint">#9CBDCC</color>
 
     <!-- Segmented Control -->

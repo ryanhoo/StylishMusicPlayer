@@ -3,6 +3,7 @@ package io.github.ryanhoo.music.ui.local.folder;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import io.github.ryanhoo.music.R;
 import io.github.ryanhoo.music.data.model.Folder;
@@ -40,6 +41,24 @@ public class AddedFolderAdapter extends AbstractFooterAdapter<Folder, AddedFolde
     @Override
     protected AddedFolderItemView createView(Context context) {
         return new AddedFolderItemView(context);
+    }
+
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        final RecyclerView.ViewHolder holder = super.onCreateViewHolder(parent, viewType);
+        if (holder.itemView instanceof AddedFolderItemView) {
+            final AddedFolderItemView itemView = (AddedFolderItemView) holder.itemView;
+            itemView.buttonAction.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = holder.getAdapterPosition();
+                    if (mAddFolderCallback != null) {
+                        mAddFolderCallback.onAction(itemView.buttonAction ,position);
+                    }
+                }
+            });
+        }
+        return holder;
     }
 
     // Footer View
@@ -87,6 +106,9 @@ public class AddedFolderAdapter extends AbstractFooterAdapter<Folder, AddedFolde
     }
 
     /* package */ interface AddFolderCallback {
+
+        void onAction(View actionView, int position);
+
         void onAddFolder();
     }
 }

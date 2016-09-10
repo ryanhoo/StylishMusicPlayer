@@ -10,14 +10,17 @@ import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.ryanhoo.music.R;
+import io.github.ryanhoo.music.RxBus;
 import io.github.ryanhoo.music.data.model.PlayList;
 import io.github.ryanhoo.music.data.source.AppRepository;
+import io.github.ryanhoo.music.event.PlayListCreatedEvent;
 import io.github.ryanhoo.music.ui.base.BaseFragment;
 import io.github.ryanhoo.music.ui.base.adapter.OnItemClickListener;
 import io.github.ryanhoo.music.ui.common.DefaultDividerDecoration;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 import java.util.List;
@@ -72,6 +75,29 @@ public class PlayListFragment extends BaseFragment implements EditPlayListDialog
         recyclerView.addItemDecoration(new DefaultDividerDecoration());
 
         loadPlayLists();
+    }
+
+    // RxBus Events
+
+    @Override
+    protected Subscription subscribeEvents() {
+        return RxBus.getInstance().toObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(new Action1<Object>() {
+                    @Override
+                    public void call(Object o) {
+                        if (o instanceof PlayListCreatedEvent) {
+                            onPlayListCreatedEvent((PlayListCreatedEvent) o);
+                        }
+                    }
+                })
+                .subscribe(RxBus.defaultSubscriber());
+    }
+
+    private void onPlayListCreatedEvent(PlayListCreatedEvent event) {
+        mAdapter.getData().add(event.playList);
+        mAdapter.notifyDataSetChanged();
+        mAdapter.updateFooterView();
     }
 
     // Request Data
@@ -140,7 +166,6 @@ public class PlayListFragment extends BaseFragment implements EditPlayListDialog
                 .subscribe(new Subscriber<Boolean>() {
                     @Override
                     public void onCompleted() {
-
                     }
 
                     @Override

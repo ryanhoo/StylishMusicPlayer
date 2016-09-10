@@ -6,7 +6,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import io.github.ryanhoo.music.R;
 import io.github.ryanhoo.music.data.model.Folder;
 import io.github.ryanhoo.music.ui.base.adapter.IAdapterView;
@@ -26,6 +25,8 @@ public class AddedFolderItemView extends RelativeLayout implements IAdapterView<
     TextView textViewName;
     @BindView(R.id.text_view_info)
     TextView textViewInfo;
+    @BindView(R.id.image_button_action)
+    View buttonAction;
 
     public AddedFolderItemView(Context context) {
         super(context);
@@ -41,10 +42,5 @@ public class AddedFolderItemView extends RelativeLayout implements IAdapterView<
                 new Random().nextInt(1000),
                 folder.getPath()
         ));
-    }
-
-    @OnClick(R.id.image_button_action)
-    public void onItemAction(View view) {
-
     }
 }

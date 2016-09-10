@@ -25,6 +25,11 @@
 
         <!-- AlertDialog -->
         <item name="alertDialogTheme">@style/MP.Theme.Widget.AlertDialog</item>
+
+        <!-- PopupMenu -->
+        <item name="popupMenuStyle">@style/MP.Theme.Widget.PopupMenu</item>
+        <item name="textAppearanceLargePopupMenu">@style/MP.Theme.TextAppearance.LargePopupMenu</item>
+        <item name="textAppearanceSmallPopupMenu">@style/MP.Theme.TextAppearance.SmallPopupMenu</item>
     </style>
 
     <style name="MP.Theme" parent="AppTheme"/>
@@ -90,6 +95,11 @@
 
     <style name="MP.Theme.Widget.AlertDialog" parent="ThemeOverlay.AppCompat.Dialog.Alert">
         <item name="android:background">@color/mp.theme.dark_blue.background</item>
+    </style>
+
+    <style name="MP.Theme.Widget.PopupMenu" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:popupBackground">@color/mp.popupMenu.background</item>
+        <item name="android:dropDownHorizontalOffset">-24dp</item>
     </style>
 
     <style name="MP.Theme.Widget.RecyclerView">
@@ -165,5 +175,13 @@
         <item name="android:textColor">@color/mp.text.hint</item>
         <item name="android:gravity">center</item>
         <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="MP.Theme.TextAppearance.LargePopupMenu" parent="TextAppearance.AppCompat.Widget.PopupMenu.Large">
+        <item name="android:textColor">@color/mp.theme.dark_blue.colorPrimary</item>
+    </style>
+
+    <style name="MP.Theme.TextAppearance.SmallPopupMenu" parent="TextAppearance.AppCompat.Widget.PopupMenu.Small">
+        <item name="android:textColor">@color/mp.theme.dark_blue.colorPrimary</item>
     </style>
 </resources>

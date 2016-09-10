@@ -42,8 +42,7 @@ public abstract class AbstractFooterAdapter<T, V extends IAdapterView> extends L
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == VIEW_TYPE_FOOTER) {
-            return new RecyclerView.ViewHolder(createFooterView()) {
-            };
+            return new RecyclerView.ViewHolder(createFooterView()) {};
         }
         return super.onCreateViewHolder(parent, viewType);
     }
