@@ -2,6 +2,9 @@ package io.github.ryanhoo.music.data.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import com.litesuits.orm.db.annotation.PrimaryKey;
+import com.litesuits.orm.db.annotation.Table;
+import com.litesuits.orm.db.enums.AssignType;
 
 /**
  * Created with Android Studio.
@@ -10,8 +13,10 @@ import android.os.Parcelable;
  * Time: 4:01 PM
  * Desc: Song
  */
+@Table("song")
 public class Song implements Parcelable {
 
+    @PrimaryKey(AssignType.BY_MYSELF)
     private String id;
 
     private String title;

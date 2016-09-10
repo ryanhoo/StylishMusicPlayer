@@ -4,9 +4,13 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import com.litesuits.orm.db.annotation.*;
+import com.litesuits.orm.db.enums.AssignType;
+import com.litesuits.orm.db.enums.Relation;
 import io.github.ryanhoo.music.player.PlayMode;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -17,21 +21,38 @@ import java.util.Random;
  * Time: 5:53 PM
  * Desc: PlayList
  */
+@Table("playlist")
 public class PlayList implements Parcelable {
 
     // Play List: Favorite
-    public static final int FAVORITE_PLAY_LIST_ID = -1;
-
-    private static Random DICE = new Random();
     public static final int NO_POSITION = -1;
 
+    private static Random DICE = new Random();
+
+    @PrimaryKey(AssignType.AUTO_INCREMENT)
     private int id;
+
     private String name;
 
+    private int numOfSongs;
+
+    private boolean favorite;
+
+    private Date createdAt;
+
+    private Date updatedAt;
+
+    @MapCollection(ArrayList.class)
+    @Mapping(Relation.OneToMany)
     private List<Song> songs = new ArrayList<>();
 
+    @Ignore
     private int playingIndex = -1;
 
+    /**
+     * Use a singleton play mode
+     * */
+    @Deprecated
     private PlayMode playMode = PlayMode.LOOP;
 
     public PlayList() {
@@ -56,6 +77,38 @@ public class PlayList implements Parcelable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getNumOfSongs() {
+        return numOfSongs;
+    }
+
+    public void setNumOfSongs(int numOfSongs) {
+        this.numOfSongs = numOfSongs;
+    }
+
+    public boolean isFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     @NonNull
@@ -90,10 +143,6 @@ public class PlayList implements Parcelable {
     }
 
     // Utils
-
-    public boolean isFavorite() {
-        return getId() == FAVORITE_PLAY_LIST_ID;
-    }
 
     public int getItemCount() {
         return songs == null ? 0 : songs.size();
@@ -169,6 +218,10 @@ public class PlayList implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(this.id);
         dest.writeString(this.name);
+        dest.writeInt(this.numOfSongs);
+        dest.writeByte(this.favorite ? (byte) 1 : (byte) 0);
+        dest.writeLong(this.createdAt != null ? this.createdAt.getTime() : -1);
+        dest.writeLong(this.updatedAt != null ? this.updatedAt.getTime() : -1);
         dest.writeTypedList(this.songs);
         dest.writeInt(this.playingIndex);
         dest.writeInt(this.playMode == null ? -1 : this.playMode.ordinal());
@@ -177,13 +230,19 @@ public class PlayList implements Parcelable {
     private void readFromParcel(Parcel in) {
         this.id = in.readInt();
         this.name = in.readString();
+        this.numOfSongs = in.readInt();
+        this.favorite = in.readByte() != 0;
+        long tmpCreatedAt = in.readLong();
+        this.createdAt = tmpCreatedAt == -1 ? null : new Date(tmpCreatedAt);
+        long tmpUpdatedAt = in.readLong();
+        this.updatedAt = tmpUpdatedAt == -1 ? null : new Date(tmpUpdatedAt);
         this.songs = in.createTypedArrayList(Song.CREATOR);
         this.playingIndex = in.readInt();
         int tmpPlayMode = in.readInt();
         this.playMode = tmpPlayMode == -1 ? null : PlayMode.values()[tmpPlayMode];
     }
 
-    public static final Parcelable.Creator<PlayList> CREATOR = new Parcelable.Creator<PlayList>() {
+    public static final Creator<PlayList> CREATOR = new Creator<PlayList>() {
         @Override
         public PlayList createFromParcel(Parcel source) {
             return new PlayList(source);
