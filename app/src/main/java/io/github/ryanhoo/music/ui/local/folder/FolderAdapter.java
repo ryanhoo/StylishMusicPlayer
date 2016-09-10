@@ -16,9 +16,9 @@ import java.util.List;
  * User: ryan.hoo.j@gmail.com
  * Date: 9/3/16
  * Time: 7:22 PM
- * Desc: AddedFolderAdapter
+ * Desc: FolderAdapter
  */
-public class AddedFolderAdapter extends AbstractFooterAdapter<Folder, AddedFolderItemView> {
+public class FolderAdapter extends AbstractFooterAdapter<Folder, FolderItemView> {
 
     private Context mContext;
 
@@ -27,7 +27,7 @@ public class AddedFolderAdapter extends AbstractFooterAdapter<Folder, AddedFolde
 
     private AddFolderCallback mAddFolderCallback;
 
-    public AddedFolderAdapter(Context context, List<Folder> data) {
+    public FolderAdapter(Context context, List<Folder> data) {
         super(context, data);
         mContext = context;
         registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
@@ -39,15 +39,15 @@ public class AddedFolderAdapter extends AbstractFooterAdapter<Folder, AddedFolde
     }
 
     @Override
-    protected AddedFolderItemView createView(Context context) {
-        return new AddedFolderItemView(context);
+    protected FolderItemView createView(Context context) {
+        return new FolderItemView(context);
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         final RecyclerView.ViewHolder holder = super.onCreateViewHolder(parent, viewType);
-        if (holder.itemView instanceof AddedFolderItemView) {
-            final AddedFolderItemView itemView = (AddedFolderItemView) holder.itemView;
+        if (holder.itemView instanceof FolderItemView) {
+            final FolderItemView itemView = (FolderItemView) holder.itemView;
             itemView.buttonAction.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -87,7 +87,7 @@ public class AddedFolderAdapter extends AbstractFooterAdapter<Folder, AddedFolde
         return mFooterView;
     }
 
-    private void updateFooterView() {
+    public void updateFooterView() {
         if (textViewSummary == null) return;
 
         int itemCount = getItemCount() - 1; // real data count

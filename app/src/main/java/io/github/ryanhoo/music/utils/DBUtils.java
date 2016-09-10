@@ -1,8 +1,14 @@
 package io.github.ryanhoo.music.utils;
 
 import android.content.Context;
+import android.os.Environment;
 import io.github.ryanhoo.music.R;
+import io.github.ryanhoo.music.data.model.Folder;
 import io.github.ryanhoo.music.data.model.PlayList;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created with Android Studio.
@@ -18,5 +24,16 @@ public class DBUtils {
         favorite.setFavorite(true);
         favorite.setName(context.getString(R.string.mp_play_list_favorite));
         return favorite;
+    }
+
+    public static List<Folder> generateDefaultFolders() {
+        List<Folder> defaultFolders = new ArrayList<>(3);
+        // File sdcardDir = Environment.getExternalStorageDirectory();
+        File downloadDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        File musicDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC);
+        // defaultFolders.add(new Folder(sdcardDir.getName(), sdcardDir.getAbsolutePath()));
+        defaultFolders.add(new Folder(downloadDir.getName(), downloadDir.getAbsolutePath()));
+        defaultFolders.add(new Folder(musicDir.getName(), musicDir.getAbsolutePath()));
+        return defaultFolders;
     }
 }

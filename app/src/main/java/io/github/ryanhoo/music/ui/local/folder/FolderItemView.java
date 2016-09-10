@@ -17,9 +17,9 @@ import java.util.Random;
  * User: ryan.hoo.j@gmail.com
  * Date: 9/3/16
  * Time: 7:22 PM
- * Desc: AddedFolderItemView
+ * Desc: FolderItemView
  */
-public class AddedFolderItemView extends RelativeLayout implements IAdapterView<Folder> {
+public class FolderItemView extends RelativeLayout implements IAdapterView<Folder> {
 
     @BindView(R.id.text_view_name)
     TextView textViewName;
@@ -28,7 +28,7 @@ public class AddedFolderItemView extends RelativeLayout implements IAdapterView<
     @BindView(R.id.image_button_action)
     View buttonAction;
 
-    public AddedFolderItemView(Context context) {
+    public FolderItemView(Context context) {
         super(context);
         View.inflate(context, R.layout.item_added_folder, this);
         ButterKnife.bind(this);

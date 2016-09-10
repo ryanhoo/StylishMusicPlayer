@@ -112,6 +112,13 @@
         <item name="layoutManager">@string/mp.list.layoutManager.linear</item>
     </style>
 
+    <style name="MP.Theme.Widget.ProgressBar" parent="@style/Widget.AppCompat.ProgressBar">
+        <item name="android:id">@id/progress_bar</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerInParent">true</item>
+    </style>
+
     <style name="MP.Theme.Widget.SegmentedControl.Left">
         <item name="android:background">@drawable/selector_segmented_left</item>
     </style>

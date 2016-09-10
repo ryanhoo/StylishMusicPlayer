@@ -1,6 +1,7 @@
 package io.github.ryanhoo.music.data.source;
 
 import io.github.ryanhoo.music.Injection;
+import io.github.ryanhoo.music.data.model.Folder;
 import io.github.ryanhoo.music.data.model.PlayList;
 import io.github.ryanhoo.music.data.source.db.LiteOrmHelper;
 import rx.Observable;
@@ -18,7 +19,7 @@ public class AppRepository implements AppContract {
 
     private static volatile AppRepository sInstance;
 
-    private AppContract.Local mLocalDataSource;
+    private AppLocalDataSource mLocalDataSource;
 
     private AppRepository() {
         mLocalDataSource = new AppLocalDataSource(Injection.provideContext(), LiteOrmHelper.getInstance());
@@ -43,17 +44,39 @@ public class AppRepository implements AppContract {
     }
 
     @Override
-    public Observable<Boolean> create(PlayList playList) {
+    public Observable<PlayList> create(PlayList playList) {
         return mLocalDataSource.create(playList);
     }
 
     @Override
-    public Observable<Boolean> update(PlayList playList) {
+    public Observable<PlayList> update(PlayList playList) {
         return mLocalDataSource.update(playList);
     }
 
     @Override
-    public Observable<Boolean> delete(PlayList playList) {
+    public Observable<PlayList> delete(PlayList playList) {
         return mLocalDataSource.delete(playList);
+    }
+
+    // Folders
+
+    @Override
+    public Observable<List<Folder>> folders() {
+        return mLocalDataSource.folders();
+    }
+
+    @Override
+    public Observable<Folder> create(Folder folder) {
+        return mLocalDataSource.create(folder);
+    }
+
+    @Override
+    public Observable<List<Folder>> create(List<Folder> folders) {
+        return mLocalDataSource.create(folders);
+    }
+
+    @Override
+    public Observable<Folder> delete(Folder folder) {
+        return mLocalDataSource.delete(folder);
     }
 }

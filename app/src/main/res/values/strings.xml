@@ -22,6 +22,7 @@
     <string name="mp.play_list.footer.end_summary_formatter">%d play lists in total</string>
 
     <string name="mp.play_list.create">Create play list</string>
+    <string name="mp.play_list.created">%s created</string>
     <string name="mp.play_list.edit">Edit play list</string>
     <string name="mp.play_list.dialog.hint">Play list name</string>
 
@@ -55,6 +56,10 @@
     <string name="mp.local_files.file_system.menu.done">Done</string>
 
     <!-- Local Files - File System -->
+    <plurals name="mp_folders_created_formatter">
+        <item quantity="one">%d new folder created</item>
+        <item quantity="other">%d new folders created</item>
+    </plurals>
     <plurals name="mp_directory_items_formatter">
         <item quantity="one">%d item</item>
         <item quantity="other">%d items</item>

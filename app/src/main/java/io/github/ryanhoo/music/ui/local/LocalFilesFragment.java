@@ -14,7 +14,7 @@ import butterknife.OnCheckedChanged;
 import io.github.ryanhoo.music.R;
 import io.github.ryanhoo.music.ui.base.BaseFragment;
 import io.github.ryanhoo.music.ui.local.all.AllLocalMusicFragment;
-import io.github.ryanhoo.music.ui.local.folder.AddedFolderFragment;
+import io.github.ryanhoo.music.ui.local.folder.FolderFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +45,7 @@ public class LocalFilesFragment extends BaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mFragments.add(new AllLocalMusicFragment());
-        mFragments.add(new AddedFolderFragment());
+        mFragments.add(new FolderFragment());
     }
 
     @Nullable

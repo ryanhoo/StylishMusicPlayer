@@ -134,7 +134,7 @@ public class PlayListFragment extends BaseFragment implements EditPlayListDialog
                 .create(playList)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Boolean>() {
+                .subscribe(new Subscriber<PlayList>() {
                     @Override
                     public void onCompleted() {
 
@@ -146,12 +146,10 @@ public class PlayListFragment extends BaseFragment implements EditPlayListDialog
                     }
 
                     @Override
-                    public void onNext(Boolean success) {
-                        if (success) {
-                            mAdapter.getData().add(playList);
-                            mAdapter.notifyItemInserted(mAdapter.getData().size() - 1);
-                            mAdapter.updateFooterView();
-                        }
+                    public void onNext(PlayList result) {
+                        mAdapter.getData().add(result);
+                        mAdapter.notifyItemInserted(mAdapter.getData().size() - 1);
+                        mAdapter.updateFooterView();
                     }
                 });
         addSubscription(subscription);
@@ -163,7 +161,7 @@ public class PlayListFragment extends BaseFragment implements EditPlayListDialog
                 .update(playList)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Boolean>() {
+                .subscribe(new Subscriber<PlayList>() {
                     @Override
                     public void onCompleted() {
                     }
@@ -174,12 +172,10 @@ public class PlayListFragment extends BaseFragment implements EditPlayListDialog
                     }
 
                     @Override
-                    public void onNext(Boolean success) {
-                        if (success) {
-                            mAdapter.getData().set(mEditIndex, playList);
-                            mAdapter.notifyItemChanged(mEditIndex);
-                            mAdapter.updateFooterView();
-                        }
+                    public void onNext(PlayList result) {
+                        mAdapter.getData().set(mEditIndex, result);
+                        mAdapter.notifyItemChanged(mEditIndex);
+                        mAdapter.updateFooterView();
                     }
                 });
         addSubscription(subscription);
