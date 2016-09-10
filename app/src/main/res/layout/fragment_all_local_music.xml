@@ -52,4 +52,12 @@
             appCompat:srcCompat="@drawable/fast_scroller_indicator"
             tools:ignore="RtlSymmetry"/>
     </io.github.ryanhoo.music.ui.widget.RecyclerViewFastScroller>
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        />
 </RelativeLayout>

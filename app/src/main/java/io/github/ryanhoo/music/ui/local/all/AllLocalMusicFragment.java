@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.ryanhoo.music.R;
@@ -32,6 +33,7 @@ import rx.schedulers.Schedulers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created with Android Studio.
@@ -68,6 +70,8 @@ public class AllLocalMusicFragment extends BaseFragment implements LoaderManager
     RecyclerView recyclerView;
     @BindView(R.id.fast_scroller)
     RecyclerViewFastScroller fastScroller;
+    @BindView(R.id.progress_bar)
+    ProgressBar progressBar;
 
     LocalMusicAdapter mAdapter;
 
@@ -82,6 +86,7 @@ public class AllLocalMusicFragment extends BaseFragment implements LoaderManager
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
 
+        showProgress();
         getLoaderManager().initLoader(URL_LOAD_LOCAL_MUSIC, null, this);
 
         mAdapter = new LocalMusicAdapter(getActivity(), null);
@@ -135,12 +140,18 @@ public class AllLocalMusicFragment extends BaseFragment implements LoaderManager
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<List<Song>>() {
                     @Override
+                    public void onStart() {
+                        showProgress();
+                    }
+
+                    @Override
                     public void onCompleted() {
-                        // TODO progress dismiss
+                        hideProgress();
                     }
 
                     @Override
                     public void onError(Throwable throwable) {
+                        hideProgress();
                         Log.e(TAG, "onError: ", throwable);
                     }
 
@@ -162,6 +173,14 @@ public class AllLocalMusicFragment extends BaseFragment implements LoaderManager
     private void onMusicLoaded(List<Song> songList) {
         mAdapter.setData(songList);
         mAdapter.notifyDataSetChanged();
+    }
+
+    private void showProgress() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void hideProgress() {
+        progressBar.setVisibility(View.GONE);
     }
 
     // Utils
