@@ -11,12 +11,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.ryanhoo.music.R;
 import io.github.ryanhoo.music.data.model.PlayList;
+import io.github.ryanhoo.music.data.source.AppRepository;
 import io.github.ryanhoo.music.ui.base.BaseFragment;
 import io.github.ryanhoo.music.ui.base.adapter.OnItemClickListener;
 import io.github.ryanhoo.music.ui.common.DefaultDividerDecoration;
-import io.github.ryanhoo.music.utils.DBUtils;
+import rx.Subscriber;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,7 +35,8 @@ public class PlayListFragment extends BaseFragment implements EditPlayListDialog
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
 
-    PlayListAdapter mAdapter;
+    private PlayListAdapter mAdapter;
+    private int mEditIndex;
 
     @Nullable
     @Override
@@ -45,16 +49,15 @@ public class PlayListFragment extends BaseFragment implements EditPlayListDialog
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
 
-        PlayList favorite = DBUtils.generateFavoritePlayList(getActivity());
-        List<PlayList> list = new ArrayList<>();
-        list.add(favorite);
-
-        mAdapter = new PlayListAdapter(getActivity(), new ArrayList<>(list));
+        mAdapter = new PlayListAdapter(getActivity(), null);
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                // TODO
-                Toast.makeText(getActivity(), "List Item " + position, Toast.LENGTH_SHORT).show();
+                mEditIndex = position;
+                PlayList item = mAdapter.getItem(position);
+                EditPlayListDialogFragment.editPlayList(item)
+                        .setCallback(PlayListFragment.this)
+                        .show(getFragmentManager().beginTransaction(), "EditPlayList");
             }
         });
         mAdapter.setAddPlayListCallback(new PlayListAdapter.AddPlayListCallback() {
@@ -67,19 +70,93 @@ public class PlayListFragment extends BaseFragment implements EditPlayListDialog
         });
         recyclerView.setAdapter(mAdapter);
         recyclerView.addItemDecoration(new DefaultDividerDecoration());
+
+        loadPlayLists();
+    }
+
+    // Request Data
+
+    private void loadPlayLists() {
+        Subscription subscription = AppRepository.getInstance().playLists()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<PlayList>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onNext(List<PlayList> playLists) {
+                        mAdapter.setData(playLists);
+                        mAdapter.notifyDataSetChanged();
+                    }
+                });
+        addSubscription(subscription);
     }
 
     // Create or Edit Play List Callbacks
 
     @Override
-    public void onCreated(PlayList playList) {
-        mAdapter.getData().add(playList);
-        mAdapter.notifyItemInserted(mAdapter.getData().size() - 1);
-        mAdapter.updateFooterView();
+    public void onCreated(final PlayList playList) {
+        Subscription subscription = AppRepository.getInstance()
+                .create(playList)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Boolean>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onNext(Boolean success) {
+                        if (success) {
+                            mAdapter.getData().add(playList);
+                            mAdapter.notifyItemInserted(mAdapter.getData().size() - 1);
+                            mAdapter.updateFooterView();
+                        }
+                    }
+                });
+        addSubscription(subscription);
     }
 
     @Override
-    public void onEdited(PlayList playList) {
+    public void onEdited(final PlayList playList) {
+        Subscription subscription = AppRepository.getInstance()
+                .update(playList)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Boolean>() {
+                    @Override
+                    public void onCompleted() {
 
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onNext(Boolean success) {
+                        if (success) {
+                            mAdapter.getData().set(mEditIndex, playList);
+                            mAdapter.notifyItemChanged(mEditIndex);
+                            mAdapter.updateFooterView();
+                        }
+                    }
+                });
+        addSubscription(subscription);
     }
 }

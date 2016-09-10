@@ -21,7 +21,7 @@ import java.util.List;
 
 public class MainActivity extends BaseActivity {
 
-    static final int DEFAULT_PAGE_INDEX = 2;
+    static final int DEFAULT_PAGE_INDEX = 0;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
