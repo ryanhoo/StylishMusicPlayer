@@ -57,6 +57,7 @@ public class MainActivity extends BaseActivity {
         MainPagerAdapter adapter = new MainPagerAdapter(getSupportFragmentManager(), mTitles, fragments);
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(adapter.getCount() - 1);
+        viewPager.setPageMargin(getResources().getDimensionPixelSize(R.dimen.mp_margin_large));
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
