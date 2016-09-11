@@ -184,7 +184,12 @@ public class MusicPlayerFragment extends BaseFragment implements Player.Callback
     }
 
     private int getDuration(int progress) {
-        return (int) (mPlayer.getPlayingSong().getDuration() * ((float) progress / 100));
+        Song currentSong = mPlayer.getPlayingSong();
+        int duration = 0;
+        if (currentSong != null) {
+            duration = currentSong.getDuration();
+        }
+        return (int) (duration * ((float) progress / 100));
     }
 
     // Player Callbacks
