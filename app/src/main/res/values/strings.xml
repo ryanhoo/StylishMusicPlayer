@@ -73,4 +73,10 @@
         <item quantity="one">%d folder selected</item>
         <item quantity="other">%d folders selected</item>
     </plurals>
+
+    <!-- Menu -->
+    <string name="mp.menu.create_play_list">Create play list</string>
+    <string name="mp.menu.play_now">Play now</string>
+    <string name="mp.menu.rename">Rename</string>
+    <string name="mp.menu.delete">Delete</string>
 </resources>

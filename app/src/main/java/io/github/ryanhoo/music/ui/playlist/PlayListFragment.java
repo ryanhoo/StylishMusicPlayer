@@ -2,10 +2,9 @@ package io.github.ryanhoo.music.ui.playlist;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import butterknife.BindView;
@@ -31,7 +30,8 @@ import java.util.List;
  * Time: 9:58 PM
  * Desc: PlayListFragment
  */
-public class PlayListFragment extends BaseFragment implements PlayListContract.View, EditPlayListDialogFragment.Callback {
+public class PlayListFragment extends BaseFragment implements PlayListContract.View,
+        EditPlayListDialogFragment.Callback, PlayListAdapter.AddPlayListCallback {
 
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
@@ -39,7 +39,7 @@ public class PlayListFragment extends BaseFragment implements PlayListContract.V
     ProgressBar progressBar;
 
     private PlayListAdapter mAdapter;
-    private int mEditIndex;
+    private int mEditIndex, mDeleteIndex;
 
     PlayListContract.Presenter mPresenter;
 
@@ -58,21 +58,10 @@ public class PlayListFragment extends BaseFragment implements PlayListContract.V
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                mEditIndex = position;
-                PlayList item = mAdapter.getItem(position);
-                EditPlayListDialogFragment.editPlayList(item)
-                        .setCallback(PlayListFragment.this)
-                        .show(getFragmentManager().beginTransaction(), "EditPlayList");
+
             }
         });
-        mAdapter.setAddPlayListCallback(new PlayListAdapter.AddPlayListCallback() {
-            @Override
-            public void onAddPlayList() {
-                EditPlayListDialogFragment.createPlayList()
-                        .setCallback(PlayListFragment.this)
-                        .show(getFragmentManager().beginTransaction(), "CreatePlayList");
-            }
-        });
+        mAdapter.setAddPlayListCallback(this);
         recyclerView.setAdapter(mAdapter);
         recyclerView.addItemDecoration(new DefaultDividerDecoration());
 
@@ -106,6 +95,38 @@ public class PlayListFragment extends BaseFragment implements PlayListContract.V
         mAdapter.getData().add(event.playList);
         mAdapter.notifyDataSetChanged();
         mAdapter.updateFooterView();
+    }
+
+    // Adapter Callbacks
+
+    @Override
+    public void onAction(View actionView, final int position) {
+        PopupMenu actionMenu = new PopupMenu(getActivity(), actionView, Gravity.END | Gravity.BOTTOM);
+        actionMenu.inflate(R.menu.play_list_action);
+        actionMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                PlayList playList = mAdapter.getItem(position);
+                if (item.getItemId() == R.id.menu_item_rename) {
+                    mEditIndex = position;
+                    EditPlayListDialogFragment.editPlayList(playList)
+                            .setCallback(PlayListFragment.this)
+                            .show(getFragmentManager().beginTransaction(), "EditPlayList");
+                } else if (item.getItemId() == R.id.menu_item_delete) {
+                    mDeleteIndex = position;
+                    mPresenter.deletePlayList(playList);
+                }
+                return true;
+            }
+        });
+        actionMenu.show();
+    }
+
+    @Override
+    public void onAddPlayList() {
+        EditPlayListDialogFragment.createPlayList()
+                .setCallback(PlayListFragment.this)
+                .show(getFragmentManager().beginTransaction(), "CreatePlayList");
     }
 
     // Create or Edit Play List Callbacks
@@ -154,6 +175,13 @@ public class PlayListFragment extends BaseFragment implements PlayListContract.V
     public void onPlayListEdited(PlayList playList) {
         mAdapter.getData().set(mEditIndex, playList);
         mAdapter.notifyItemChanged(mEditIndex);
+        mAdapter.updateFooterView();
+    }
+
+    @Override
+    public void onPlayListDeleted(PlayList playList) {
+        mAdapter.getData().remove(mDeleteIndex);
+        mAdapter.notifyItemRemoved(mDeleteIndex);
         mAdapter.updateFooterView();
     }
 

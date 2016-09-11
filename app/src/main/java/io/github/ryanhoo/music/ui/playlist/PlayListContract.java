@@ -28,6 +28,8 @@ import java.util.List;
         void onPlayListCreated(PlayList playList);
 
         void onPlayListEdited(PlayList playList);
+
+        void onPlayListDeleted(PlayList playList);
     }
 
     interface Presenter extends BasePresenter {
@@ -37,5 +39,7 @@ import java.util.List;
         void createPlayList(PlayList playList);
 
         void editPlayList(PlayList playList);
+
+        void deletePlayList(PlayList playList);
     }
 }

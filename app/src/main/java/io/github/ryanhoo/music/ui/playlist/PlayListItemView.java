@@ -7,7 +7,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import io.github.ryanhoo.music.R;
 import io.github.ryanhoo.music.data.model.PlayList;
 import io.github.ryanhoo.music.ui.base.adapter.IAdapterView;
@@ -28,6 +27,8 @@ public class PlayListItemView extends RelativeLayout implements IAdapterView<Pla
     TextView textViewName;
     @BindView(R.id.text_view_info)
     TextView textViewInfo;
+    @BindView(R.id.image_button_action)
+    View buttonAction;
 
     public PlayListItemView(Context context) {
         super(context);
@@ -45,10 +46,5 @@ public class PlayListItemView extends RelativeLayout implements IAdapterView<Pla
         textViewName.setText(item.getName());
         textViewInfo.setText(getResources().getQuantityString(
                 R.plurals.mp_play_list_items_formatter, item.getItemCount(), item.getItemCount()));
-    }
-
-    @OnClick(R.id.image_button_action)
-    public void onItemAction(View view) {
-
     }
 }

@@ -132,4 +132,34 @@ public class PlayListPresenter implements PlayListContract.Presenter {
                 });
         mSubscriptions.add(subscription);
     }
+
+    @Override
+    public void deletePlayList(PlayList playList) {
+        Subscription subscription = mRepository.delete(playList)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<PlayList>() {
+                    @Override
+                    public void onStart() {
+                        mView.showLoading();
+                    }
+
+                    @Override
+                    public void onCompleted() {
+                        mView.hideLoading();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mView.hideLoading();
+                        mView.handleError(e);
+                    }
+
+                    @Override
+                    public void onNext(PlayList playList) {
+                        mView.onPlayListDeleted(playList);
+                    }
+                });
+        mSubscriptions.add(subscription);
+    }
 }

@@ -9,7 +9,7 @@
     >
 
     <FrameLayout
-        android:id="@+id/layout_add_folder"
+        android:id="@+id/layout_add_play_list"
         android:layout_width="match_parent"
         android:layout_height="@dimen/mp.list.itemHeight"
         android:background="@color/mp.list.background"

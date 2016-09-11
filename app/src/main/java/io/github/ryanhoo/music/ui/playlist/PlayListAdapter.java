@@ -3,6 +3,7 @@ package io.github.ryanhoo.music.ui.playlist;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import io.github.ryanhoo.music.R;
 import io.github.ryanhoo.music.data.model.PlayList;
@@ -24,7 +25,7 @@ public class PlayListAdapter extends AbstractFooterAdapter<PlayList, PlayListIte
     private View mFooterView;
     private TextView textViewSummary;
 
-    private AddPlayListCallback mAddFolderCallback;
+    private AddPlayListCallback mAddPlayListCallback;
 
     public PlayListAdapter(Context context, List<PlayList> data) {
         super(context, data);
@@ -42,6 +43,24 @@ public class PlayListAdapter extends AbstractFooterAdapter<PlayList, PlayListIte
         return new PlayListItemView(context);
     }
 
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        final RecyclerView.ViewHolder holder = super.onCreateViewHolder(parent, viewType);
+        if (holder.itemView instanceof PlayListItemView) {
+            final PlayListItemView itemView = (PlayListItemView) holder.itemView;
+            itemView.buttonAction.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = holder.getAdapterPosition();
+                    if (mAddPlayListCallback != null) {
+                        mAddPlayListCallback.onAction(itemView.buttonAction, position);
+                    }
+                }
+            });
+        }
+        return holder;
+    }
+
     // Footer View
 
     @Override
@@ -53,12 +72,12 @@ public class PlayListAdapter extends AbstractFooterAdapter<PlayList, PlayListIte
     protected View createFooterView() {
         if (mFooterView == null) {
             mFooterView = View.inflate(mContext, R.layout.item_play_list_footer, null);
-            View layoutAddFolder = mFooterView.findViewById(R.id.layout_add_folder);
-            layoutAddFolder.setOnClickListener(new View.OnClickListener() {
+            View layoutAddPlayList = mFooterView.findViewById(R.id.layout_add_play_list);
+            layoutAddPlayList.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (mAddFolderCallback != null) {
-                        mAddFolderCallback.onAddPlayList();
+                    if (mAddPlayListCallback != null) {
+                        mAddPlayListCallback.onAddPlayList();
                     }
                 }
             });
@@ -83,10 +102,13 @@ public class PlayListAdapter extends AbstractFooterAdapter<PlayList, PlayListIte
     // Callback
 
     public void setAddPlayListCallback(AddPlayListCallback callback) {
-        mAddFolderCallback = callback;
+        mAddPlayListCallback = callback;
     }
 
     /* package */ interface AddPlayListCallback {
+
+        void onAction(View actionView, int position);
+
         void onAddPlayList();
     }
 }

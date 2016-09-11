@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/menu_item_add_play_list"
-        android:title="@string/mp.menu.create_play_list"
+        android:id="@+id/menu_item_play_now"
+        android:title="@string/mp.menu.play_now"
+        />
+    <item
+        android:id="@+id/menu_item_rename"
+        android:title="@string/mp.menu.rename"
         />
     <item
         android:id="@+id/menu_item_delete"
