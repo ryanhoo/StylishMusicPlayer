@@ -11,5 +11,9 @@ public enum PlayMode {
     SINGLE,
     LOOP,
     LIST,
-    SHUFFLE
+    SHUFFLE;
+
+    public static PlayMode getDefault() {
+        return LOOP;
+    }
 }
