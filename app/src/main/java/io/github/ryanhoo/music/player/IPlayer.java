@@ -18,6 +18,8 @@ public interface IPlayer {
 
     boolean play(PlayList list);
 
+    boolean play(PlayList list, int startIndex);
+
     boolean play(Song song);
 
     boolean pause();
@@ -28,5 +30,5 @@ public interface IPlayer {
 
     Song getPlayingSong();
 
-    void seekTo(int progress);
+    boolean seekTo(int progress);
 }

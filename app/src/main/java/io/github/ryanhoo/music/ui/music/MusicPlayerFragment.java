@@ -1,6 +1,8 @@
 package io.github.ryanhoo.music.ui.music;
 
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,6 +37,9 @@ public class MusicPlayerFragment extends BaseFragment implements Player.Callback
 
     private static final String TAG = "MusicPlayerFragment";
 
+    // Update seek bar every second
+    private static final long UPDATE_PROGRESS_INTERVAL = 1000;
+
     @BindView(R.id.image_view_album)
     ShadowImageView imageViewAlbum;
     @BindView(R.id.text_view_name)
@@ -51,13 +56,37 @@ public class MusicPlayerFragment extends BaseFragment implements Player.Callback
     @BindView(R.id.button_play_toggle)
     ImageView buttonPlayToggle;
 
-    Player mPlayer;
+    private Player mPlayer;
+
+    private Handler mHandler;
+
+    private Runnable mProgressCallback = new Runnable() {
+        @Override
+        public void run() {
+            if (isDetached()) return;
+
+            if (mPlayer.isPlaying()) {
+                int progress = (int) (seekBarProgress.getMax()
+                        * ((float) mPlayer.getProgress() / (float) getCurrentSongDuration()));
+                updateProgressTextWithDuration(mPlayer.getProgress());
+                if (progress >= 0 && progress <= seekBarProgress.getMax()) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        seekBarProgress.setProgress(progress, true);
+                    } else {
+                        seekBarProgress.setProgress(progress);
+                    }
+                    mHandler.postDelayed(this, UPDATE_PROGRESS_INTERVAL);
+                }
+            }
+        }
+    };
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPlayer = Player.getInstance();
         mPlayer.setCallback(this);
+        mHandler = new Handler();
     }
 
     @Nullable
@@ -75,20 +104,30 @@ public class MusicPlayerFragment extends BaseFragment implements Player.Callback
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (fromUser) {
-                    updateProgressText(progress);
+                    updateProgressTextWithProgress(progress);
                 }
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                // Empty
+                mHandler.removeCallbacks(mProgressCallback);
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 seekTo(getDuration(seekBar.getProgress()));
+                if (mPlayer.isPlaying()) {
+                    mHandler.removeCallbacks(mProgressCallback);
+                    mHandler.post(mProgressCallback);
+                }
             }
         });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mHandler.removeCallbacks(mProgressCallback);
     }
 
     // Click Events
@@ -99,10 +138,15 @@ public class MusicPlayerFragment extends BaseFragment implements Player.Callback
             mPlayer.pause();
             buttonPlayToggle.setImageResource(R.drawable.ic_play);
             imageViewAlbum.pauseRotateAnimation();
+
+            mHandler.removeCallbacks(mProgressCallback);
         } else {
             if (mPlayer.play()) {
                 imageViewAlbum.resumeRotateAnimation();
                 buttonPlayToggle.setImageResource(R.drawable.ic_pause);
+
+                mHandler.removeCallbacks(mProgressCallback);
+                mHandler.post(mProgressCallback);
             }
         }
     }
@@ -172,11 +216,18 @@ public class MusicPlayerFragment extends BaseFragment implements Player.Callback
             buttonPlayToggle.setImageResource(R.drawable.ic_play);
             textViewDuration.setText(R.string.mp_music_default_duration);
         }
+
+        mHandler.removeCallbacks(mProgressCallback);
+        mHandler.post(mProgressCallback);
     }
 
-    private void updateProgressText(int progress) {
+    private void updateProgressTextWithProgress(int progress) {
         int targetDuration = getDuration(progress);
         textViewProgress.setText(TimeUtils.formatDuration(targetDuration));
+    }
+
+    private void updateProgressTextWithDuration(int duration) {
+        textViewProgress.setText(TimeUtils.formatDuration(duration));
     }
 
     private void seekTo(int duration) {
@@ -184,12 +235,16 @@ public class MusicPlayerFragment extends BaseFragment implements Player.Callback
     }
 
     private int getDuration(int progress) {
+        return (int) (getCurrentSongDuration() * ((float) progress / seekBarProgress.getMax()));
+    }
+
+    private int getCurrentSongDuration() {
         Song currentSong = mPlayer.getPlayingSong();
         int duration = 0;
         if (currentSong != null) {
             duration = currentSong.getDuration();
         }
-        return (int) (duration * ((float) progress / 100));
+        return duration;
     }
 
     // Player Callbacks

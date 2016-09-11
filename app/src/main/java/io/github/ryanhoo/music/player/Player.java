@@ -1,6 +1,7 @@
 package io.github.ryanhoo.music.player;
 
 import android.media.MediaPlayer;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import io.github.ryanhoo.music.data.model.PlayList;
 import io.github.ryanhoo.music.data.model.Song;
@@ -85,6 +86,16 @@ public class Player implements IPlayer, MediaPlayer.OnCompletionListener {
     }
 
     @Override
+    public boolean play(PlayList list, int startIndex) {
+        if (list == null || startIndex < 0 || startIndex >= list.getNumOfSongs()) return false;
+
+        isPaused = false;
+        list.setPlayingIndex(startIndex);
+        setPlayList(list);
+        return play();
+    }
+
+    @Override
     public boolean play(Song song) {
         if (song == null) return false;
 
@@ -114,14 +125,18 @@ public class Player implements IPlayer, MediaPlayer.OnCompletionListener {
         return mPlayer.getCurrentPosition();
     }
 
+    @Nullable
     @Override
     public Song getPlayingSong() {
         return mPlayList.getCurrentSong();
     }
 
     @Override
-    public void seekTo(int progress) {
+    public boolean seekTo(int progress) {
+        if (mPlayList.getSongs().isEmpty()) return false;
+
         mPlayer.seekTo(progress);
+        return true;
     }
 
     // Listeners

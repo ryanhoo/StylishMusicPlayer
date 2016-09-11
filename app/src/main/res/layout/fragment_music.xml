@@ -69,14 +69,14 @@
             android:text="@string/mp.music.default_duration"
             />
 
-        <SeekBar
+        <android.support.v7.widget.AppCompatSeekBar
             android:id="@+id/seek_bar"
             style="@style/Widget.AppCompat.SeekBar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:max="100"
-            tools:progress="50"
+            android:max="10000"
+            tools:progress="5000"
             />
 
         <TextView
