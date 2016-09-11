@@ -17,6 +17,7 @@ import io.github.ryanhoo.music.event.PlayListCreatedEvent;
 import io.github.ryanhoo.music.ui.base.BaseFragment;
 import io.github.ryanhoo.music.ui.base.adapter.OnItemClickListener;
 import io.github.ryanhoo.music.ui.common.DefaultDividerDecoration;
+import io.github.ryanhoo.music.ui.details.PlayListDetailsActivity;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -58,7 +59,8 @@ public class PlayListFragment extends BaseFragment implements PlayListContract.V
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-
+                PlayList playList = mAdapter.getItem(position);
+                startActivity(PlayListDetailsActivity.launchIntentForPlayList(getActivity(), playList));
             }
         });
         mAdapter.setAddPlayListCallback(this);

@@ -117,10 +117,7 @@ public class FolderFragment extends BaseFragment implements FolderContract.View,
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 if (item.getItemId() == R.id.menu_item_add_play_list) {
-                    PlayList playList = new PlayList();
-                    playList.setName(folder.getName());
-                    playList.setSongs(folder.getSongs());
-                    playList.setNumOfSongs(folder.getNumOfSongs());
+                    PlayList playList = PlayList.fromFolder(folder);
                     EditPlayListDialogFragment.editPlayList(playList)
                             .setCallback(new EditPlayListDialogFragment.Callback() {
                                 @Override

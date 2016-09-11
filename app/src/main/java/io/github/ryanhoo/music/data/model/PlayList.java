@@ -51,7 +51,7 @@ public class PlayList implements Parcelable {
 
     /**
      * Use a singleton play mode
-     * */
+     */
     @Deprecated
     private PlayMode playMode = PlayMode.LOOP;
 
@@ -142,6 +142,53 @@ public class PlayList implements Parcelable {
         this.playMode = playMode;
     }
 
+    // Parcelable
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.id);
+        dest.writeString(this.name);
+        dest.writeInt(this.numOfSongs);
+        dest.writeByte(this.favorite ? (byte) 1 : (byte) 0);
+        dest.writeLong(this.createdAt != null ? this.createdAt.getTime() : -1);
+        dest.writeLong(this.updatedAt != null ? this.updatedAt.getTime() : -1);
+        dest.writeTypedList(this.songs);
+        dest.writeInt(this.playingIndex);
+        dest.writeInt(this.playMode == null ? -1 : this.playMode.ordinal());
+    }
+
+    private void readFromParcel(Parcel in) {
+        this.id = in.readInt();
+        this.name = in.readString();
+        this.numOfSongs = in.readInt();
+        this.favorite = in.readByte() != 0;
+        long tmpCreatedAt = in.readLong();
+        this.createdAt = tmpCreatedAt == -1 ? null : new Date(tmpCreatedAt);
+        long tmpUpdatedAt = in.readLong();
+        this.updatedAt = tmpUpdatedAt == -1 ? null : new Date(tmpUpdatedAt);
+        this.songs = in.createTypedArrayList(Song.CREATOR);
+        this.playingIndex = in.readInt();
+        int tmpPlayMode = in.readInt();
+        this.playMode = tmpPlayMode == -1 ? null : PlayMode.values()[tmpPlayMode];
+    }
+
+    public static final Creator<PlayList> CREATOR = new Creator<PlayList>() {
+        @Override
+        public PlayList createFromParcel(Parcel source) {
+            return new PlayList(source);
+        }
+
+        @Override
+        public PlayList[] newArray(int size) {
+            return new PlayList[size];
+        }
+    };
+
     // Utils
 
     public int getItemCount() {
@@ -207,50 +254,11 @@ public class PlayList implements Parcelable {
         return randomIndex;
     }
 
-    // Parcelable
-
-    @Override
-    public int describeContents() {
-        return 0;
+    public static PlayList fromFolder(@NonNull Folder folder) {
+        PlayList playList = new PlayList();
+        playList.setName(folder.getName());
+        playList.setSongs(folder.getSongs());
+        playList.setNumOfSongs(folder.getNumOfSongs());
+        return playList;
     }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.id);
-        dest.writeString(this.name);
-        dest.writeInt(this.numOfSongs);
-        dest.writeByte(this.favorite ? (byte) 1 : (byte) 0);
-        dest.writeLong(this.createdAt != null ? this.createdAt.getTime() : -1);
-        dest.writeLong(this.updatedAt != null ? this.updatedAt.getTime() : -1);
-        dest.writeTypedList(this.songs);
-        dest.writeInt(this.playingIndex);
-        dest.writeInt(this.playMode == null ? -1 : this.playMode.ordinal());
-    }
-
-    private void readFromParcel(Parcel in) {
-        this.id = in.readInt();
-        this.name = in.readString();
-        this.numOfSongs = in.readInt();
-        this.favorite = in.readByte() != 0;
-        long tmpCreatedAt = in.readLong();
-        this.createdAt = tmpCreatedAt == -1 ? null : new Date(tmpCreatedAt);
-        long tmpUpdatedAt = in.readLong();
-        this.updatedAt = tmpUpdatedAt == -1 ? null : new Date(tmpUpdatedAt);
-        this.songs = in.createTypedArrayList(Song.CREATOR);
-        this.playingIndex = in.readInt();
-        int tmpPlayMode = in.readInt();
-        this.playMode = tmpPlayMode == -1 ? null : PlayMode.values()[tmpPlayMode];
-    }
-
-    public static final Creator<PlayList> CREATOR = new Creator<PlayList>() {
-        @Override
-        public PlayList createFromParcel(Parcel source) {
-            return new PlayList(source);
-        }
-
-        @Override
-        public PlayList[] newArray(int size) {
-            return new PlayList[size];
-        }
-    };
 }
