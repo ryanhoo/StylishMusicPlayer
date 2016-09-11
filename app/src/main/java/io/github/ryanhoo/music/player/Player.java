@@ -106,6 +106,28 @@ public class Player implements IPlayer, MediaPlayer.OnCompletionListener {
     }
 
     @Override
+    public boolean playLast() {
+        isPaused = false;
+
+        return false;
+    }
+
+    @Override
+    public boolean playNext() {
+        isPaused = false;
+        boolean hasNext = mPlayList.hasNext();
+        if (hasNext) {
+            Song next = mPlayList.next();
+            play();
+            if (mCallback != null) {
+                mCallback.onSwitchNext(next);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public boolean pause() {
         if (mPlayer.isPlaying()) {
             mPlayer.pause();
@@ -135,22 +157,44 @@ public class Player implements IPlayer, MediaPlayer.OnCompletionListener {
     public boolean seekTo(int progress) {
         if (mPlayList.getSongs().isEmpty()) return false;
 
-        mPlayer.seekTo(progress);
-        return true;
+        Song currentSong = mPlayList.getCurrentSong();
+        if (currentSong != null) {
+            if (currentSong.getDuration() <= progress) {
+                onCompletion(mPlayer);
+            } else {
+                mPlayer.seekTo(progress);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void setPlayMode(PlayMode playMode) {
+        mPlayList.setPlayMode(playMode);
     }
 
     // Listeners
 
     @Override
     public void onCompletion(MediaPlayer mp) {
-        Song current = mPlayList.getCurrentSong();
         Song next = null;
-        boolean hasNext = mPlayList.hasNext();
-        if (hasNext) {
-            next = mPlayList.next();
+        // There is only one limited play mode which is list, player should be stopped when hitting the list end
+        if (mPlayList.getPlayMode() == PlayMode.LIST && mPlayList.getPlayingIndex() == mPlayList.getNumOfSongs() - 1) {
+            // In the end of the list
+            // Do nothing, just deliver the callback
+        } else if (mPlayList.getPlayMode() == PlayMode.SINGLE) {
+            next = mPlayList.getCurrentSong();
+            play();
+        } else {
+            boolean hasNext = mPlayList.hasNext();
+            if (hasNext) {
+                next = mPlayList.next();
+                play();
+            }
         }
         if (mCallback != null) {
-            mCallback.onComplete(current, next);
+            mCallback.onComplete(next);
         }
     }
 
@@ -162,6 +206,10 @@ public class Player implements IPlayer, MediaPlayer.OnCompletionListener {
 
     public interface Callback {
 
-        void onComplete(Song completed, Song next);
+        void onSwitchLast(@Nullable Song last);
+
+        void onSwitchNext(@Nullable Song next);
+
+        void onComplete(@Nullable Song next);
     }
 }

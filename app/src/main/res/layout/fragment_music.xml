@@ -138,7 +138,8 @@
             android:id="@+id/button_favorite_toggle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_favorite_no"
+            android:scaleType="center"
+            app:srcCompat="@drawable/ic_favorite_yes"
             android:background="?attr/selectableItemBackgroundBorderless"
             />
     </LinearLayout>

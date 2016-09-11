@@ -22,6 +22,10 @@ public interface IPlayer {
 
     boolean play(Song song);
 
+    boolean playLast();
+
+    boolean playNext();
+
     boolean pause();
 
     boolean isPlaying();
@@ -31,4 +35,6 @@ public interface IPlayer {
     Song getPlayingSong();
 
     boolean seekTo(int progress);
+
+    void setPlayMode(PlayMode playMode);
 }

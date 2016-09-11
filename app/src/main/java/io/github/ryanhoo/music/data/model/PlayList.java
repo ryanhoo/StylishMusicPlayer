@@ -27,8 +27,6 @@ public class PlayList implements Parcelable {
     // Play List: Favorite
     public static final int NO_POSITION = -1;
 
-    private static Random DICE = new Random();
-
     @PrimaryKey(AssignType.AUTO_INCREMENT)
     private int id;
 
@@ -52,11 +50,15 @@ public class PlayList implements Parcelable {
     /**
      * Use a singleton play mode
      */
-    @Deprecated
     private PlayMode playMode = PlayMode.LOOP;
 
     public PlayList() {
         // EMPTY
+    }
+
+    public PlayList(Song song) {
+        songs.add(song);
+        numOfSongs = 1;
     }
 
     public PlayList(Parcel in) {
@@ -226,6 +228,11 @@ public class PlayList implements Parcelable {
         return true;
     }
 
+    /**
+     * Move the playingIndex forward depends on the play mode
+     *
+     * @return The next song to play
+     */
     public Song next() {
         switch (playMode) {
             case LOOP:
@@ -246,7 +253,7 @@ public class PlayList implements Parcelable {
     }
 
     private int randomPlayIndex() {
-        int randomIndex = DICE.nextInt(songs.size());
+        int randomIndex = new Random().nextInt(songs.size());
         // Make sure not play the same song twice if there are at least 2 songs
         if (songs.size() > 1 && randomIndex == playingIndex) {
             randomPlayIndex();

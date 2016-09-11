@@ -3,8 +3,8 @@ package io.github.ryanhoo.music.ui.music;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +16,12 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.github.ryanhoo.music.R;
 import io.github.ryanhoo.music.RxBus;
+import io.github.ryanhoo.music.data.model.PlayList;
 import io.github.ryanhoo.music.data.model.Song;
+import io.github.ryanhoo.music.data.source.PreferenceManager;
+import io.github.ryanhoo.music.event.PlayListNowEvent;
 import io.github.ryanhoo.music.event.PlaySongEvent;
+import io.github.ryanhoo.music.player.PlayMode;
 import io.github.ryanhoo.music.player.Player;
 import io.github.ryanhoo.music.ui.base.BaseFragment;
 import io.github.ryanhoo.music.ui.widget.ShadowImageView;
@@ -35,7 +39,7 @@ import rx.functions.Action1;
  */
 public class MusicPlayerFragment extends BaseFragment implements Player.Callback {
 
-    private static final String TAG = "MusicPlayerFragment";
+    // private static final String TAG = "MusicPlayerFragment";
 
     // Update seek bar every second
     private static final long UPDATE_PROGRESS_INTERVAL = 1000;
@@ -53,6 +57,8 @@ public class MusicPlayerFragment extends BaseFragment implements Player.Callback
     @BindView(R.id.seek_bar)
     SeekBar seekBarProgress;
 
+    @BindView(R.id.button_play_mode_toggle)
+    ImageView buttonPlayModeToggle;
     @BindView(R.id.button_play_toggle)
     ImageView buttonPlayToggle;
 
@@ -122,6 +128,9 @@ public class MusicPlayerFragment extends BaseFragment implements Player.Callback
                 }
             }
         });
+        // Retrieve last play mode
+        PlayMode lastPlayMode = PreferenceManager.lastPlayMode(getActivity());
+        buttonPlayModeToggle.setImageResource(getPlayModeDrawableRes(lastPlayMode));
     }
 
     @Override
@@ -153,17 +162,21 @@ public class MusicPlayerFragment extends BaseFragment implements Player.Callback
 
     @OnClick(R.id.button_play_mode_toggle)
     public void onPlayModeToggleAction(View view) {
-
+        PlayMode current = PreferenceManager.lastPlayMode(getActivity());
+        PlayMode newMode = PlayMode.switchNextMode(current);
+        PreferenceManager.setPlayMode(getActivity(), newMode);
+        mPlayer.setPlayMode(newMode);
+        buttonPlayModeToggle.setImageResource(getPlayModeDrawableRes(newMode));
     }
 
     @OnClick(R.id.button_play_last)
     public void onPlayLastAction(View view) {
-
+        mPlayer.playLast();
     }
 
     @OnClick(R.id.button_play_next)
     public void onPlayNextAction(View view) {
-
+        mPlayer.playNext();
     }
 
     @OnClick(R.id.button_favorite_toggle)
@@ -182,6 +195,8 @@ public class MusicPlayerFragment extends BaseFragment implements Player.Callback
                     public void call(Object o) {
                         if (o instanceof PlaySongEvent) {
                             onPlaySongEvent((PlaySongEvent) o);
+                        } else if (o instanceof PlayListNowEvent) {
+                            onPlayListNowEvent((PlayListNowEvent) o);
                         }
                     }
                 })
@@ -193,16 +208,28 @@ public class MusicPlayerFragment extends BaseFragment implements Player.Callback
         playSong(song);
     }
 
+    private void onPlayListNowEvent(PlayListNowEvent event) {
+        PlayList playList = event.playList;
+        playList.setPlayMode(PreferenceManager.lastPlayMode(getActivity()));
+        int playIndex = event.playIndex;
+        playSong(playList, playIndex);
+    }
+
     // Music Controls
 
     private void playSong(Song song) {
-        if (song == null) return;
+        PlayList playList = new PlayList(song);
+        playList.setPlayMode(PreferenceManager.lastPlayMode(getActivity()));
+        playSong(playList, 0);
+    }
 
-        boolean result = mPlayer.play(song);
-        Log.d(TAG, String.format("onPlaySongEvent: %s at path: %s", result ? "success" : "failure", song.getPath()));
+    private void playSong(PlayList playList, int playIndex) {
+        if (playList == null) return;
 
-        textViewName.setText(song.getDisplayName());
-        textViewArtist.setText(song.getArtist());
+        boolean result = mPlayer.play(playList, playIndex);
+
+        Song song = playList.getCurrentSong();
+        onSongUpdated(song);
 
         seekBarProgress.setProgress(0);
         seekBarProgress.setEnabled(result);
@@ -219,6 +246,14 @@ public class MusicPlayerFragment extends BaseFragment implements Player.Callback
 
         mHandler.removeCallbacks(mProgressCallback);
         mHandler.post(mProgressCallback);
+    }
+
+    private void onSongUpdated(Song song) {
+        if (song == null) return;
+
+        textViewName.setText(song.getDisplayName());
+        textViewArtist.setText(song.getArtist());
+        textViewDuration.setText(TimeUtils.formatDuration(song.getDuration()));
     }
 
     private void updateProgressTextWithProgress(int progress) {
@@ -247,16 +282,46 @@ public class MusicPlayerFragment extends BaseFragment implements Player.Callback
         return duration;
     }
 
+    @DrawableRes
+    private int getPlayModeDrawableRes(PlayMode playMode) {
+        if (playMode == null) {
+            playMode = PlayMode.getDefault();
+        }
+        switch (playMode) {
+            case LIST:
+                return R.drawable.ic_play_mode_list;
+            case LOOP:
+                return R.drawable.ic_play_mode_loop;
+            case SHUFFLE:
+                return R.drawable.ic_play_mode_shuffle;
+            case SINGLE:
+                return R.drawable.ic_play_mode_single;
+        }
+        return R.drawable.ic_play_mode_loop;
+    }
+
     // Player Callbacks
 
     @Override
-    public void onComplete(Song completed, Song next) {
+    public void onSwitchLast(Song last) {
+
+    }
+
+    @Override
+    public void onSwitchNext(Song next) {
+        onSongUpdated(next);
+    }
+
+    @Override
+    public void onComplete(Song next) {
         if (next == null) {
             imageViewAlbum.cancelRotateAnimation();
             buttonPlayToggle.setImageResource(R.drawable.ic_play);
+            seekBarProgress.setProgress(0);
+            updateProgressTextWithProgress(0);
             seekTo(0);
         } else {
-            playSong(next);
+            onSongUpdated(next);
         }
     }
 }
