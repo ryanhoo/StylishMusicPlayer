@@ -203,17 +203,28 @@ public class PlayList implements Parcelable {
         numOfSongs = songs.size();
     }
 
+    public void addSong(Song song, int index) {
+        if (song == null) return;
+
+        songs.add(index, song);
+        numOfSongs = songs.size();
+    }
+
     public boolean removeSong(Song song) {
         if (song == null) return false;
 
         int index;
         if ((index = songs.indexOf(song)) != -1) {
-            return songs.remove(index) != null;
+            if (songs.remove(index) != null) {
+                numOfSongs = songs.size();
+                return true;
+            }
         } else {
             for (Iterator<Song> iterator = songs.iterator(); iterator.hasNext(); ) {
                 Song item = iterator.next();
                 if (song.getPath().equals(item.getPath())) {
                     iterator.remove();
+                    numOfSongs = songs.size();
                     return true;
                 }
             }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 import com.litesuits.orm.LiteOrm;
 import com.litesuits.orm.db.assit.QueryBuilder;
+import com.litesuits.orm.db.model.ConflictAlgorithm;
 import io.github.ryanhoo.music.data.model.Folder;
 import io.github.ryanhoo.music.data.model.PlayList;
 import io.github.ryanhoo.music.data.model.Song;
@@ -218,13 +219,15 @@ import java.util.List;
                 }
                 PlayList favorite = playLists.get(0);
                 song.setFavorite(isFavorite);
+                favorite.setUpdatedAt(new Date());
                 if (isFavorite) {
-                    favorite.addSong(song);
+                    // Insert song to the beginning of the list
+                    favorite.addSong(song, 0);
                 } else {
                     favorite.removeSong(song);
                 }
-                mLiteOrm.delete(favorite);
-                long result = mLiteOrm.save(favorite);
+                mLiteOrm.insert(song, ConflictAlgorithm.Replace);
+                long result = mLiteOrm.insert(favorite, ConflictAlgorithm.Replace);
                 if (result > 0) {
                     subscriber.onNext(song);
                 } else {
