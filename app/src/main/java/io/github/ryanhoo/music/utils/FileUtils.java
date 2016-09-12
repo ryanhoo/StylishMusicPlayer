@@ -1,12 +1,15 @@
 package io.github.ryanhoo.music.utils;
 
 import android.media.MediaMetadataRetriever;
+import io.github.ryanhoo.music.data.model.Folder;
 import io.github.ryanhoo.music.data.model.Song;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -56,6 +59,14 @@ public class FileUtils {
                 }
             }
         }
+        if (songs.size() > 1) {
+            Collections.sort(songs, new Comparator<Song>() {
+                @Override
+                public int compare(Song left, Song right) {
+                    return left.getTitle().compareTo(right.getTitle());
+                }
+            });
+        }
         return songs;
     }
 
@@ -82,5 +93,13 @@ public class FileUtils {
         song.setDuration(duration);
         song.setSize((int) file.length());
         return song;
+    }
+
+    public static Folder folderFromDir(File dir) {
+        Folder folder = new Folder(dir.getName(), dir.getAbsolutePath());
+        List<Song> songs = musicFiles(dir);
+        folder.setSongs(songs);
+        folder.setNumOfSongs(songs.size());
+        return folder;
     }
 }

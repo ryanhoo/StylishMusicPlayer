@@ -31,9 +31,9 @@ public class DBUtils {
         // File sdcardDir = Environment.getExternalStorageDirectory();
         File downloadDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
         File musicDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC);
-        // defaultFolders.add(new Folder(sdcardDir.getName(), sdcardDir.getAbsolutePath()));
-        defaultFolders.add(new Folder(downloadDir.getName(), downloadDir.getAbsolutePath()));
-        defaultFolders.add(new Folder(musicDir.getName(), musicDir.getAbsolutePath()));
+        // defaultFolders.add(FileUtils.folderFromDir(sdcardDir));
+        defaultFolders.add(FileUtils.folderFromDir(downloadDir));
+        defaultFolders.add(FileUtils.folderFromDir(musicDir));
         return defaultFolders;
     }
 }
