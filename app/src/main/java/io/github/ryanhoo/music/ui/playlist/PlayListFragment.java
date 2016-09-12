@@ -13,6 +13,7 @@ import io.github.ryanhoo.music.R;
 import io.github.ryanhoo.music.RxBus;
 import io.github.ryanhoo.music.data.model.PlayList;
 import io.github.ryanhoo.music.data.source.AppRepository;
+import io.github.ryanhoo.music.event.FavoriteChangeEvent;
 import io.github.ryanhoo.music.event.PlayListCreatedEvent;
 import io.github.ryanhoo.music.event.PlayListNowEvent;
 import io.github.ryanhoo.music.ui.base.BaseFragment;
@@ -88,6 +89,8 @@ public class PlayListFragment extends BaseFragment implements PlayListContract.V
                     public void call(Object o) {
                         if (o instanceof PlayListCreatedEvent) {
                             onPlayListCreatedEvent((PlayListCreatedEvent) o);
+                        } else if (o instanceof FavoriteChangeEvent) {
+                            onFavoriteChangeEvent((FavoriteChangeEvent) o);
                         }
                     }
                 })
@@ -98,6 +101,33 @@ public class PlayListFragment extends BaseFragment implements PlayListContract.V
         mAdapter.getData().add(event.playList);
         mAdapter.notifyDataSetChanged();
         mAdapter.updateFooterView();
+    }
+
+    private void onFavoriteChangeEvent(FavoriteChangeEvent event) {
+        // Update entire play lists
+        mPresenter.loadPlayLists();
+       /*
+        Song song = event.song;
+        List<PlayList> playLists = mAdapter.getData();
+        if (playLists != null && playLists.size() > 1) {
+            PlayList favorite = playLists.get(0);
+            if (!favorite.isFavorite()) {
+                // Find the favorite play list
+                for (PlayList list : playLists) {
+                    if (list.isFavorite()) {
+                        favorite = list;
+                        break;
+                    }
+                }
+            }
+            int index;
+            if ((index = favorite.getSongs().indexOf(song)) != -1) {
+                favorite.getSongs().remove(index);
+            }
+            favorite.addSong(song);
+            mAdapter.notifyDataSetChanged();
+        }
+        */
     }
 
     // Adapter Callbacks

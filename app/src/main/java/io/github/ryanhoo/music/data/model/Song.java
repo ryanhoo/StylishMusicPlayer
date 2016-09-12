@@ -37,6 +37,8 @@ public class Song implements Parcelable {
 
     private int size;
 
+    private boolean favorite;
+
     public Song() {
         // Empty
     }
@@ -117,6 +119,14 @@ public class Song implements Parcelable {
         this.size = size;
     }
 
+    public boolean isFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -133,6 +143,7 @@ public class Song implements Parcelable {
         dest.writeString(this.path);
         dest.writeInt(this.duration);
         dest.writeInt(this.size);
+        dest.writeInt(this.favorite ? 1 : 0);
     }
 
     private void readFromParcel(Parcel in) {
@@ -145,6 +156,7 @@ public class Song implements Parcelable {
         this.path = in.readString();
         this.duration = in.readInt();
         this.size = in.readInt();
+        this.favorite = in.readInt() == 1;
     }
 
     public static final Parcelable.Creator<Song> CREATOR = new Parcelable.Creator<Song>() {

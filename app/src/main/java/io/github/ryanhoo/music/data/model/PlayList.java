@@ -9,10 +9,7 @@ import com.litesuits.orm.db.enums.AssignType;
 import com.litesuits.orm.db.enums.Relation;
 import io.github.ryanhoo.music.player.PlayMode;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Created with Android Studio.
@@ -26,6 +23,7 @@ public class PlayList implements Parcelable {
 
     // Play List: Favorite
     public static final int NO_POSITION = -1;
+    public static final String COLUMN_FAVORITE = "favorite";
 
     @PrimaryKey(AssignType.AUTO_INCREMENT)
     private int id;
@@ -34,6 +32,7 @@ public class PlayList implements Parcelable {
 
     private int numOfSongs;
 
+    @Column(COLUMN_FAVORITE)
     private boolean favorite;
 
     private Date createdAt;
@@ -195,6 +194,31 @@ public class PlayList implements Parcelable {
 
     public int getItemCount() {
         return songs == null ? 0 : songs.size();
+    }
+
+    public void addSong(Song song) {
+        if (song == null) return;
+
+        songs.add(song);
+        numOfSongs = songs.size();
+    }
+
+    public boolean removeSong(Song song) {
+        if (song == null) return false;
+
+        int index;
+        if ((index = songs.indexOf(song)) != -1) {
+            return songs.remove(index) != null;
+        } else {
+            for (Iterator<Song> iterator = songs.iterator(); iterator.hasNext(); ) {
+                Song item = iterator.next();
+                if (song.getPath().equals(item.getPath())) {
+                    iterator.remove();
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**

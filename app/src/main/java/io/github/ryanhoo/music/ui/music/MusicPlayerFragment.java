@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -18,6 +19,7 @@ import io.github.ryanhoo.music.R;
 import io.github.ryanhoo.music.RxBus;
 import io.github.ryanhoo.music.data.model.PlayList;
 import io.github.ryanhoo.music.data.model.Song;
+import io.github.ryanhoo.music.data.source.AppRepository;
 import io.github.ryanhoo.music.data.source.PreferenceManager;
 import io.github.ryanhoo.music.event.PlayListNowEvent;
 import io.github.ryanhoo.music.event.PlaySongEvent;
@@ -37,7 +39,8 @@ import rx.functions.Action1;
  * Time: 9:58 PM
  * Desc: MusicPlayerFragment
  */
-public class MusicPlayerFragment extends BaseFragment implements Player.Callback {
+
+public class MusicPlayerFragment extends BaseFragment implements MusicPlayerContract.View, Player.Callback {
 
     // private static final String TAG = "MusicPlayerFragment";
 
@@ -61,10 +64,14 @@ public class MusicPlayerFragment extends BaseFragment implements Player.Callback
     ImageView buttonPlayModeToggle;
     @BindView(R.id.button_play_toggle)
     ImageView buttonPlayToggle;
+    @BindView(R.id.button_favorite_toggle)
+    ImageView buttonFavoriteToggle;
 
     private Player mPlayer;
 
     private Handler mHandler;
+
+    private MusicPlayerContract.Presenter mPresenter;
 
     private Runnable mProgressCallback = new Runnable() {
         @Override
@@ -131,11 +138,14 @@ public class MusicPlayerFragment extends BaseFragment implements Player.Callback
         // Retrieve last play mode
         PlayMode lastPlayMode = PreferenceManager.lastPlayMode(getActivity());
         buttonPlayModeToggle.setImageResource(getPlayModeDrawableRes(lastPlayMode));
+
+        new MusicPlayerPresenter(AppRepository.getInstance(), this).subscribe();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        mPresenter.unsubscribe();
         mHandler.removeCallbacks(mProgressCallback);
     }
 
@@ -181,7 +191,11 @@ public class MusicPlayerFragment extends BaseFragment implements Player.Callback
 
     @OnClick(R.id.button_favorite_toggle)
     public void onFavoriteToggleAction(View view) {
-
+        Song currentSong = mPlayer.getPlayingSong();
+        if (currentSong != null) {
+            view.setEnabled(false);
+            mPresenter.setSongAsFavorite(currentSong, !currentSong.isFavorite());
+        }
     }
 
     // RXBus Events
@@ -254,6 +268,7 @@ public class MusicPlayerFragment extends BaseFragment implements Player.Callback
         textViewName.setText(song.getDisplayName());
         textViewArtist.setText(song.getArtist());
         textViewDuration.setText(TimeUtils.formatDuration(song.getDuration()));
+        buttonFavoriteToggle.setImageResource(song.isFavorite() ? R.drawable.ic_favorite_yes : R.drawable.ic_favorite_no);
     }
 
     private void updateProgressTextWithProgress(int progress) {
@@ -323,5 +338,23 @@ public class MusicPlayerFragment extends BaseFragment implements Player.Callback
         } else {
             onSongUpdated(next);
         }
+    }
+
+    // MVP View
+
+    @Override
+    public void handleError(Throwable error) {
+        Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onSongSetAsFavorite(Song song) {
+        buttonFavoriteToggle.setEnabled(true);
+        buttonFavoriteToggle.setImageResource(song.isFavorite() ? R.drawable.ic_favorite_yes : R.drawable.ic_favorite_no);
+    }
+
+    @Override
+    public void setPresenter(MusicPlayerContract.Presenter presenter) {
+        mPresenter = presenter;
     }
 }

@@ -3,6 +3,7 @@ package io.github.ryanhoo.music.data.source;
 import io.github.ryanhoo.music.Injection;
 import io.github.ryanhoo.music.data.model.Folder;
 import io.github.ryanhoo.music.data.model.PlayList;
+import io.github.ryanhoo.music.data.model.Song;
 import io.github.ryanhoo.music.data.source.db.LiteOrmHelper;
 import rx.Observable;
 
@@ -78,5 +79,15 @@ public class AppRepository implements AppContract {
     @Override
     public Observable<Folder> delete(Folder folder) {
         return mLocalDataSource.delete(folder);
+    }
+
+    @Override
+    public Observable<Song> update(Song song) {
+        return mLocalDataSource.update(song);
+    }
+
+    @Override
+    public Observable<Song> setSongAsFavorite(Song song, boolean favorite) {
+        return mLocalDataSource.setSongAsFavorite(song, favorite);
     }
 }

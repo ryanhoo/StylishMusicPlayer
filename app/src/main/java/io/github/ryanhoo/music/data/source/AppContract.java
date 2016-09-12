@@ -2,6 +2,7 @@ package io.github.ryanhoo.music.data.source;
 
 import io.github.ryanhoo.music.data.model.Folder;
 import io.github.ryanhoo.music.data.model.PlayList;
+import io.github.ryanhoo.music.data.model.Song;
 import rx.Observable;
 
 import java.util.List;
@@ -36,4 +37,11 @@ import java.util.List;
     // Observable<Folder> update(Folder folder);
 
     Observable<Folder> delete(Folder folder);
+
+    // Song
+
+    Observable<Song> update(Song song);
+
+    Observable<Song> setSongAsFavorite(Song song, boolean favorite);
+
 }
