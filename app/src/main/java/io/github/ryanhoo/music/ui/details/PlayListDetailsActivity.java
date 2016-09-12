@@ -11,9 +11,12 @@ import android.view.View;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.ryanhoo.music.R;
+import io.github.ryanhoo.music.RxBus;
 import io.github.ryanhoo.music.data.model.Folder;
 import io.github.ryanhoo.music.data.model.PlayList;
+import io.github.ryanhoo.music.event.PlayListNowEvent;
 import io.github.ryanhoo.music.ui.base.BaseActivity;
+import io.github.ryanhoo.music.ui.base.adapter.OnItemClickListener;
 import io.github.ryanhoo.music.ui.common.DefaultDividerDecoration;
 
 /**
@@ -61,6 +64,12 @@ public class PlayListDetailsActivity extends BaseActivity {
         }
 
         mAdapter = new SongAdapter(this, mPlayList.getSongs());
+        mAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                RxBus.getInstance().post(new PlayListNowEvent(mPlayList, position));
+            }
+        });
         recyclerView.setAdapter(mAdapter);
         recyclerView.addItemDecoration(new DefaultDividerDecoration());
         emptyView.setVisibility(mPlayList.getNumOfSongs() > 0 ? View.GONE : View.VISIBLE);
