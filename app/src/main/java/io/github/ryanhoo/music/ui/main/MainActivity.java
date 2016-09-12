@@ -78,6 +78,11 @@ public class MainActivity extends BaseActivity {
         radioButtons.get(DEFAULT_PAGE_INDEX).setChecked(true);
     }
 
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
+    }
+
     @OnCheckedChanged({R.id.radio_button_play_list, R.id.radio_button_music, R.id.radio_button_local_files, R.id.radio_button_settings})
     public void onRadioButtonChecked(RadioButton button, boolean isChecked) {
         if (isChecked) {

@@ -133,7 +133,7 @@ public class Song implements Parcelable {
         dest.writeInt(this.favorite ? 1 : 0);
     }
 
-    private void readFromParcel(Parcel in) {
+    public void readFromParcel(Parcel in) {
         this.id = in.readInt();
         this.title = in.readString();
         this.displayName = in.readString();

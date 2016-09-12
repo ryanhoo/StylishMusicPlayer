@@ -163,7 +163,7 @@ public class PlayList implements Parcelable {
         dest.writeInt(this.playMode == null ? -1 : this.playMode.ordinal());
     }
 
-    private void readFromParcel(Parcel in) {
+    public void readFromParcel(Parcel in) {
         this.id = in.readInt();
         this.name = in.readString();
         this.numOfSongs = in.readInt();

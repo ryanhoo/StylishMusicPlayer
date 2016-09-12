@@ -1,5 +1,6 @@
 package io.github.ryanhoo.music.player;
 
+import android.support.annotation.Nullable;
 import io.github.ryanhoo.music.data.model.PlayList;
 import io.github.ryanhoo.music.data.model.Song;
 
@@ -10,7 +11,7 @@ import io.github.ryanhoo.music.data.model.Song;
  * Time: 6:02 PM
  * Desc: IPlayer
  */
-public interface IPlayer {
+public interface IPlayback {
 
     void setPlayList(PlayList list);
 
@@ -37,4 +38,23 @@ public interface IPlayer {
     boolean seekTo(int progress);
 
     void setPlayMode(PlayMode playMode);
+
+    void registerCallback(Callback callback);
+
+    void unregisterCallback(Callback callback);
+
+    void removeCallbacks();
+
+    void releasePlayer();
+
+    interface Callback {
+
+        void onSwitchLast(@Nullable Song last);
+
+        void onSwitchNext(@Nullable Song next);
+
+        void onComplete(@Nullable Song next);
+
+        void onPlayStatusChanged(boolean isPlaying);
+    }
 }

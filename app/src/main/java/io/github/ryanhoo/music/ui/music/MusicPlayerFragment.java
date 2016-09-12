@@ -3,7 +3,7 @@ package io.github.ryanhoo.music.ui.music;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.DrawableRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,8 +23,9 @@ import io.github.ryanhoo.music.data.source.AppRepository;
 import io.github.ryanhoo.music.data.source.PreferenceManager;
 import io.github.ryanhoo.music.event.PlayListNowEvent;
 import io.github.ryanhoo.music.event.PlaySongEvent;
+import io.github.ryanhoo.music.player.IPlayback;
 import io.github.ryanhoo.music.player.PlayMode;
-import io.github.ryanhoo.music.player.Player;
+import io.github.ryanhoo.music.player.PlaybackService;
 import io.github.ryanhoo.music.ui.base.BaseFragment;
 import io.github.ryanhoo.music.ui.widget.ShadowImageView;
 import io.github.ryanhoo.music.utils.TimeUtils;
@@ -40,7 +41,7 @@ import rx.functions.Action1;
  * Desc: MusicPlayerFragment
  */
 
-public class MusicPlayerFragment extends BaseFragment implements MusicPlayerContract.View, Player.Callback {
+public class MusicPlayerFragment extends BaseFragment implements MusicPlayerContract.View, IPlayback.Callback {
 
     // private static final String TAG = "MusicPlayerFragment";
 
@@ -67,9 +68,9 @@ public class MusicPlayerFragment extends BaseFragment implements MusicPlayerCont
     @BindView(R.id.button_favorite_toggle)
     ImageView buttonFavoriteToggle;
 
-    private Player mPlayer;
+    private IPlayback mPlayer;
 
-    private Handler mHandler;
+    private Handler mHandler = new Handler();
 
     private MusicPlayerContract.Presenter mPresenter;
 
@@ -93,14 +94,6 @@ public class MusicPlayerFragment extends BaseFragment implements MusicPlayerCont
             }
         }
     };
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mPlayer = Player.getInstance();
-        mPlayer.setCallback(this);
-        mHandler = new Handler();
-    }
 
     @Nullable
     @Override
@@ -135,62 +128,73 @@ public class MusicPlayerFragment extends BaseFragment implements MusicPlayerCont
                 }
             }
         });
-        // Retrieve last play mode
-        PlayMode lastPlayMode = PreferenceManager.lastPlayMode(getActivity());
-        buttonPlayModeToggle.setImageResource(getPlayModeDrawableRes(lastPlayMode));
 
-        new MusicPlayerPresenter(AppRepository.getInstance(), this).subscribe();
+        new MusicPlayerPresenter(getActivity(), AppRepository.getInstance(), this).subscribe();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (mPlayer != null && mPlayer.isPlaying()) {
+            mHandler.removeCallbacks(mProgressCallback);
+            mHandler.post(mProgressCallback);
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mHandler.removeCallbacks(mProgressCallback);
     }
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
         mPresenter.unsubscribe();
-        mHandler.removeCallbacks(mProgressCallback);
+        super.onDestroyView();
     }
 
     // Click Events
 
     @OnClick(R.id.button_play_toggle)
     public void onPlayToggleAction(View view) {
+        if (mPlayer == null) return;
+
         if (mPlayer.isPlaying()) {
             mPlayer.pause();
-            buttonPlayToggle.setImageResource(R.drawable.ic_play);
-            imageViewAlbum.pauseRotateAnimation();
-
-            mHandler.removeCallbacks(mProgressCallback);
         } else {
-            if (mPlayer.play()) {
-                imageViewAlbum.resumeRotateAnimation();
-                buttonPlayToggle.setImageResource(R.drawable.ic_pause);
-
-                mHandler.removeCallbacks(mProgressCallback);
-                mHandler.post(mProgressCallback);
-            }
+            mPlayer.play();
         }
     }
 
     @OnClick(R.id.button_play_mode_toggle)
     public void onPlayModeToggleAction(View view) {
+        if (mPlayer == null) return;
+
         PlayMode current = PreferenceManager.lastPlayMode(getActivity());
         PlayMode newMode = PlayMode.switchNextMode(current);
         PreferenceManager.setPlayMode(getActivity(), newMode);
         mPlayer.setPlayMode(newMode);
-        buttonPlayModeToggle.setImageResource(getPlayModeDrawableRes(newMode));
+        updatePlayMode(newMode);
     }
 
     @OnClick(R.id.button_play_last)
     public void onPlayLastAction(View view) {
+        if (mPlayer == null) return;
+
         mPlayer.playLast();
     }
 
     @OnClick(R.id.button_play_next)
     public void onPlayNextAction(View view) {
+        if (mPlayer == null) return;
+
         mPlayer.playNext();
     }
 
     @OnClick(R.id.button_favorite_toggle)
     public void onFavoriteToggleAction(View view) {
+        if (mPlayer == null) return;
+
         Song currentSong = mPlayer.getPlayingSong();
         if (currentSong != null) {
             view.setEnabled(false);
@@ -224,7 +228,6 @@ public class MusicPlayerFragment extends BaseFragment implements MusicPlayerCont
 
     private void onPlayListNowEvent(PlayListNowEvent event) {
         PlayList playList = event.playList;
-        playList.setPlayMode(PreferenceManager.lastPlayMode(getActivity()));
         int playIndex = event.playIndex;
         playSong(playList, playIndex);
     }
@@ -233,18 +236,20 @@ public class MusicPlayerFragment extends BaseFragment implements MusicPlayerCont
 
     private void playSong(Song song) {
         PlayList playList = new PlayList(song);
-        playList.setPlayMode(PreferenceManager.lastPlayMode(getActivity()));
         playSong(playList, 0);
     }
 
     private void playSong(PlayList playList, int playIndex) {
         if (playList == null) return;
 
-        boolean result = mPlayer.play(playList, playIndex);
+        playList.setPlayMode(PreferenceManager.lastPlayMode(getActivity()));
+        // boolean result =
+        mPlayer.play(playList, playIndex);
 
         Song song = playList.getCurrentSong();
         onSongUpdated(song);
 
+        /*
         seekBarProgress.setProgress(0);
         seekBarProgress.setEnabled(result);
         textViewProgress.setText(R.string.mp_music_default_duration);
@@ -260,15 +265,9 @@ public class MusicPlayerFragment extends BaseFragment implements MusicPlayerCont
 
         mHandler.removeCallbacks(mProgressCallback);
         mHandler.post(mProgressCallback);
-    }
 
-    private void onSongUpdated(Song song) {
-        if (song == null) return;
-
-        textViewName.setText(song.getDisplayName());
-        textViewArtist.setText(song.getArtist());
-        textViewDuration.setText(TimeUtils.formatDuration(song.getDuration()));
-        buttonFavoriteToggle.setImageResource(song.isFavorite() ? R.drawable.ic_favorite_yes : R.drawable.ic_favorite_no);
+        getActivity().startService(new Intent(getActivity(), PlaybackService.class));
+        */
     }
 
     private void updateProgressTextWithProgress(int progress) {
@@ -297,29 +296,11 @@ public class MusicPlayerFragment extends BaseFragment implements MusicPlayerCont
         return duration;
     }
 
-    @DrawableRes
-    private int getPlayModeDrawableRes(PlayMode playMode) {
-        if (playMode == null) {
-            playMode = PlayMode.getDefault();
-        }
-        switch (playMode) {
-            case LIST:
-                return R.drawable.ic_play_mode_list;
-            case LOOP:
-                return R.drawable.ic_play_mode_loop;
-            case SHUFFLE:
-                return R.drawable.ic_play_mode_shuffle;
-            case SINGLE:
-                return R.drawable.ic_play_mode_single;
-        }
-        return R.drawable.ic_play_mode_loop;
-    }
-
     // Player Callbacks
 
     @Override
     public void onSwitchLast(Song last) {
-
+        onSongUpdated(last);
     }
 
     @Override
@@ -329,14 +310,19 @@ public class MusicPlayerFragment extends BaseFragment implements MusicPlayerCont
 
     @Override
     public void onComplete(Song next) {
-        if (next == null) {
-            imageViewAlbum.cancelRotateAnimation();
-            buttonPlayToggle.setImageResource(R.drawable.ic_play);
-            seekBarProgress.setProgress(0);
-            updateProgressTextWithProgress(0);
-            seekTo(0);
+        onSongUpdated(next);
+    }
+
+    @Override
+    public void onPlayStatusChanged(boolean isPlaying) {
+        updatePlayToggle(isPlaying);
+        if (isPlaying) {
+            imageViewAlbum.resumeRotateAnimation();
+            mHandler.removeCallbacks(mProgressCallback);
+            mHandler.post(mProgressCallback);
         } else {
-            onSongUpdated(next);
+            imageViewAlbum.pauseRotateAnimation();
+            mHandler.removeCallbacks(mProgressCallback);
         }
     }
 
@@ -348,9 +334,82 @@ public class MusicPlayerFragment extends BaseFragment implements MusicPlayerCont
     }
 
     @Override
-    public void onSongSetAsFavorite(Song song) {
+    public void onPlaybackServiceBound(PlaybackService service) {
+        mPlayer = service;
+        mPlayer.registerCallback(this);
+    }
+
+    @Override
+    public void onPlaybackServiceUnbound() {
+        mPlayer.unregisterCallback(this);
+        mPlayer = null;
+    }
+
+    @Override
+    public void onSongSetAsFavorite(@NonNull Song song) {
         buttonFavoriteToggle.setEnabled(true);
+        updateFavoriteToggle(song.isFavorite());
+    }
+
+    public void onSongUpdated(@Nullable Song song) {
+        if (song == null) {
+            imageViewAlbum.cancelRotateAnimation();
+            buttonPlayToggle.setImageResource(R.drawable.ic_play);
+            seekBarProgress.setProgress(0);
+            updateProgressTextWithProgress(0);
+            seekTo(0);
+            mHandler.removeCallbacks(mProgressCallback);
+            return;
+        }
+
+        // Step 1: Song name and artist
+        textViewName.setText(song.getDisplayName());
+        textViewArtist.setText(song.getArtist());
+        // Step 2: favorite
         buttonFavoriteToggle.setImageResource(song.isFavorite() ? R.drawable.ic_favorite_yes : R.drawable.ic_favorite_no);
+        // Step 3: Duration
+        textViewDuration.setText(TimeUtils.formatDuration(song.getDuration()));
+        // Step 4: Keep these things updated
+        // - Album rotation
+        // - Progress(textViewProgress & seekBarProgress)
+        imageViewAlbum.pauseRotateAnimation();
+        mHandler.removeCallbacks(mProgressCallback);
+        if (mPlayer.isPlaying()) {
+            imageViewAlbum.startRotateAnimation();
+            mHandler.post(mProgressCallback);
+            buttonPlayToggle.setImageResource(R.drawable.ic_pause);
+        }
+    }
+
+    @Override
+    public void updatePlayMode(PlayMode playMode) {
+        if (playMode == null) {
+            playMode = PlayMode.getDefault();
+        }
+        switch (playMode) {
+            case LIST:
+                buttonPlayModeToggle.setImageResource(R.drawable.ic_play_mode_list);
+                break;
+            case LOOP:
+                buttonPlayModeToggle.setImageResource(R.drawable.ic_play_mode_loop);
+                break;
+            case SHUFFLE:
+                buttonPlayModeToggle.setImageResource(R.drawable.ic_play_mode_shuffle);
+                break;
+            case SINGLE:
+                buttonPlayModeToggle.setImageResource(R.drawable.ic_play_mode_single);
+                break;
+        }
+    }
+
+    @Override
+    public void updatePlayToggle(boolean play) {
+        buttonPlayToggle.setImageResource(play ? R.drawable.ic_pause : R.drawable.ic_play);
+    }
+
+    @Override
+    public void updateFavoriteToggle(boolean favorite) {
+        buttonFavoriteToggle.setImageResource(favorite ? R.drawable.ic_favorite_yes : R.drawable.ic_favorite_no);
     }
 
     @Override

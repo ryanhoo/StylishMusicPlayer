@@ -7,6 +7,8 @@ import io.github.ryanhoo.music.data.model.PlayList;
 import io.github.ryanhoo.music.data.model.Song;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created with Android Studio.
@@ -15,7 +17,7 @@ import java.io.IOException;
  * Time: 5:57 PM
  * Desc: Player
  */
-public class Player implements IPlayer, MediaPlayer.OnCompletionListener {
+public class Player implements IPlayback, MediaPlayer.OnCompletionListener {
 
     private static final String TAG = "Player";
 
@@ -24,7 +26,8 @@ public class Player implements IPlayer, MediaPlayer.OnCompletionListener {
     private MediaPlayer mPlayer;
 
     private PlayList mPlayList;
-    private Callback mCallback;
+    // Default size 2: for service and UI
+    private List<Callback> mCallbacks = new ArrayList<>(2);
 
     // Player status
     private boolean isPaused;
@@ -58,6 +61,7 @@ public class Player implements IPlayer, MediaPlayer.OnCompletionListener {
     public boolean play() {
         if (isPaused) {
             mPlayer.start();
+            notifyPlayStatusChanged(true);
             return true;
         }
         if (mPlayList.prepare()) {
@@ -67,8 +71,10 @@ public class Player implements IPlayer, MediaPlayer.OnCompletionListener {
                 mPlayer.setDataSource(song.getPath());
                 mPlayer.prepare();
                 mPlayer.start();
+                notifyPlayStatusChanged(true);
             } catch (IOException e) {
                 Log.e(TAG, "play: ", e);
+                notifyPlayStatusChanged(false);
                 return false;
             }
             return true;
@@ -119,9 +125,7 @@ public class Player implements IPlayer, MediaPlayer.OnCompletionListener {
         if (hasNext) {
             Song next = mPlayList.next();
             play();
-            if (mCallback != null) {
-                mCallback.onSwitchNext(next);
-            }
+            notifyPlayNext(next);
             return true;
         }
         return false;
@@ -132,6 +136,7 @@ public class Player implements IPlayer, MediaPlayer.OnCompletionListener {
         if (mPlayer.isPlaying()) {
             mPlayer.pause();
             isPaused = true;
+            notifyPlayStatusChanged(false);
             return true;
         }
         return false;
@@ -193,23 +198,55 @@ public class Player implements IPlayer, MediaPlayer.OnCompletionListener {
                 play();
             }
         }
-        if (mCallback != null) {
-            mCallback.onComplete(next);
+        notifyComplete(next);
+    }
+
+    @Override
+    public void releasePlayer() {
+        mPlayList = null;
+        mPlayer.reset();
+        mPlayer.release();
+        mPlayer = null;
+    }
+
+    // Callbacks
+
+    @Override
+    public void registerCallback(Callback callback) {
+        mCallbacks.add(callback);
+    }
+
+    @Override
+    public void unregisterCallback(Callback callback) {
+        mCallbacks.remove(callback);
+    }
+
+    @Override
+    public void removeCallbacks() {
+        mCallbacks.clear();
+    }
+
+    private void notifyPlayStatusChanged(boolean isPlaying) {
+        for (Callback callback : mCallbacks) {
+            callback.onPlayStatusChanged(isPlaying);
         }
     }
 
-    // Setters & Getters
-
-    public void setCallback(Callback callback) {
-        mCallback = callback;
+    private void notifyPlayLast(Song song) {
+        for (Callback callback : mCallbacks) {
+            callback.onSwitchLast(song);
+        }
     }
 
-    public interface Callback {
+    private void notifyPlayNext(Song song) {
+        for (Callback callback : mCallbacks) {
+            callback.onSwitchNext(song);
+        }
+    }
 
-        void onSwitchLast(@Nullable Song last);
-
-        void onSwitchNext(@Nullable Song next);
-
-        void onComplete(@Nullable Song next);
+    private void notifyComplete(Song song) {
+        for (Callback callback : mCallbacks) {
+            callback.onComplete(song);
+        }
     }
 }
