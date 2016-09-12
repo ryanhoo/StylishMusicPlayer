@@ -27,7 +27,7 @@ public class PlayListItemView extends RelativeLayout implements IAdapterView<Pla
     TextView textViewName;
     @BindView(R.id.text_view_info)
     TextView textViewInfo;
-    @BindView(R.id.image_button_action)
+    @BindView(R.id.layout_action)
     View buttonAction;
 
     public PlayListItemView(Context context) {

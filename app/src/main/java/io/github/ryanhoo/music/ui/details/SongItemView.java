@@ -6,6 +6,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.github.ryanhoo.music.R;
 import io.github.ryanhoo.music.data.model.Song;
 import io.github.ryanhoo.music.ui.base.adapter.IAdapterView;
@@ -38,5 +39,10 @@ public class SongItemView extends RelativeLayout implements IAdapterView<Song> {
         textViewIndex.setText(String.valueOf(position + 1));
         textViewName.setText(song.getDisplayName());
         textViewInfo.setText(String.format("%s | %s", TimeUtils.formatDuration(song.getDuration()), song.getArtist()));
+    }
+
+    @OnClick(R.id.layout_action)
+    public void onClick(View view) {
+
     }
 }

@@ -38,10 +38,8 @@
         android:layout_alignParentStart="true"
         android:layout_marginLeft="@dimen/mp.material.marginLeft"
         android:layout_marginStart="@dimen/mp.material.marginLeft"
-        android:layout_toLeftOf="@+id/image_button_action"
-        android:layout_toStartOf="@+id/image_button_action"
-        android:layout_marginRight="@dimen/mp.margin.normal"
-        android:layout_marginEnd="@dimen/mp.margin.normal"
+        android:layout_toLeftOf="@+id/layout_action"
+        android:layout_toStartOf="@+id/layout_action"
         >
 
         <TextView
@@ -58,17 +56,25 @@
             />
     </LinearLayout>
 
-    <android.support.v7.widget.AppCompatImageView
-        android:id="@+id/image_button_action"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+    <FrameLayout
+        android:id="@+id/layout_action"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginRight="@dimen/mp.margin.large"
-        android:layout_marginEnd="@dimen/mp.margin.large"
-        android:scaleType="center"
-        app:srcCompat="@drawable/ic_list_item_action"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        />
+        android:paddingRight="@dimen/mp.margin.large"
+        android:paddingLeft="@dimen/mp.margin.large"
+        >
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/image_button_action"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:scaleType="center"
+            app:srcCompat="@drawable/ic_list_item_action"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            />
+    </FrameLayout>
 </RelativeLayout>

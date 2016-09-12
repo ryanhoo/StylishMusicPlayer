@@ -10,8 +10,6 @@ import io.github.ryanhoo.music.R;
 import io.github.ryanhoo.music.data.model.Folder;
 import io.github.ryanhoo.music.ui.base.adapter.IAdapterView;
 
-import java.util.Random;
-
 /**
  * Created with Android Studio.
  * User: ryan.hoo.j@gmail.com
@@ -25,7 +23,7 @@ public class FolderItemView extends RelativeLayout implements IAdapterView<Folde
     TextView textViewName;
     @BindView(R.id.text_view_info)
     TextView textViewInfo;
-    @BindView(R.id.image_button_action)
+    @BindView(R.id.layout_action)
     View buttonAction;
 
     public FolderItemView(Context context) {
