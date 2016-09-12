@@ -24,6 +24,7 @@ import io.github.ryanhoo.music.ui.base.BaseFragment;
 import io.github.ryanhoo.music.ui.base.adapter.OnItemClickListener;
 import io.github.ryanhoo.music.ui.common.DefaultDividerDecoration;
 import io.github.ryanhoo.music.ui.widget.RecyclerViewFastScroller;
+import io.github.ryanhoo.music.utils.FileUtils;
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
@@ -31,9 +32,11 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created with Android Studio.
@@ -52,7 +55,6 @@ public class AllLocalMusicFragment extends BaseFragment implements LoaderManager
             + MediaStore.Audio.Media.SIZE + ">0";
     private static final String ORDER_BY = MediaStore.Audio.Media.DISPLAY_NAME + " ASC";
     private static String[] PROJECTIONS = {
-            MediaStore.Audio.Media._ID,
             MediaStore.Audio.Media.DATA, // the real path
             MediaStore.Audio.Media.TITLE,
             MediaStore.Audio.Media.DISPLAY_NAME,
@@ -93,7 +95,6 @@ public class AllLocalMusicFragment extends BaseFragment implements LoaderManager
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                // TODO
                 Song song = mAdapter.getItem(position);
                 RxBus.getInstance().post(new PlaySongEvent(song));
             }
@@ -133,6 +134,12 @@ public class AllLocalMusicFragment extends BaseFragment implements LoaderManager
                             } while (cursor.moveToNext());
                         }
                         Log.d(TAG, "onLoadFinished: " + songList.size());
+                        Collections.sort(songList, new Comparator<Song>() {
+                            @Override
+                            public int compare(Song left, Song right) {
+                                return left.getDisplayName().compareTo(right.getDisplayName());
+                            }
+                        });
                         return Observable.just(songList);
                     }
                 })
@@ -186,7 +193,17 @@ public class AllLocalMusicFragment extends BaseFragment implements LoaderManager
     // Utils
 
     private Song cursorToMusic(Cursor cursor) {
-        Song song = new Song();
+        String realPath = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA));
+        File songFile = new File(realPath);
+        Song song;
+        if (songFile.exists()) {
+            // Using song parsed from file to avoid encoding problems
+            song = FileUtils.fileToMusic(songFile);
+            if (song != null) {
+                return song;
+            }
+        }
+        song = new Song();
         song.setTitle(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE)));
         String displayName = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME));
         if (displayName.endsWith(".mp3")) {
