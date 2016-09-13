@@ -35,4 +35,11 @@
         android:text="@string/mp.play_list.details.empty"
         tools:visibility="visible"
         />
+
+    <ProgressBar
+        style="@style/MP.Theme.Widget.ProgressBar"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        tools:visibility="visible"
+        />
 </android.support.design.widget.CoordinatorLayout>
