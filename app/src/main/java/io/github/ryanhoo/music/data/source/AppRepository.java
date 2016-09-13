@@ -82,6 +82,11 @@ public class AppRepository implements AppContract {
     }
 
     @Override
+    public Observable<List<Song>> insert(List<Song> songs) {
+        return mLocalDataSource.insert(songs);
+    }
+
+    @Override
     public Observable<Song> update(Song song) {
         return mLocalDataSource.update(song);
     }

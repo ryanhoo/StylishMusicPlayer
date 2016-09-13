@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import com.litesuits.orm.db.annotation.PrimaryKey;
 import com.litesuits.orm.db.annotation.Table;
+import com.litesuits.orm.db.annotation.Unique;
 import com.litesuits.orm.db.enums.AssignType;
 
 /**
@@ -27,6 +28,7 @@ public class Song implements Parcelable {
 
     private String album;
 
+    @Unique
     private String path;
 
     private int duration;

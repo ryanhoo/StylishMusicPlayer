@@ -24,6 +24,8 @@
         android:paddingTop="@dimen/mp.padding.large"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
+        android:visibility="gone"
+        tools:visibility="visible"
         >
 
         <TextView
@@ -59,5 +61,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        />
+
+    <TextView
+        style="@style/MP.Theme.TextAppearance.List.Empty"
+        android:layout_centerInParent="true"
+        android:text="@string/mp.local_files.music_list.empty"
+        tools:visibility="visible"
         />
 </RelativeLayout>

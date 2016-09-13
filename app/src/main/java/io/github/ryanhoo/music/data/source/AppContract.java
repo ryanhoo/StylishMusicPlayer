@@ -40,6 +40,8 @@ import java.util.List;
 
     // Song
 
+    Observable<List<Song>> insert(List<Song> songs);
+
     Observable<Song> update(Song song);
 
     Observable<Song> setSongAsFavorite(Song song, boolean favorite);
