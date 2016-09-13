@@ -25,6 +25,7 @@
     <string name="mp.play_list.created">%s created</string>
     <string name="mp.play_list.edit">Edit play list</string>
     <string name="mp.play_list.dialog.hint">Play list name</string>
+    <string name="mp.play_list.dialog.add_to">Add to play list</string>
 
     <plurals name="mp_play_list_items_formatter">
         <item quantity="one">%d song</item>

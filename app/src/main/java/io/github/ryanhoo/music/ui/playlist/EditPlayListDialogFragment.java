@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
@@ -13,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import io.github.ryanhoo.music.R;
 import io.github.ryanhoo.music.data.model.PlayList;
+import io.github.ryanhoo.music.ui.base.BaseDialogFragment;
 
 /**
  * Created with Android Studio.
@@ -23,7 +23,7 @@ import io.github.ryanhoo.music.data.model.PlayList;
  * - Create
  * - Edit
  */
-public class EditPlayListDialogFragment extends DialogFragment implements Dialog.OnShowListener {
+public class EditPlayListDialogFragment extends BaseDialogFragment implements Dialog.OnShowListener {
 
     private static final String ARGUMENT_PLAY_LIST = "playList";
 
@@ -69,13 +69,13 @@ public class EditPlayListDialogFragment extends DialogFragment implements Dialog
                     }
                 })
                 .create();
-        dialog.setCanceledOnTouchOutside(false);
         dialog.setOnShowListener(this);
         return dialog;
     }
 
     @Override
     public void onShow(DialogInterface dialog) {
+        resizeDialogSize();
         if (editTextName == null) {
             editTextName = (EditText) getDialog().findViewById(R.id.edit_text);
             editTextName.setOnEditorActionListener(new TextView.OnEditorActionListener() {

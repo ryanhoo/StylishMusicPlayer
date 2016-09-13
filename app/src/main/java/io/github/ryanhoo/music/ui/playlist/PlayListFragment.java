@@ -16,6 +16,7 @@ import io.github.ryanhoo.music.data.source.AppRepository;
 import io.github.ryanhoo.music.event.FavoriteChangeEvent;
 import io.github.ryanhoo.music.event.PlayListCreatedEvent;
 import io.github.ryanhoo.music.event.PlayListNowEvent;
+import io.github.ryanhoo.music.event.PlayListUpdatedEvent;
 import io.github.ryanhoo.music.ui.base.BaseFragment;
 import io.github.ryanhoo.music.ui.base.adapter.OnItemClickListener;
 import io.github.ryanhoo.music.ui.common.DefaultDividerDecoration;
@@ -91,6 +92,8 @@ public class PlayListFragment extends BaseFragment implements PlayListContract.V
                             onPlayListCreatedEvent((PlayListCreatedEvent) o);
                         } else if (o instanceof FavoriteChangeEvent) {
                             onFavoriteChangeEvent((FavoriteChangeEvent) o);
+                        } else if (o instanceof PlayListUpdatedEvent) {
+                            onPlayListUpdatedEvent((PlayListUpdatedEvent) o);
                         }
                     }
                 })
@@ -128,6 +131,10 @@ public class PlayListFragment extends BaseFragment implements PlayListContract.V
             mAdapter.notifyDataSetChanged();
         }
         */
+    }
+
+    public void onPlayListUpdatedEvent(PlayListUpdatedEvent event) {
+        mPresenter.loadPlayLists();
     }
 
     // Adapter Callbacks

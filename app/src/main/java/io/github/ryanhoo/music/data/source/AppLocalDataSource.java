@@ -56,6 +56,11 @@ import java.util.List;
     }
 
     @Override
+    public List<PlayList> cachedPlayLists() {
+        return null;
+    }
+
+    @Override
     public Observable<PlayList> create(final PlayList playList) {
         return Observable.create(new Observable.OnSubscribe<PlayList>() {
             @Override

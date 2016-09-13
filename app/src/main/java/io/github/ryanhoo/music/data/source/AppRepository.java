@@ -6,7 +6,9 @@ import io.github.ryanhoo.music.data.model.PlayList;
 import io.github.ryanhoo.music.data.model.Song;
 import io.github.ryanhoo.music.data.source.db.LiteOrmHelper;
 import rx.Observable;
+import rx.functions.Action1;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,6 +23,8 @@ public class AppRepository implements AppContract {
     private static volatile AppRepository sInstance;
 
     private AppLocalDataSource mLocalDataSource;
+
+    private List<PlayList> mCachedPlayLists;
 
     private AppRepository() {
         mLocalDataSource = new AppLocalDataSource(Injection.provideContext(), LiteOrmHelper.getInstance());
@@ -41,7 +45,21 @@ public class AppRepository implements AppContract {
 
     @Override
     public Observable<List<PlayList>> playLists() {
-        return mLocalDataSource.playLists();
+        return mLocalDataSource.playLists()
+                .doOnNext(new Action1<List<PlayList>>() {
+                    @Override
+                    public void call(List<PlayList> playLists) {
+                        mCachedPlayLists = playLists;
+                    }
+                });
+    }
+
+    @Override
+    public List<PlayList> cachedPlayLists() {
+        if (mCachedPlayLists == null) {
+            return new ArrayList<>(0);
+        }
+        return mCachedPlayLists;
     }
 
     @Override

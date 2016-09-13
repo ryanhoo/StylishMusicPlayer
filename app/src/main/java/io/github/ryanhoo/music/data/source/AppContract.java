@@ -20,6 +20,8 @@ import java.util.List;
 
     Observable<List<PlayList>> playLists();
 
+    List<PlayList> cachedPlayLists();
+
     Observable<PlayList> create(PlayList playList);
 
     Observable<PlayList> update(PlayList playList);

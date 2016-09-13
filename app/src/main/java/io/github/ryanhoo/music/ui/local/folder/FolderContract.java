@@ -47,5 +47,7 @@ import java.util.List;
         void deleteFolder(Folder folder);
 
         void createPlayList(PlayList playList);
+
+        void addFolderToPlayList(Folder folder, PlayList playList);
     }
 }

@@ -22,6 +22,7 @@ import io.github.ryanhoo.music.ui.base.adapter.OnItemClickListener;
 import io.github.ryanhoo.music.ui.common.DefaultDividerDecoration;
 import io.github.ryanhoo.music.ui.details.PlayListDetailsActivity;
 import io.github.ryanhoo.music.ui.local.filesystem.FileSystemActivity;
+import io.github.ryanhoo.music.ui.playlist.AddToPlayListDialogFragment;
 import io.github.ryanhoo.music.ui.playlist.EditPlayListDialogFragment;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -117,6 +118,16 @@ public class FolderFragment extends BaseFragment implements FolderContract.View,
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
+                    case R.id.menu_item_add_to_play_list:
+                        new AddToPlayListDialogFragment()
+                                .setCallback(new AddToPlayListDialogFragment.Callback() {
+                                    @Override
+                                    public void onPlayListSelected(PlayList playList) {
+                                        mPresenter.addFolderToPlayList(folder, playList);
+                                    }
+                                })
+                                .show(getFragmentManager().beginTransaction(), "AddToPlayList");
+                        break;
                     case R.id.menu_item_create_play_list:
                         PlayList playList = PlayList.fromFolder(folder);
                         EditPlayListDialogFragment.editPlayList(playList)

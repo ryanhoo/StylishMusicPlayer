@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.RecyclerView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/MP.Theme.Widget.RecyclerView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/mp.padding.large"
+    android:paddingBottom="@dimen/mp.padding.large"
+    android:clipToPadding="false"
+    tools:listitem="@layout/item_play_list"
+    />
+

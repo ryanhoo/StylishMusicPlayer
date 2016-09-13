@@ -1,9 +1,11 @@
 package io.github.ryanhoo.music.ui.local.folder;
 
+import io.github.ryanhoo.music.RxBus;
 import io.github.ryanhoo.music.data.model.Folder;
 import io.github.ryanhoo.music.data.model.PlayList;
 import io.github.ryanhoo.music.data.model.Song;
 import io.github.ryanhoo.music.data.source.AppRepository;
+import io.github.ryanhoo.music.event.PlayListUpdatedEvent;
 import io.github.ryanhoo.music.utils.FileUtils;
 import rx.Observable;
 import rx.Subscriber;
@@ -256,6 +258,39 @@ public class FolderPresenter implements FolderContract.Presenter {
                     @Override
                     public void onNext(PlayList playList) {
                         mView.onPlayListCreated(playList);
+                    }
+                });
+        mSubscriptions.add(subscription);
+    }
+
+    @Override
+    public void addFolderToPlayList(final Folder folder, PlayList playList) {
+        if (folder.getSongs().isEmpty()) return;
+
+        playList.addSong(folder.getSongs(), 0);
+        Subscription subscription = mRepository.update(playList)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<PlayList>() {
+                    @Override
+                    public void onStart() {
+                        mView.showLoading();
+                    }
+
+                    @Override
+                    public void onCompleted() {
+                        mView.hideLoading();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mView.hideLoading();
+                        mView.handleError(e);
+                    }
+
+                    @Override
+                    public void onNext(PlayList playList) {
+                        RxBus.getInstance().post(new PlayListUpdatedEvent(playList));
                     }
                 });
         mSubscriptions.add(subscription);
