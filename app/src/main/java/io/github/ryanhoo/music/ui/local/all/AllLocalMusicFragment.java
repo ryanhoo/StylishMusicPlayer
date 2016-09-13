@@ -14,11 +14,15 @@ import io.github.ryanhoo.music.R;
 import io.github.ryanhoo.music.RxBus;
 import io.github.ryanhoo.music.data.model.Song;
 import io.github.ryanhoo.music.data.source.AppRepository;
+import io.github.ryanhoo.music.event.PlayListUpdatedEvent;
 import io.github.ryanhoo.music.event.PlaySongEvent;
 import io.github.ryanhoo.music.ui.base.BaseFragment;
 import io.github.ryanhoo.music.ui.base.adapter.OnItemClickListener;
 import io.github.ryanhoo.music.ui.common.DefaultDividerDecoration;
 import io.github.ryanhoo.music.ui.widget.RecyclerViewFastScroller;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 
 import java.util.List;
 
@@ -68,6 +72,23 @@ public class AllLocalMusicFragment extends BaseFragment implements LocalMusicCon
         fastScroller.setRecyclerView(recyclerView);
 
         new LocalMusicPresenter(AppRepository.getInstance(), this).subscribe();
+    }
+
+    // RxBus Events
+
+    @Override
+    protected Subscription subscribeEvents() {
+        return RxBus.getInstance().toObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(new Action1<Object>() {
+                    @Override
+                    public void call(Object o) {
+                        if (o instanceof PlayListUpdatedEvent) {
+                            mPresenter.loadLocalMusic();
+                        }
+                    }
+                })
+                .subscribe();
     }
 
     // MVP View
