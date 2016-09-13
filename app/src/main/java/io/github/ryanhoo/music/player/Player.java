@@ -114,14 +114,20 @@ public class Player implements IPlayback, MediaPlayer.OnCompletionListener {
     @Override
     public boolean playLast() {
         isPaused = false;
-
+        boolean hasLast = mPlayList.hasLast();
+        if (hasLast) {
+            Song last = mPlayList.last();
+            play();
+            notifyPlayLast(last);
+            return true;
+        }
         return false;
     }
 
     @Override
     public boolean playNext() {
         isPaused = false;
-        boolean hasNext = mPlayList.hasNext();
+        boolean hasNext = mPlayList.hasNext(false);
         if (hasNext) {
             Song next = mPlayList.next();
             play();
@@ -192,7 +198,7 @@ public class Player implements IPlayback, MediaPlayer.OnCompletionListener {
             next = mPlayList.getCurrentSong();
             play();
         } else {
-            boolean hasNext = mPlayList.hasNext();
+            boolean hasNext = mPlayList.hasNext(true);
             if (hasNext) {
                 next = mPlayList.next();
                 play();
