@@ -174,6 +174,23 @@ import java.util.List;
     }
 
     @Override
+    public Observable<Folder> update(final Folder folder) {
+        return Observable.create(new Observable.OnSubscribe<Folder>() {
+            @Override
+            public void call(Subscriber<? super Folder> subscriber) {
+                mLiteOrm.delete(folder);
+                long result = mLiteOrm.save(folder);
+                if (result > 0) {
+                    subscriber.onNext(folder);
+                } else {
+                    subscriber.onError(new Exception("Update folder failed"));
+                }
+                subscriber.onCompleted();
+            }
+        });
+    }
+
+    @Override
     public Observable<Folder> delete(final Folder folder) {
         return Observable.create(new Observable.OnSubscribe<Folder>() {
             @Override

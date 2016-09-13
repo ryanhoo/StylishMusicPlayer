@@ -77,6 +77,11 @@ public class AppRepository implements AppContract {
     }
 
     @Override
+    public Observable<Folder> update(Folder folder) {
+        return mLocalDataSource.update(folder);
+    }
+
+    @Override
     public Observable<Folder> delete(Folder folder) {
         return mLocalDataSource.delete(folder);
     }

@@ -34,7 +34,7 @@ import java.util.List;
 
     Observable<List<Folder>> create(List<Folder> folders);
 
-    // Observable<Folder> update(Folder folder);
+    Observable<Folder> update(Folder folder);
 
     Observable<Folder> delete(Folder folder);
 

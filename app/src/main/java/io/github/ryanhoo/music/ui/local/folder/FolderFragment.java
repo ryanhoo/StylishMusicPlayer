@@ -47,7 +47,7 @@ public class FolderFragment extends BaseFragment implements FolderContract.View,
     ProgressBar progressBar;
 
     private FolderAdapter mAdapter;
-    private int mDeleteIndex;
+    private int mUpdateIndex, mDeleteIndex;
 
     FolderContract.Presenter mPresenter;
 
@@ -116,24 +116,31 @@ public class FolderFragment extends BaseFragment implements FolderContract.View,
         actionMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                if (item.getItemId() == R.id.menu_item_add_play_list) {
-                    PlayList playList = PlayList.fromFolder(folder);
-                    EditPlayListDialogFragment.editPlayList(playList)
-                            .setCallback(new EditPlayListDialogFragment.Callback() {
-                                @Override
-                                public void onCreated(PlayList playList) {
-                                    // Empty
-                                }
+                switch (item.getItemId()) {
+                    case R.id.menu_item_create_play_list:
+                        PlayList playList = PlayList.fromFolder(folder);
+                        EditPlayListDialogFragment.editPlayList(playList)
+                                .setCallback(new EditPlayListDialogFragment.Callback() {
+                                    @Override
+                                    public void onCreated(PlayList playList) {
+                                        // Empty
+                                    }
 
-                                @Override
-                                public void onEdited(PlayList playList) {
-                                    mPresenter.createPlayList(playList);
-                                }
-                            })
-                            .show(getFragmentManager().beginTransaction(), "CreatePlayList");
-                } else if (item.getItemId() == R.id.menu_item_delete) {
-                    mDeleteIndex = position;
-                    mPresenter.deleteFolder(folder);
+                                    @Override
+                                    public void onEdited(PlayList playList) {
+                                        mPresenter.createPlayList(playList);
+                                    }
+                                })
+                                .show(getFragmentManager().beginTransaction(), "CreatePlayList");
+                        break;
+                    case R.id.menu_item_refresh:
+                        mUpdateIndex = position;
+                        mPresenter.refreshFolder(folder);
+                        break;
+                    case R.id.menu_item_delete:
+                        mDeleteIndex = position;
+                        mPresenter.deleteFolder(folder);
+                        break;
                 }
                 return true;
             }
@@ -184,6 +191,12 @@ public class FolderFragment extends BaseFragment implements FolderContract.View,
             );
             Toast.makeText(getActivity(), toast, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onFolderUpdated(Folder folder) {
+        mAdapter.getData().set(mUpdateIndex, folder);
+        mAdapter.notifyItemChanged(mUpdateIndex);
     }
 
     @Override

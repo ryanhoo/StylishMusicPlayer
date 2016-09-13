@@ -29,6 +29,8 @@ import java.util.List;
 
         void onFoldersAdded(List<Folder> folders);
 
+        void onFolderUpdated(Folder folder);
+
         void onFolderDeleted(Folder folder);
 
         void onPlayListCreated(PlayList playList);
@@ -39,6 +41,8 @@ import java.util.List;
         void loadFolders();
 
         void addFolders(List<File> folders, List<Folder> existedFolders);
+
+        void refreshFolder(Folder folder);
 
         void deleteFolder(Folder folder);
 
