@@ -4,6 +4,7 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
@@ -13,6 +14,7 @@ import io.github.ryanhoo.music.R;
 import io.github.ryanhoo.music.data.model.PlayList;
 import io.github.ryanhoo.music.data.model.Song;
 import io.github.ryanhoo.music.ui.main.MainActivity;
+import io.github.ryanhoo.music.utils.AlbumUtils;
 
 /**
  * Created with Android Studio.
@@ -261,6 +263,13 @@ public class PlaybackService extends Service implements IPlayback, IPlayback.Cal
         }
         remoteView.setImageViewResource(R.id.image_view_play_toggle, isPlaying()
                 ? R.drawable.ic_remote_view_pause : R.drawable.ic_remote_view_play);
+        Bitmap album = AlbumUtils.parseAlbum(getPlayingSong());
+        if (album == null) {
+            remoteView.setImageViewResource(R.id.image_view_album, R.mipmap.ic_launcher);
+        } else {
+            remoteView.setImageViewBitmap(R.id.image_view_album, album);
+
+        }
     }
 
     // PendingIntent

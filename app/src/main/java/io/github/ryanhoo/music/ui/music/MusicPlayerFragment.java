@@ -1,5 +1,6 @@
 package io.github.ryanhoo.music.ui.music;
 
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,6 +29,7 @@ import io.github.ryanhoo.music.player.PlayMode;
 import io.github.ryanhoo.music.player.PlaybackService;
 import io.github.ryanhoo.music.ui.base.BaseFragment;
 import io.github.ryanhoo.music.ui.widget.ShadowImageView;
+import io.github.ryanhoo.music.utils.AlbumUtils;
 import io.github.ryanhoo.music.utils.TimeUtils;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -372,6 +374,12 @@ public class MusicPlayerFragment extends BaseFragment implements MusicPlayerCont
         // Step 4: Keep these things updated
         // - Album rotation
         // - Progress(textViewProgress & seekBarProgress)
+        Bitmap bitmap = AlbumUtils.parseAlbum(song);
+        if (bitmap == null) {
+            imageViewAlbum.setImageResource(R.drawable.default_record_album);
+        } else {
+            imageViewAlbum.setImageBitmap(AlbumUtils.getCroppedBitmap(bitmap));
+        }
         imageViewAlbum.pauseRotateAnimation();
         mHandler.removeCallbacks(mProgressCallback);
         if (mPlayer.isPlaying()) {
