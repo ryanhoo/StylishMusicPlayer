@@ -1,6 +1,7 @@
 package io.github.ryanhoo.music.utils;
 
 import android.media.MediaMetadataRetriever;
+import android.text.TextUtils;
 import io.github.ryanhoo.music.data.model.Folder;
 import io.github.ryanhoo.music.data.model.Song;
 
@@ -20,6 +21,8 @@ import java.util.List;
  * Desc: FileUtils
  */
 public class FileUtils {
+
+    private static final String UNKNOWN = "unknown";
 
     /**
      * http://stackoverflow.com/a/5599842/2290191
@@ -76,15 +79,19 @@ public class FileUtils {
         MediaMetadataRetriever metadataRetriever = new MediaMetadataRetriever();
         metadataRetriever.setDataSource(file.getAbsolutePath());
 
-        String title = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
-        String displayName = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
-        String artist = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
-        String album = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM);
-        int duration = Integer.parseInt(metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
+        final int duration;
 
-        if (duration == 0) return null;
+        String keyDuration = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+        // ensure the duration is a digit, otherwise return null song
+        if (keyDuration == null || !keyDuration.matches("\\d+")) return null;
+        duration = Integer.parseInt(keyDuration);
 
-        Song song = new Song();
+        final String title = extractMetadata(metadataRetriever, MediaMetadataRetriever.METADATA_KEY_TITLE, file.getName());
+        final String displayName = extractMetadata(metadataRetriever, MediaMetadataRetriever.METADATA_KEY_TITLE, file.getName());
+        final String artist = extractMetadata(metadataRetriever, MediaMetadataRetriever.METADATA_KEY_ARTIST, UNKNOWN);
+        final String album = extractMetadata(metadataRetriever, MediaMetadataRetriever.METADATA_KEY_ALBUM, UNKNOWN);
+
+        final Song song = new Song();
         song.setTitle(title);
         song.setDisplayName(displayName);
         song.setArtist(artist);
@@ -101,5 +108,13 @@ public class FileUtils {
         folder.setSongs(songs);
         folder.setNumOfSongs(songs.size());
         return folder;
+    }
+
+    private static String extractMetadata(MediaMetadataRetriever retriever, int key, String defaultValue) {
+        String value = retriever.extractMetadata(key);
+        if (TextUtils.isEmpty(value)) {
+            value = defaultValue;
+        }
+        return value;
     }
 }
