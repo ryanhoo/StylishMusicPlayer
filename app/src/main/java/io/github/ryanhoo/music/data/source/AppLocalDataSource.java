@@ -12,7 +12,9 @@ import io.github.ryanhoo.music.utils.DBUtils;
 import rx.Observable;
 import rx.Subscriber;
 
+import java.io.File;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -220,6 +222,16 @@ import java.util.List;
                     mLiteOrm.insert(song, ConflictAlgorithm.Abort);
                 }
                 List<Song> allSongs = mLiteOrm.query(Song.class);
+                File file;
+                for (Iterator<Song> iterator = allSongs.iterator(); iterator.hasNext(); ) {
+                    Song song = iterator.next();
+                    file = new File(song.getPath());
+                    boolean exists = file.exists();
+                    if (!exists) {
+                        iterator.remove();
+                    }
+                    mLiteOrm.delete(song);
+                }
                 subscriber.onNext(allSongs);
                 subscriber.onCompleted();
             }

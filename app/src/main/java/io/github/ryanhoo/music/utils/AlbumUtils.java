@@ -2,6 +2,7 @@ package io.github.ryanhoo.music.utils;
 
 import android.graphics.*;
 import android.media.MediaMetadataRetriever;
+import android.util.Log;
 import io.github.ryanhoo.music.data.model.Song;
 
 import java.io.File;
@@ -16,13 +17,19 @@ import java.io.File;
  */
 public class AlbumUtils {
 
+    private static final String TAG = "AlbumUtils";
+
     public static Bitmap parseAlbum(Song song) {
         return parseAlbum(new File(song.getPath()));
     }
 
     public static Bitmap parseAlbum(File file) {
         MediaMetadataRetriever metadataRetriever = new MediaMetadataRetriever();
-        metadataRetriever.setDataSource(file.getAbsolutePath());
+        try {
+            metadataRetriever.setDataSource(file.getAbsolutePath());
+        } catch (IllegalArgumentException e) {
+            Log.e(TAG, "parseAlbum: ", e);
+        }
         byte[] albumData = metadataRetriever.getEmbeddedPicture();
         if (albumData != null) {
             return BitmapFactory.decodeByteArray(albumData, 0, albumData.length);
