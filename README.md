@@ -6,6 +6,11 @@
 
 ![Artboard](materials/Artboard.png)
 
+## TODO
+
+- Lyric Support
+- Settings
+
 ## Acknowledgements
 
 Thanks to these projects and libraries:
