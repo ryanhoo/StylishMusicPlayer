@@ -213,6 +213,7 @@ public class Player implements IPlayback, MediaPlayer.OnCompletionListener {
         mPlayer.reset();
         mPlayer.release();
         mPlayer = null;
+        sInstance = null;
     }
 
     // Callbacks
