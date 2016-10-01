@@ -229,8 +229,8 @@ import java.util.List;
                     boolean exists = file.exists();
                     if (!exists) {
                         iterator.remove();
+                        mLiteOrm.delete(song);
                     }
-                    mLiteOrm.delete(song);
                 }
                 subscriber.onNext(allSongs);
                 subscriber.onCompleted();
