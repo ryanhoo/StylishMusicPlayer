@@ -53,23 +53,25 @@ public class PlaybackService extends Service implements IPlayback, IPlayback.Cal
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        String action = intent.getAction();
-        if (ACTION_PLAY_TOGGLE.equals(action)) {
-            if (isPlaying()) {
-                pause();
-            } else {
-                play();
+        if (intent != null) {
+            String action = intent.getAction();
+            if (ACTION_PLAY_TOGGLE.equals(action)) {
+                if (isPlaying()) {
+                    pause();
+                } else {
+                    play();
+                }
+            } else if (ACTION_PLAY_NEXT.equals(action)) {
+                playNext();
+            } else if (ACTION_PLAY_LAST.equals(action)) {
+                playLast();
+            } else if (ACTION_STOP_SERVICE.equals(action)) {
+                if (isPlaying()) {
+                    pause();
+                }
+                stopForeground(true);
+                unregisterCallback(this);
             }
-        } else if (ACTION_PLAY_NEXT.equals(action)) {
-            playNext();
-        } else if (ACTION_PLAY_LAST.equals(action)) {
-            playLast();
-        } else if (ACTION_STOP_SERVICE.equals(action)) {
-            if (isPlaying()) {
-                pause();
-            }
-            stopForeground(true);
-            unregisterCallback(this);
         }
         return START_STICKY;
     }
