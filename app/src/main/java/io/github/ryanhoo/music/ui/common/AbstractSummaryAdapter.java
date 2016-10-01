@@ -56,7 +56,7 @@ public abstract class AbstractSummaryAdapter<T, V extends IAdapterView> extends 
         return textViewEndSummary;
     }
 
-    private void updateSummaryText() {
+    public void updateSummaryText() {
         if (textViewEndSummary != null) {
             textViewEndSummary.setText(getEndSummaryText(super.getItemCount()));
         }
