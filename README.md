@@ -10,7 +10,7 @@
 
 ## TODO
 
-- Lyric Support
+- Lyrics Support
 - Settings
 
 ## Acknowledgements
