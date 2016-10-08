@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+
+    <FrameLayout
+        android:id="@+id/layout_add_play_list"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/mp.list.itemHeight"
+        android:background="@color/mp.list.background"
+        >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/selectableItemBackground"
+            />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center_vertical"
+            >
+
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/mp.padding.large"
+                android:layout_marginEnd="@dimen/mp.padding.large"
+                app:srcCompat="@drawable/ic_list_add"
+                />
+
+            <android.support.v7.widget.AppCompatTextView
+                style="@style/MP.Theme.TextAppearance.List.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/mp.play_list.footer.add"
+                />
+        </LinearLayout>
+    </FrameLayout>
+
+    <TextView
+        style="@style/MP.Theme.TextAppearance.List.EndSummary"
+        tools:text="3 play lists in total"
+        />
+</LinearLayout>

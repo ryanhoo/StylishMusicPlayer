@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/mp.list.itemHeight"
+    android:background="@color/mp.list.background"
+    >
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?attr/selectableItemBackground"
+        android:layout_marginBottom="@dimen/mp.divider.line"
+        />
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/image_view_folder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/mp.padding.large"
+        android:layout_marginRight="@dimen/mp.padding.large"
+        app:srcCompat="@drawable/ic_folder"
+        />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/image_view_folder"
+        android:layout_toEndOf="@+id/image_view_folder"
+        android:layout_toLeftOf="@+id/layout_action"
+        android:layout_toStartOf="@+id/layout_action"
+        >
+
+        <TextView
+            style="@style/MP.Theme.TextAppearance.List.Title"
+            android:id="@+id/text_view_name"
+            tools:text="Music"
+            />
+
+        <TextView
+            style="@style/MP.Theme.TextAppearance.List.Hint"
+            android:id="@+id/text_view_info"
+            android:layout_marginTop="@dimen/mp.margin.small"
+            tools:text="100 songs | /storage/emulated/0/Music"
+            />
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/layout_action"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:paddingRight="@dimen/mp.margin.large"
+        android:paddingLeft="@dimen/mp.margin.large"
+        >
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/image_button_action"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:scaleType="center"
+            app:srcCompat="@drawable/ic_list_item_action"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            />
+    </FrameLayout>
+</RelativeLayout>

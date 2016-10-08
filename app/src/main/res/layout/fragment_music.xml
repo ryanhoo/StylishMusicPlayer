@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/mp.padding.large"
+    android:gravity="center_horizontal"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        >
+
+        <io.github.ryanhoo.music.ui.widget.ShadowImageView
+            android:id="@+id/image_view_album"
+            android:layout_width="@dimen/mp.music.album.size"
+            android:layout_height="@dimen/mp.music.album.size"
+            android:src="@drawable/default_record_album"
+            android:layout_centerInParent="true"
+            />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/text_view_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/mp.margin.xlarge"
+        android:layout_marginRight="@dimen/mp.margin.xlarge"
+        android:layout_marginBottom="@dimen/mp.margin.normal"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:textColor="?attr/colorAccent"
+        tools:text="Drag me down"
+        />
+
+    <TextView
+        android:id="@+id/text_view_artist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/mp.margin.xlarge"
+        android:layout_marginRight="@dimen/mp.margin.xlarge"
+        android:gravity="center"
+        android:textSize="14sp"
+        android:textColor="?attr/colorAccent"
+        tools:text="One Direction"
+        />
+
+    <LinearLayout
+        android:id="@+id/layout_progress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="44dp"
+        android:layout_marginTop="@dimen/mp.music.seekBar.marginTop"
+        android:gravity="center_vertical"
+        >
+
+        <TextView
+            android:id="@+id/text_view_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/colorAccent"
+            android:textSize="12sp"
+            android:singleLine="true"
+            android:text="@string/mp.music.default_duration"
+            />
+
+        <android.support.v7.widget.AppCompatSeekBar
+            android:id="@+id/seek_bar"
+            style="@style/Widget.AppCompat.SeekBar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:max="10000"
+            tools:progress="5000"
+            />
+
+        <TextView
+            android:id="@+id/text_view_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/colorAccent"
+            android:textSize="12sp"
+            android:singleLine="true"
+            android:text="@string/mp.music.default_duration"
+            tools:text="03:22"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_play_controls"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/mp.music.playControls.marginTop"
+        android:layout_marginBottom="@dimen/mp.music.playControls.marginBottom"
+        android:showDividers="middle"
+        android:divider="@drawable/common_divider_xlarge_horizontal"
+        android:gravity="center_vertical"
+        >
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/button_play_mode_toggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_play_mode_shuffle"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/button_play_last"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_play_last"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/button_play_toggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_play"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/button_play_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_play_next"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/button_favorite_toggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="center"
+            app:srcCompat="@drawable/ic_favorite_no"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            />
+    </LinearLayout>
+</LinearLayout>

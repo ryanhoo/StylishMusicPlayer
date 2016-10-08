@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="toolbar" type="id"/>
+    <item name="recycler_view" type="id"/>
+    <item name="progress_bar" type="id"/>
+
+    <item name="text_view_summary" type="id"/>
+    <item name="text_view_empty" type="id"/>
+</resources>

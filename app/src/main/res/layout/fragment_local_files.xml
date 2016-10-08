@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <RadioGroup
+        android:id="@+id/radio_group_segmented_control"
+        android:orientation="horizontal"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/mp.padding.normal"
+        android:layout_marginBottom="@dimen/mp.padding.large"
+        >
+
+        <RadioButton
+            android:id="@+id/radio_button_all"
+            style="@style/MP.Theme.Widget.SegmentedControl.Left"
+            android:text="@string/mp.local_files.segmented.all"
+            tools:checked="true"
+            />
+
+        <RadioButton
+            android:id="@+id/radio_button_folder"
+            style="@style/MP.Theme.Widget.SegmentedControl.Right"
+            android:text="@string/mp.local_files.segmented.folder"
+            />
+    </RadioGroup>
+
+    <View
+        android:id="@+id/divider"
+        style="@style/MP.Theme.Widget.Divider.Line.Vertical"
+        android:layout_below="@+id/radio_group_segmented_control"
+        />
+
+    <FrameLayout
+        android:id="@+id/layout_fragment_container_all"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/divider"
+        />
+    <FrameLayout
+        android:id="@+id/layout_fragment_container_folder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/divider"
+        />
+
+</RelativeLayout>

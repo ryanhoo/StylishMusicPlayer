@@ -2,19 +2,41 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="io.github.ryanhoo.music">
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="@string/mp.app.name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".SplashScreenActivity">
+        android:name=".MusicPlayerApplication"
+        android:theme="@style/MP.Theme">
+        <activity
+            android:name=".ui.main.MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity
+            android:label="@string/mp.activity.title.file_system"
+            android:name=".ui.local.filesystem.FileSystemActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity
+            android:name=".ui.details.PlayListDetailsActivity"
+            android:screenOrientation="portrait"/>
+
+        <service android:name=".player.PlaybackService">
+            <intent-filter>
+                <action android:name="io.github.ryanhoo.music.ACTION.PLAY_TOGGLE"/>
+                <action android:name="io.github.ryanhoo.music.ACTION.PLAY_NEXT"/>
+                <action android:name="io.github.ryanhoo.music.ACTION.PLAY_LAST"/>
+                <action android:name="io.github.ryanhoo.music.ACTION.STOP_SERVICE"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

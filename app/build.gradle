@@ -1,15 +1,19 @@
+import java.text.SimpleDateFormat
+
 apply plugin: 'com.android.application'
+apply plugin: 'android-apt'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.0"
+    buildToolsVersion '24.0.2'
 
     defaultConfig {
-        applicationId "io.github.ryanhoo.music"
+        applicationId 'io.github.ryanhoo.music'
         minSdkVersion 16
-        targetSdkVersion 24
-        versionCode 1
-        versionName "1.0"
+        targetSdkVersion 22
+        versionCode getVersionCode("$BUILD")
+        versionName "$VERSION"
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {
@@ -23,4 +27,18 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:24.2.0'
+    compile 'com.android.support:design:24.2.0'
+    compile 'com.android.support:recyclerview-v7:24.2.0'
+
+    compile 'io.reactivex:rxjava:1.1.9'
+    compile 'io.reactivex:rxandroid:1.2.1'
+    compile 'com.jakewharton:butterknife:8.4.0'
+    apt 'com.jakewharton:butterknife-compiler:8.4.0'
+
+    compile 'uk.co.chrisjenx:calligraphy:2.2.0'
+}
+
+def getVersionCode(build) {
+    String date = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(new Date())
+    return Integer.parseInt(date + build)
 }

@@ -1,13 +1,194 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/theme.dark_blue.colorPrimary</item>
-        <item name="colorPrimaryDark">@color/theme.dark_blue.colorPrimaryDark</item>
-        <item name="colorAccent">@color/theme.dark_blue.colorAccent</item>
+        <item name="colorPrimary">@color/mp.theme.dark_blue.colorPrimary</item>
+        <item name="colorPrimaryDark">@color/mp.theme.dark_blue.colorPrimaryDark</item>
+        <item name="colorAccent">@color/mp.theme.dark_blue.colorAccent</item>
 
-        <item name="android:windowBackground">@color/theme.dark_blue.background</item>
+        <item name="android:textColorPrimary">@color/mp.theme.dark_blue.textColorPrimary</item>
+        <item name="android:textColorSecondary">@color/mp.theme.dark_blue.textColorSecondary</item>
+
+        <item name="android:windowBackground">@color/mp.theme.dark_blue.background</item>
+
+        <item name="colorControlNormal">?attr/colorAccent</item>
+        <item name="colorControlActivated">@color/mp.theme.dark_blue.colorControlActivated</item>
+        <item name="colorControlHighlight">@color/mp.theme.dark_blue.colorControlHighlight</item>
+
+        <item name="android:statusBarColor" tools:targetApi="lollipop">@color/transparent</item>
+
+        <!-- ActionMode -->
+        <item name="windowActionModeOverlay">true</item>
+        <item name="actionModeStyle">@style/MP.Theme.Widget.ActionMode</item>
+        <item name="actionModeCloseButtonStyle">@style/MP.Theme.Widget.ActionMode.CloseButton</item>
+
+        <!-- AlertDialog -->
+        <item name="alertDialogTheme">@style/MP.Theme.Widget.AlertDialog</item>
+
+        <!-- PopupMenu -->
+        <item name="popupMenuStyle">@style/MP.Theme.Widget.PopupMenu</item>
+        <item name="textAppearanceLargePopupMenu">@style/MP.Theme.TextAppearance.LargePopupMenu</item>
+        <item name="textAppearanceSmallPopupMenu">@style/MP.Theme.TextAppearance.SmallPopupMenu</item>
     </style>
 
+    <style name="MP.Theme" parent="AppTheme"/>
+
+
+    <!-- Widget -->
+
+    <style name="MP.Theme.Widget"/>
+
+    <!-- Widget - Divider -->
+
+    <style name="MP.Theme.Widget.Divider">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:background">@color/mp.line</item>
+    </style>
+
+    <style name="MP.Theme.Widget.Divider.Line">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="MP.Theme.Widget.Divider.Line.Vertical">
+        <item name="android:layout_height">@dimen/mp.divider.line</item>
+    </style>
+
+    <style name="MP.Theme.Widget.Divider.Line.Horizontal">
+        <item name="android:layout_width">@dimen/mp.divider.line</item>
+    </style>
+
+
+    <style name="MP.Theme.Widget.SegmentedControl">
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/selector_segmented_control_item_text</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:minWidth">100dp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:paddingLeft">@dimen/mp.padding.normal</item>
+        <item name="android:paddingRight">@dimen/mp.padding.normal</item>
+        <item name="android:button">@null</item>
+    </style>
+
+    <style name="MP.Theme.Widget.Toolbar">
+        <item name="android:id">@id/toolbar</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">?android:attr/actionBarSize</item>
+        <item name="titleTextAppearance">@style/MP.Theme.TextAppearance.Light.Toolbar.Title</item>
+    </style>
+
+    <style name="MP.Theme.Widget.ActionMode" parent="@style/Widget.AppCompat.ActionMode">
+        <item name="background">@color/mp.theme.dark_blue.actionMode.background</item>
+        <item name="height">?attr/actionBarSize</item>
+        <item name="backgroundSplit">@null</item>
+        <item name="titleTextStyle">@style/MP.Theme.TextAppearance.ActionMode.Title</item>
+        <item name="android:tint">@color/black</item>
+    </style>
+
+    <style name="MP.Theme.Widget.ActionMode.CloseButton" parent="@style/Widget.AppCompat.ActionButton.CloseMode">
+        <item name="android:tint">@color/mp.theme.dark_blue.colorPrimary</item>
+    </style>
+
+    <style name="MP.Theme.Widget.AlertDialog" parent="ThemeOverlay.AppCompat.Dialog.Alert">
+        <item name="android:background">@color/mp.theme.dark_blue.background</item>
+    </style>
+
+    <style name="MP.Theme.Widget.PopupMenu" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:popupBackground">@color/mp.popupMenu.background</item>
+        <item name="android:dropDownHorizontalOffset">-24dp</item>
+    </style>
+
+    <style name="MP.Theme.Widget.RecyclerView">
+        <item name="android:id">@id/recycler_view</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:scrollbars">vertical</item>
+        <item name="android:scrollbarThumbVertical">@color/mp.list.scrollThumb</item>
+        <item name="android:scrollbarSize">@dimen/mp.list.scrollbarSize</item>
+        <item name="layoutManager">@string/mp.list.layoutManager.linear</item>
+    </style>
+
+    <style name="MP.Theme.Widget.ProgressBar" parent="@style/Widget.AppCompat.ProgressBar">
+        <item name="android:id">@id/progress_bar</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerInParent">true</item>
+    </style>
+
+    <style name="MP.Theme.Widget.SegmentedControl.Left">
+        <item name="android:background">@drawable/selector_segmented_left</item>
+    </style>
+
+    <style name="MP.Theme.Widget.SegmentedControl.Right">
+        <item name="android:background">@drawable/selector_segmented_right</item>
+    </style>
+
+    <!-- TextAppearance -->
+
+    <style name="MP.Theme.TextAppearance">
+        <item name="fontPath">@string/mp.font.roboto.monospace.regular</item>
+    </style>
+
+    <style name="MP.Theme.TextAppearance.Toolbar">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="MP.Theme.TextAppearance.Light.Toolbar.Title" parent="MP.Theme.TextAppearance.Toolbar">
+        <item name="android:textColor">@color/mp.theme.dark_blue.colorAccent</item>
+    </style>
+
+    <style name="MP.Theme.TextAppearance.ActionMode.Title" parent="TextAppearance.AppCompat.Widget.ActionMode.Title">
+        <item name="android:textColor">?attr/colorPrimary</item>
+    </style>
+
+    <style name="MP.Theme.TextAppearance.List">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="MP.Theme.TextAppearance.List.EndSummary">
+        <item name="android:id">@id/text_view_summary</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/mp.text.hint</item>
+        <item name="android:textSize">@dimen/mp.text.hint</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">@dimen/mp.padding.large</item>
+    </style>
+
+    <style name="MP.Theme.TextAppearance.List.Title">
+        <item name="android:textColor">@color/selector_list_title_text</item>
+        <item name="android:textSize">@dimen/mp.text.list.title</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="MP.Theme.TextAppearance.List.Hint">
+        <item name="android:textColor">@color/selector_list_hint_text</item>
+        <item name="android:textSize">@dimen/mp.text.list.hint</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="MP.Theme.TextAppearance.List.Empty">
+        <item name="android:id">@id/text_view_empty</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">@dimen/mp.margin.xlarge</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/mp.text.hint</item>
+        <item name="android:gravity">center</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="MP.Theme.TextAppearance.LargePopupMenu" parent="TextAppearance.AppCompat.Widget.PopupMenu.Large">
+        <item name="android:textColor">@color/mp.theme.dark_blue.colorPrimary</item>
+    </style>
+
+    <style name="MP.Theme.TextAppearance.SmallPopupMenu" parent="TextAppearance.AppCompat.Widget.PopupMenu.Small">
+        <item name="android:textColor">@color/mp.theme.dark_blue.colorPrimary</item>
+    </style>
 </resources>

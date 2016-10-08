@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <android.support.design.widget.AppBarLayout
+        xmlns:appBarLayout="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        appBarLayout:expanded="true"
+        appBarLayout:layout_behavior="@string/appbar_scrolling_view_behavior"
+        >
+
+        <android.support.v7.widget.Toolbar
+            xmlns:toolbar="http://schemas.android.com/apk/res-auto"
+            style="@style/MP.Theme.Widget.Toolbar"
+            toolbar:layout_scrollFlags="enterAlways"
+            />
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v7.widget.RecyclerView
+        xmlns:recyclerView="http://schemas.android.com/apk/res-auto"
+        style="@style/MP.Theme.Widget.RecyclerView"
+        android:paddingTop="@dimen/mp.padding.large"
+        android:clipToPadding="false"
+        recyclerView:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:listitem="@layout/item_play_list_details_song"
+        />
+
+    <TextView
+        style="@style/MP.Theme.TextAppearance.List.Empty"
+        android:text="@string/mp.play_list.details.empty"
+        tools:visibility="visible"
+        />
+
+    <ProgressBar
+        style="@style/MP.Theme.Widget.ProgressBar"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        tools:visibility="visible"
+        />
+</android.support.design.widget.CoordinatorLayout>

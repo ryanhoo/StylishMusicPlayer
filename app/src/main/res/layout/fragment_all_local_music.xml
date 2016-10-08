@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <android.support.v7.widget.RecyclerView
+        xmlns:recyclerView="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="@dimen/mp.padding.large"
+        android:clipToPadding="false"
+        recyclerView:layoutManager="@string/mp.list.layoutManager.linear"
+        tools:listitem="@layout/item_local_music"
+        />
+
+    <io.github.ryanhoo.music.ui.widget.RecyclerViewFastScroller
+        android:id="@+id/fast_scroller"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:paddingTop="@dimen/mp.padding.large"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:visibility="gone"
+        tools:visibility="visible"
+        >
+
+        <TextView
+            android:id="@+id/bubble"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="56dp"
+            android:minHeight="56dp"
+            android:gravity="center"
+            android:layout_marginRight="@dimen/mp.padding.large"
+            android:layout_marginEnd="@dimen/mp.padding.large"
+            android:padding="@dimen/mp.padding.normal"
+            android:background="@drawable/fast_scroller_bubble"
+            android:textColor="?attr/colorAccent"
+            android:textSize="20sp"
+            tools:text="A"
+            />
+
+        <android.support.v7.widget.AppCompatImageView
+            xmlns:appCompat="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/handle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/mp.padding.small"
+            android:paddingStart="@dimen/mp.padding.small"
+            appCompat:srcCompat="@drawable/fast_scroller_indicator"
+            tools:ignore="RtlSymmetry"/>
+    </io.github.ryanhoo.music.ui.widget.RecyclerViewFastScroller>
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        />
+
+    <TextView
+        style="@style/MP.Theme.TextAppearance.List.Empty"
+        android:layout_centerInParent="true"
+        android:text="@string/mp.local_files.music_list.empty"
+        tools:visibility="visible"
+        />
+</RelativeLayout>
