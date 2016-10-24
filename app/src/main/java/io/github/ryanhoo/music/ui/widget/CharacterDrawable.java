@@ -92,7 +92,7 @@ public class CharacterDrawable extends Drawable {
     @Override
     public int getOpacity() {
         // TODO
-        return 0;
+        return PixelFormat.UNKNOWN;
     }
 
     // Getters & Setters
