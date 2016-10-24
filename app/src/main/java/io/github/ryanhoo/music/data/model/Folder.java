@@ -10,6 +10,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Created with Android Studio.
  * User: ryan.hoo.j@gmail.com
@@ -17,9 +22,10 @@ import java.util.List;
  * Time: 7:19 PM
  * Desc: Folder
  */
-@Table("folder")
+@Table("folder") @Data
 public class Folder implements Parcelable {
 
+    @Getter(AccessLevel.NONE)
     public static final String COLUMN_NAME = "name";
 
     @PrimaryKey(AssignType.AUTO_INCREMENT)
@@ -47,57 +53,10 @@ public class Folder implements Parcelable {
         readFromParcel(in);
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public Folder(String name, String path) {
         this.name = name;
         this.path = path;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
-
-    public int getNumOfSongs() {
-        return numOfSongs;
-    }
-
-    public void setNumOfSongs(int numOfSongs) {
-        this.numOfSongs = numOfSongs;
-    }
-
-    public List<Song> getSongs() {
-        return songs;
-    }
-
-    public void setSongs(List<Song> songs) {
-        this.songs = songs;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
     }
 
     @Override
