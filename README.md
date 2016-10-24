@@ -25,6 +25,7 @@ Thanks to these projects and libraries:
 - [Butter Knife](https://github.com/JakeWharton/butterknife)
 - [Calligraphy](https://github.com/chrisjenx/Calligraphy)
 - [LiteOrm](https://github.com/litesuits/android-lite-orm)
+- [Lombok](https://github.com/rzwitserloot/lombok)
 
 **Design**
 
