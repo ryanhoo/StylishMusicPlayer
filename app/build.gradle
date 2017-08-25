@@ -36,6 +36,9 @@ dependencies {
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
 
     compile 'uk.co.chrisjenx:calligraphy:2.2.0'
+
+    provided "org.projectlombok:lombok:1.16.10"
+    apt "org.projectlombok:lombok:1.16.10"
 }
 
 def getVersionCode(build) {

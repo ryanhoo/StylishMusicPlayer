@@ -13,6 +13,8 @@ import android.view.MenuItem;
 import android.view.Window;
 import io.github.ryanhoo.music.R;
 import io.github.ryanhoo.music.utils.ViewUtils;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Created with Android Studio.
@@ -36,6 +38,7 @@ public class ActionModeCallback implements ActionMode.Callback {
 
     private int statusBarColor;
 
+    @Getter @Setter
     private boolean isShowing;
 
     public ActionModeCallback(Activity activity, ActionListener listener) {
@@ -128,14 +131,6 @@ public class ActionModeCallback implements ActionMode.Callback {
         if (actionMode != null) {
             actionMode.finish();
         }
-    }
-
-    public boolean isShowing() {
-        return isShowing;
-    }
-
-    public void setShowing(boolean isShowing) {
-        this.isShowing = isShowing;
     }
 
     public interface ActionListener {

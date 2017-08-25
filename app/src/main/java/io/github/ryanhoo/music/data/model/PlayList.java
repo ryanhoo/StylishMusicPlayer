@@ -8,6 +8,9 @@ import com.litesuits.orm.db.annotation.*;
 import com.litesuits.orm.db.enums.AssignType;
 import com.litesuits.orm.db.enums.Relation;
 import io.github.ryanhoo.music.player.PlayMode;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.Getter;
 
 import java.util.*;
 
@@ -18,11 +21,14 @@ import java.util.*;
  * Time: 5:53 PM
  * Desc: PlayList
  */
-@Table("playlist")
+@Table("playlist") @Data
 public class PlayList implements Parcelable {
 
     // Play List: Favorite
+    @Getter(AccessLevel.NONE)
     public static final int NO_POSITION = -1;
+
+    @Getter(AccessLevel.NONE)
     public static final String COLUMN_FAVORITE = "favorite";
 
     @PrimaryKey(AssignType.AUTO_INCREMENT)
@@ -64,54 +70,6 @@ public class PlayList implements Parcelable {
         readFromParcel(in);
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getNumOfSongs() {
-        return numOfSongs;
-    }
-
-    public void setNumOfSongs(int numOfSongs) {
-        this.numOfSongs = numOfSongs;
-    }
-
-    public boolean isFavorite() {
-        return favorite;
-    }
-
-    public void setFavorite(boolean favorite) {
-        this.favorite = favorite;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
     @NonNull
     public List<Song> getSongs() {
         if (songs == null) {
@@ -125,22 +83,6 @@ public class PlayList implements Parcelable {
             songs = new ArrayList<>();
         }
         this.songs = songs;
-    }
-
-    public int getPlayingIndex() {
-        return playingIndex;
-    }
-
-    public void setPlayingIndex(int playingIndex) {
-        this.playingIndex = playingIndex;
-    }
-
-    public PlayMode getPlayMode() {
-        return playMode;
-    }
-
-    public void setPlayMode(PlayMode playMode) {
-        this.playMode = playMode;
     }
 
     // Parcelable
