@@ -1,0 +1,86 @@
+<resources>
+    <string name="mp.app.name">音乐播放器</string>
+
+    <string name="mp.list.layoutManager.linear">LinearLayoutManager</string>
+
+    <!-- Common -->
+
+    <string name="mp.cancel">取消</string>
+    <string name="mp.Confirm">确认</string>
+
+    <!-- Activity/Fragment Titles -->
+    <string name="mp.fragment.title.play_list">播放列表</string>
+    <string name="mp.fragment.title.music">音乐</string>
+    <string name="mp.fragment.title.local_files">本地音乐</string>
+    <string name="mp.fragment.title.settings">设置</string>
+
+    <string name="mp.activity.title.file_system">SD卡</string>
+
+    <!-- Play Lists -->
+    <string name="mp.play_list.favorite">收藏</string>
+    <string name="mp.play_list.footer.add">添加播放列表</string>
+    <string name="mp.play_list.footer.end_summary_formatter">总共有 %d 个播放列表</string>
+
+    <string name="mp.play_list.create">创建播放列表</string>
+    <string name="mp.play_list.created">创建 %s </string>
+    <string name="mp.play_list.edit">编辑播放列表</string>
+    <string name="mp.play_list.dialog.hint">播放列表名称</string>
+    <string name="mp.play_list.dialog.add_to">添加至播放列表</string>
+
+    <plurals name="mp_play_list_items_formatter">
+        <item quantity="one">%d 首歌</item>
+        <item quantity="other">%d 首歌</item>
+    </plurals>
+
+    <!-- Play Lists - Details -->
+    <string name="mp.play_list.details.empty">没有音乐，去添加一些吧!</string>
+    <string name="mp.play_list.details.footer.end_summary_formatter">总共有 %d 首歌</string>
+
+    <!-- Main -->
+    <string-array name="mp_main_titles">
+        <item>@string/mp.fragment.title.play_list</item>
+        <item>@string/mp.fragment.title.music</item>
+        <item>@string/mp.fragment.title.local_files</item>
+        <item>@string/mp.fragment.title.settings</item>
+    </string-array>
+
+    <!-- Music -->
+
+    <string name="mp.music.default_duration">00:00</string>
+
+    <!-- Local Files -->
+    <string name="mp.local_files.segmented.all">所有歌曲</string>
+    <string name="mp.local_files.segmented.folder">文件夹</string>
+
+    <string name="mp.local_files.music_list.empty">设备上没有找到音乐</string>
+    <string name="mp.local_files.music_list.end_summary_formatter">总共有 %d 首歌</string>
+    <string name="mp.local_files.folder_list.end_summary_formatter">总共有 %d 个文件夹</string>
+    <string name="mp.local_files.folder_list.item_info_formatter" formatted="false">%d 首歌 | %s</string>
+    <string name="mp.local_files.folder_list.add_folder">添加文件夹</string>
+
+    <string name="mp.local_files.file_system.empty">此目录下没有文件</string>
+    <string name="mp.local_files.file_system.menu.done">完成</string>
+
+    <!-- Local Files - File System -->
+    <plurals name="mp_folders_created_formatter">
+        <item quantity="one">创建了 %d 个新文件夹</item>
+        <item quantity="other">创建了 %d 个新文件夹</item>
+    </plurals>
+    <plurals name="mp_directory_items_formatter">
+        <item quantity="one">%d 项目</item>
+        <item quantity="other">%d 项目</item>
+    </plurals>
+
+    <plurals name="mp_selected_folders_formatter">
+        <item quantity="one">选中了 %d 个文件夹</item>
+        <item quantity="other">选中了 %d 个文件夹</item>
+    </plurals>
+
+    <!-- Menu -->
+    <string name="mp.menu.add_to_play_list">添加至播放列表</string>
+    <string name="mp.menu.create_play_list">创建播放列表</string>
+    <string name="mp.menu.refresh">刷新</string>
+    <string name="mp.menu.play_now">立即播放</string>
+    <string name="mp.menu.rename">重命名</string>
+    <string name="mp.menu.delete">删除</string>
+</resources>
