@@ -77,7 +77,12 @@ public class FileUtils {
         if (file.length() == 0) return null;
 
         MediaMetadataRetriever metadataRetriever = new MediaMetadataRetriever();
-        metadataRetriever.setDataSource(file.getAbsolutePath());
+        // 修复扫描到特定文件路径时出现异常而中断，歌曲列表不显示的问题
+        try {
+            metadataRetriever.setDataSource(file.getAbsolutePath());
+        } catch (Exception e) {
+            return null;
+        }
 
         final int duration;
 
