@@ -2,8 +2,11 @@ package io.github.ryanhoo.music.utils;
 
 import android.media.MediaMetadataRetriever;
 import android.text.TextUtils;
+import android.util.Log;
+
 import io.github.ryanhoo.music.data.model.Folder;
 import io.github.ryanhoo.music.data.model.Song;
+import io.github.ryanhoo.music.ui.local.all.LocalMusicPresenter;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -77,8 +80,13 @@ public class FileUtils {
         if (file.length() == 0) return null;
 
         MediaMetadataRetriever metadataRetriever = new MediaMetadataRetriever();
-        metadataRetriever.setDataSource(file.getAbsolutePath());
-
+        try {//add s
+            metadataRetriever.setDataSource(file.getAbsolutePath());
+        } catch (Exception e) {
+            metadataRetriever.release();
+            Log.d(LocalMusicPresenter.TAG, "metadataRetriever--Exception--" + e);
+            return null;
+        }//add end
         final int duration;
 
         String keyDuration = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
@@ -99,6 +107,8 @@ public class FileUtils {
         song.setAlbum(album);
         song.setDuration(duration);
         song.setSize((int) file.length());
+
+        metadataRetriever.release();
         return song;
     }
 

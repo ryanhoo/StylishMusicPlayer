@@ -9,6 +9,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import java.io.File;
+import java.util.ArrayList;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.ryanhoo.music.R;
@@ -18,15 +27,11 @@ import io.github.ryanhoo.music.ui.base.BaseActivity;
 import io.github.ryanhoo.music.ui.base.adapter.OnItemClickListener;
 import io.github.ryanhoo.music.ui.base.adapter.OnItemLongClickListener;
 import io.github.ryanhoo.music.ui.common.DefaultDividerDecoration;
-import rx.Observable;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
-
-import java.io.File;
-import java.util.*;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Function;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created with Android Studio.
@@ -166,10 +171,26 @@ public class FileSystemActivity extends BaseActivity {
     // Load files
 
     private void loadFiles(final File parent) {
-        Subscription subscription = Observable.just(parent)
-                .flatMap(new Func1<File, Observable<List<FileWrapper>>>() {
+        DisposableObserver disposableObserver = new DisposableObserver<List<FileWrapper>>() {
+            @Override
+            public void onNext(List<FileWrapper> files) {
+                onFilesLoaded(parent, files);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.e(TAG, "onError: ", e);
+            }
+
+            @Override
+            public void onComplete() {
+                toggleEmptyViewVisibility();
+            }
+        };
+        Observable.just(parent)
+                .flatMap(new Function<File, Observable<List<FileWrapper>>>() {
                     @Override
-                    public Observable<List<FileWrapper>> call(File parent) {
+                    public Observable<List<FileWrapper>> apply(File parent) {
                         List<File> files = Arrays.asList(parent.listFiles(SystemFileFilter.DEFAULT_INSTANCE));
                         Collections.sort(files, new Comparator<File>() {
                             @Override
@@ -193,23 +214,8 @@ public class FileSystemActivity extends BaseActivity {
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<FileWrapper>>() {
-                    @Override
-                    public void onCompleted() {
-                        toggleEmptyViewVisibility();
-                    }
-
-                    @Override
-                    public void onError(Throwable throwable) {
-                        Log.e(TAG, "onError: ", throwable);
-                    }
-
-                    @Override
-                    public void onNext(List<FileWrapper> files) {
-                        onFilesLoaded(parent, files);
-                    }
-                });
-        addSubscription(subscription);
+                .subscribe(disposableObserver);
+        addDisposable(disposableObserver);
     }
 
     private void onFilesLoaded(File parent, List<FileWrapper> files) {

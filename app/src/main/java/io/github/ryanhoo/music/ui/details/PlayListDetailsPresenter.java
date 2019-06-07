@@ -5,11 +5,10 @@ import io.github.ryanhoo.music.data.model.PlayList;
 import io.github.ryanhoo.music.data.model.Song;
 import io.github.ryanhoo.music.data.source.AppRepository;
 import io.github.ryanhoo.music.event.PlayListUpdatedEvent;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created with Android Studio.
@@ -22,12 +21,12 @@ public class PlayListDetailsPresenter implements PlayListDetailsContract.Present
 
     private PlayListDetailsContract.View mView;
     private AppRepository mRepository;
-    private CompositeSubscription mSubscriptions;
+    private CompositeDisposable mDisposables;
 
     public PlayListDetailsPresenter(AppRepository repository, PlayListDetailsContract.View view) {
         mView = view;
         mRepository = repository;
-        mSubscriptions = new CompositeSubscription();
+        mDisposables = new CompositeDisposable();
         mView.setPresenter(this);
     }
 
@@ -39,72 +38,70 @@ public class PlayListDetailsPresenter implements PlayListDetailsContract.Present
     @Override
     public void unsubscribe() {
         mView = null;
-        mSubscriptions.clear();
+        mDisposables.clear();
     }
 
     @Override
-    public void addSongToPlayList(Song song, PlayList playList) {
+    public void addSongToPlayList(Song song, final PlayList playList) {
         if (playList.isFavorite()) {
             song.setFavorite(true);
         }
         playList.addSong(song, 0);
-        Subscription subscription = mRepository.update(playList)
+        DisposableObserver disposableObserver = new DisposableObserver() {
+            @Override
+            protected void onStart() {
+                mView.showLoading();
+            }
+
+            @Override
+            public void onNext(Object o) {
+                RxBus.getInstance().post(new PlayListUpdatedEvent(playList));
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                mView.hideLoading();
+                mView.handleError(e);
+            }
+
+            @Override
+            public void onComplete() {
+                mView.hideLoading();
+            }
+        };
+        mRepository.update(playList)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<PlayList>() {
-                    @Override
-                    public void onStart() {
-                        mView.showLoading();
-                    }
-
-                    @Override
-                    public void onCompleted() {
-                        mView.hideLoading();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        mView.hideLoading();
-                        mView.handleError(e);
-                    }
-
-                    @Override
-                    public void onNext(PlayList playList) {
-                        RxBus.getInstance().post(new PlayListUpdatedEvent(playList));
-                    }
-                });
-        mSubscriptions.add(subscription);
+                .subscribe(disposableObserver);
+        mDisposables.add(disposableObserver);
     }
 
     @Override
-    public void delete(final Song song, PlayList playList) {
+    public void delete(final Song song, final PlayList playList) {
         playList.removeSong(song);
-        Subscription subscription = mRepository.update(playList)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<PlayList>() {
-                    @Override
-                    public void onStart() {
-                        mView.showLoading();
-                    }
+        DisposableObserver disposableObserver = new DisposableObserver() {
+            @Override
+            protected void onStart() {
+                mView.showLoading();
+            }
 
-                    @Override
-                    public void onCompleted() {
-                        mView.hideLoading();
-                    }
+            @Override
+            public void onNext(Object o) {
+                mView.onSongDeleted(song);
+                RxBus.getInstance().post(new PlayListUpdatedEvent(playList));
+            }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        mView.hideLoading();
-                        mView.handleError(e);
-                    }
+            @Override
+            public void onError(Throwable e) {
+                mView.hideLoading();
+                mView.handleError(e);
+            }
 
-                    @Override
-                    public void onNext(PlayList playList) {
-                        mView.onSongDeleted(song);
-                        RxBus.getInstance().post(new PlayListUpdatedEvent(playList));
-                    }
-                });
-        mSubscriptions.add(subscription);
+            @Override
+            public void onComplete() {
+                mView.hideLoading();
+            }
+        };
+        mDisposables.add(disposableObserver);
     }
 }

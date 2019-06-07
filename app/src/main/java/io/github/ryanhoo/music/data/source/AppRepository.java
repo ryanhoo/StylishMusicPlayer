@@ -1,15 +1,15 @@
 package io.github.ryanhoo.music.data.source;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.github.ryanhoo.music.Injection;
 import io.github.ryanhoo.music.data.model.Folder;
 import io.github.ryanhoo.music.data.model.PlayList;
 import io.github.ryanhoo.music.data.model.Song;
 import io.github.ryanhoo.music.data.source.db.LiteOrmHelper;
-import rx.Observable;
-import rx.functions.Action1;
-
-import java.util.ArrayList;
-import java.util.List;
+import io.reactivex.Observable;
+import io.reactivex.functions.Consumer;
 
 /**
  * Created with Android Studio.
@@ -46,9 +46,9 @@ public class AppRepository implements AppContract {
     @Override
     public Observable<List<PlayList>> playLists() {
         return mLocalDataSource.playLists()
-                .doOnNext(new Action1<List<PlayList>>() {
+                .doOnNext(new Consumer<List<PlayList>>() {
                     @Override
-                    public void call(List<PlayList> playLists) {
+                    public void accept(List<PlayList> playLists) {
                         mCachedPlayLists = playLists;
                     }
                 });

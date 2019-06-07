@@ -8,23 +8,23 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.util.Log;
-import io.github.ryanhoo.music.data.model.Song;
-import io.github.ryanhoo.music.data.source.AppRepository;
-import io.github.ryanhoo.music.utils.FileUtils;
-import rx.Observable;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import io.github.ryanhoo.music.data.model.Song;
+import io.github.ryanhoo.music.data.source.AppRepository;
+import io.github.ryanhoo.music.utils.FileUtils;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created with Android Studio.
@@ -35,7 +35,7 @@ import java.util.List;
  */
 public class LocalMusicPresenter implements LocalMusicContract.Presenter, LoaderManager.LoaderCallbacks<Cursor> {
 
-    private static final String TAG = "LocalMusicPresenter";
+    public static final String TAG = "LocalMusicPresenter";
 
     private static final int URL_LOAD_LOCAL_MUSIC = 0;
     private static final Uri MEDIA_URI = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
@@ -58,12 +58,12 @@ public class LocalMusicPresenter implements LocalMusicContract.Presenter, Loader
 
     private LocalMusicContract.View mView;
     private AppRepository mRepository;
-    private CompositeSubscription mSubscriptions;
+    private CompositeDisposable mDisposables;
 
     public LocalMusicPresenter(AppRepository repository, LocalMusicContract.View view) {
         mView = view;
         mRepository = repository;
-        mSubscriptions = new CompositeSubscription();
+        mDisposables = new CompositeDisposable();
         mView.setPresenter(this);
     }
 
@@ -75,7 +75,7 @@ public class LocalMusicPresenter implements LocalMusicContract.Presenter, Loader
     @Override
     public void unsubscribe() {
         mView = null;
-        mSubscriptions.clear();
+        mDisposables.clear();
     }
 
     @Override
@@ -100,10 +100,33 @@ public class LocalMusicPresenter implements LocalMusicContract.Presenter, Loader
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        Subscription subscription = Observable.just(cursor)
-                .flatMap(new Func1<Cursor, Observable<List<Song>>>() {
+        DisposableObserver disposableObserver = new DisposableObserver<List<Song>>() {
+            @Override
+            protected void onStart() {
+                mView.showProgress();
+            }
+
+            @Override
+            public void onNext(List<Song> songs) {
+                mView.onLocalMusicLoaded(songs);
+                mView.emptyView(songs.isEmpty());
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                mView.hideProgress();
+                Log.e(TAG, "onError: ", e);
+            }
+
+            @Override
+            public void onComplete() {
+                mView.hideProgress();
+            }
+        };
+        Observable.just(cursor)
+                .flatMap(new Function<Cursor, Observable<List<Song>>>() {
                     @Override
-                    public Observable<List<Song>> call(Cursor cursor) {
+                    public Observable<List<Song>> apply(Cursor cursor) {
                         List<Song> songs = new ArrayList<>();
                         if (cursor != null && cursor.getCount() > 0) {
                             cursor.moveToFirst();
@@ -115,9 +138,9 @@ public class LocalMusicPresenter implements LocalMusicContract.Presenter, Loader
                         return mRepository.insert(songs);
                     }
                 })
-                .doOnNext(new Action1<List<Song>>() {
+                .doOnNext(new Consumer<List<Song>>() {
                     @Override
-                    public void call(List<Song> songs) {
+                    public void accept(List<Song> songs) throws Exception {
                         Log.d(TAG, "onLoadFinished: " + songs.size());
                         Collections.sort(songs, new Comparator<Song>() {
                             @Override
@@ -125,35 +148,12 @@ public class LocalMusicPresenter implements LocalMusicContract.Presenter, Loader
                                 return left.getDisplayName().compareTo(right.getDisplayName());
                             }
                         });
-
                     }
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<Song>>() {
-                    @Override
-                    public void onStart() {
-                        mView.showProgress();
-                    }
-
-                    @Override
-                    public void onCompleted() {
-                        mView.hideProgress();
-                    }
-
-                    @Override
-                    public void onError(Throwable throwable) {
-                        mView.hideProgress();
-                        Log.e(TAG, "onError: ", throwable);
-                    }
-
-                    @Override
-                    public void onNext(List<Song> songs) {
-                        mView.onLocalMusicLoaded(songs);
-                        mView.emptyView(songs.isEmpty());
-                    }
-                });
-        mSubscriptions.add(subscription);
+                .subscribe(disposableObserver);
+        mDisposables.add(disposableObserver);
     }
 
     @Override

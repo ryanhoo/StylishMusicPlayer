@@ -5,9 +5,17 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.view.*;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import java.io.File;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.ryanhoo.music.R;
@@ -24,12 +32,10 @@ import io.github.ryanhoo.music.ui.details.PlayListDetailsActivity;
 import io.github.ryanhoo.music.ui.local.filesystem.FileSystemActivity;
 import io.github.ryanhoo.music.ui.playlist.AddToPlayListDialogFragment;
 import io.github.ryanhoo.music.ui.playlist.EditPlayListDialogFragment;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-
-import java.io.File;
-import java.util.List;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.observers.DisposableObserver;
 
 /**
  * Created with Android Studio.
@@ -87,18 +93,20 @@ public class FolderFragment extends BaseFragment implements FolderContract.View,
     // RxBus Events
 
     @Override
-    protected Subscription subscribeEvents() {
-        return RxBus.getInstance().toObservable()
+    protected Disposable subscribeEvents() {
+        DisposableObserver disposableObserver = RxBus.defaultSubscriber();
+        RxBus.getInstance().toObservable()
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext(new Action1<Object>() {
+                .doOnNext(new Consumer<Object>() {
                     @Override
-                    public void call(Object o) {
+                    public void accept(Object o) {
                         if (o instanceof AddFolderEvent) {
                             onAddFolders((AddFolderEvent) o);
                         }
                     }
                 })
-                .subscribe(RxBus.defaultSubscriber());
+                .subscribe(disposableObserver);
+        return disposableObserver;
     }
 
     private void onAddFolders(AddFolderEvent event) {
