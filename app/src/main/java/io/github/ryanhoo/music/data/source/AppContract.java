@@ -1,11 +1,11 @@
 package io.github.ryanhoo.music.data.source;
 
+import java.util.List;
+
 import io.github.ryanhoo.music.data.model.Folder;
 import io.github.ryanhoo.music.data.model.PlayList;
 import io.github.ryanhoo.music.data.model.Song;
-import rx.Observable;
-
-import java.util.List;
+import io.reactivex.Observable;
 
 /**
  * Created with Android Studio.

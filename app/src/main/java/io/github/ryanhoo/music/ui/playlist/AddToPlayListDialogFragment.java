@@ -10,6 +10,9 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.util.List;
+
 import io.github.ryanhoo.music.R;
 import io.github.ryanhoo.music.data.model.PlayList;
 import io.github.ryanhoo.music.data.source.AppRepository;
@@ -17,9 +20,7 @@ import io.github.ryanhoo.music.ui.base.BaseDialogFragment;
 import io.github.ryanhoo.music.ui.base.adapter.ListAdapter;
 import io.github.ryanhoo.music.ui.base.adapter.OnItemClickListener;
 import io.github.ryanhoo.music.ui.common.DefaultDividerDecoration;
-import rx.subscriptions.CompositeSubscription;
-
-import java.util.List;
+import io.reactivex.disposables.CompositeDisposable;
 
 /**
  * Created with Android Studio.
@@ -32,7 +33,7 @@ public class AddToPlayListDialogFragment extends BaseDialogFragment implements O
 
     RecyclerView recyclerView;
 
-    CompositeSubscription mSubscriptions = new CompositeSubscription();
+    CompositeDisposable mDisposables = new CompositeDisposable();
 
     AddPlayListAdapter mAdapter;
     Callback mCallback;
@@ -58,7 +59,7 @@ public class AddToPlayListDialogFragment extends BaseDialogFragment implements O
 
     @Override
     public void onDestroyView() {
-        mSubscriptions.clear();
+        mDisposables.clear();
         super.onDestroyView();
     }
 

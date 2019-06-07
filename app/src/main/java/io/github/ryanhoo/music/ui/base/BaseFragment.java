@@ -5,8 +5,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.View;
-import rx.Subscription;
-import rx.subscriptions.CompositeSubscription;
+
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created with Android Studio.
@@ -17,7 +18,7 @@ import rx.subscriptions.CompositeSubscription;
  */
 public abstract class BaseFragment extends Fragment {
 
-    private CompositeSubscription mSubscriptions;
+    private CompositeDisposable mDisposables;
 
     @Override
     public void onAttach(Context context) {
@@ -27,26 +28,26 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        addSubscription(subscribeEvents());
+        addDisposable(subscribeEvents());
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (mSubscriptions != null) {
-            mSubscriptions.clear();
+        if (mDisposables != null) {
+            mDisposables.clear();
         }
     }
 
-    protected Subscription subscribeEvents() {
+    protected void addDisposable(Disposable disposable) {
+        if (disposable == null) return;
+        if (mDisposables == null) {
+            mDisposables = new CompositeDisposable();
+        }
+        mDisposables.add(disposable);
+    }
+
+    protected Disposable subscribeEvents() {
         return null;
-    }
-
-    protected void addSubscription(Subscription subscription) {
-        if (subscription == null) return;
-        if (mSubscriptions == null) {
-            mSubscriptions = new CompositeSubscription();
-        }
-        mSubscriptions.add(subscription);
     }
 }

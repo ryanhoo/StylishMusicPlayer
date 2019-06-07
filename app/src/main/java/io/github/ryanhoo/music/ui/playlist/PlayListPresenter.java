@@ -1,14 +1,13 @@
 package io.github.ryanhoo.music.ui.playlist;
 
+import java.util.List;
+
 import io.github.ryanhoo.music.data.model.PlayList;
 import io.github.ryanhoo.music.data.source.AppRepository;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
-
-import java.util.List;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created with Android Studio.
@@ -21,12 +20,12 @@ public class PlayListPresenter implements PlayListContract.Presenter {
 
     private PlayListContract.View mView;
     private AppRepository mRepository;
-    private CompositeSubscription mSubscriptions;
+    private CompositeDisposable mDisposables;
 
     public PlayListPresenter(AppRepository repository, PlayListContract.View view) {
         mView = view;
         mRepository = repository;
-        mSubscriptions = new CompositeSubscription();
+        mDisposables = new CompositeDisposable();
         mView.setPresenter(this);
     }
 
@@ -38,128 +37,127 @@ public class PlayListPresenter implements PlayListContract.Presenter {
     @Override
     public void unsubscribe() {
         mView = null;
-        mSubscriptions.clear();
+        mDisposables.clear();
     }
 
     @Override
     public void loadPlayLists() {
-        Subscription subscription = mRepository.playLists()
+        DisposableObserver disposableObserver = new DisposableObserver<List<PlayList>>() {
+            @Override
+            protected void onStart() {
+                mView.showLoading();
+            }
+
+            @Override
+            public void onNext(List<PlayList> playLists) {
+                mView.onPlayListsLoaded(playLists);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                mView.hideLoading();
+                mView.handleError(e);
+            }
+
+            @Override
+            public void onComplete() {
+                mView.hideLoading();
+            }
+        };
+        mRepository.playLists()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<PlayList>>() {
-                    @Override
-                    public void onStart() {
-                        mView.showLoading();
-                    }
-
-                    @Override
-                    public void onCompleted() {
-                        mView.hideLoading();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        mView.hideLoading();
-                        mView.handleError(e);
-                    }
-
-                    @Override
-                    public void onNext(List<PlayList> playLists) {
-                        mView.onPlayListsLoaded(playLists);
-                    }
-                });
-        mSubscriptions.add(subscription);
+                .subscribe(disposableObserver);
+        mDisposables.add(disposableObserver);
     }
 
     @Override
     public void createPlayList(PlayList playList) {
-        Subscription subscription = mRepository
-                .create(playList)
+        DisposableObserver disposableObserver = new DisposableObserver<PlayList>() {
+            @Override
+            protected void onStart() {
+                mView.showLoading();
+            }
+
+            @Override
+            public void onNext(PlayList result) {
+                mView.onPlayListCreated(result);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                mView.hideLoading();
+                mView.handleError(e);
+            }
+
+            @Override
+            public void onComplete() {
+                mView.hideLoading();
+            }
+        };
+        mRepository.create(playList)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<PlayList>() {
-                    @Override
-                    public void onStart() {
-                        mView.showLoading();
-                    }
-
-                    @Override
-                    public void onCompleted() {
-                        mView.hideLoading();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        mView.hideLoading();
-                        mView.handleError(e);
-                    }
-
-                    @Override
-                    public void onNext(PlayList result) {
-                        mView.onPlayListCreated(result);
-                    }
-                });
-        mSubscriptions.add(subscription);
+                .subscribe(disposableObserver);
+        mDisposables.add(disposableObserver);
     }
 
     @Override
     public void editPlayList(PlayList playList) {
-        Subscription subscription = mRepository
-                .update(playList)
+        DisposableObserver disposableObserver = new DisposableObserver<PlayList>() {
+            @Override
+            protected void onStart() {
+                mView.showLoading();
+            }
+
+            @Override
+            public void onNext(PlayList result) {
+                mView.onPlayListEdited(result);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                mView.hideLoading();
+                mView.handleError(e);
+            }
+
+            @Override
+            public void onComplete() {
+                mView.hideLoading();
+            }
+        };
+
+        mRepository.update(playList)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<PlayList>() {
-                    @Override
-                    public void onStart() {
-                        mView.showLoading();
-                    }
-
-                    @Override
-                    public void onCompleted() {
-                        mView.hideLoading();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        mView.hideLoading();
-                        mView.handleError(e);
-                    }
-
-                    @Override
-                    public void onNext(PlayList result) {
-                        mView.onPlayListEdited(result);
-                    }
-                });
-        mSubscriptions.add(subscription);
+                .subscribe(disposableObserver);
+        mDisposables.add(disposableObserver);
     }
 
     @Override
-    public void deletePlayList(PlayList playList) {
-        Subscription subscription = mRepository.delete(playList)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<PlayList>() {
-                    @Override
-                    public void onStart() {
-                        mView.showLoading();
-                    }
+    public void deletePlayList(final PlayList playList) {
+        DisposableObserver disposableObserver = new DisposableObserver() {
+            @Override
+            protected void onStart() {
+                mView.showLoading();
+            }
 
-                    @Override
-                    public void onCompleted() {
-                        mView.hideLoading();
-                    }
+            @Override
+            public void onNext(Object o) {
+                mView.onPlayListDeleted(playList);
+            }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        mView.hideLoading();
-                        mView.handleError(e);
-                    }
+            @Override
+            public void onError(Throwable e) {
+                mView.hideLoading();
+                mView.handleError(e);
+            }
 
-                    @Override
-                    public void onNext(PlayList playList) {
-                        mView.onPlayListDeleted(playList);
-                    }
-                });
-        mSubscriptions.add(subscription);
+            @Override
+            public void onComplete() {
+                mView.hideLoading();
+            }
+        };
+        mDisposables.add(disposableObserver);
     }
 }

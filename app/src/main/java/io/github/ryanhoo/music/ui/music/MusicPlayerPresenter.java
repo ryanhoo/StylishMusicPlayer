@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
+
 import io.github.ryanhoo.music.RxBus;
 import io.github.ryanhoo.music.data.model.Song;
 import io.github.ryanhoo.music.data.source.AppRepository;
@@ -12,11 +13,10 @@ import io.github.ryanhoo.music.data.source.PreferenceManager;
 import io.github.ryanhoo.music.event.FavoriteChangeEvent;
 import io.github.ryanhoo.music.player.PlayMode;
 import io.github.ryanhoo.music.player.PlaybackService;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created with Android Studio.
@@ -30,7 +30,7 @@ public class MusicPlayerPresenter implements MusicPlayerContract.Presenter {
     private Context mContext;
     private MusicPlayerContract.View mView;
     private AppRepository mRepository;
-    private CompositeSubscription mSubscriptions;
+    private CompositeDisposable mDisposables;
 
     private PlaybackService mPlaybackService;
     private boolean mIsServiceBound;
@@ -61,7 +61,7 @@ public class MusicPlayerPresenter implements MusicPlayerContract.Presenter {
         mContext = context;
         mView = view;
         mRepository = repository;
-        mSubscriptions = new CompositeSubscription();
+        mDisposables = new CompositeDisposable();
         mView.setPresenter(this);
     }
 
@@ -85,7 +85,7 @@ public class MusicPlayerPresenter implements MusicPlayerContract.Presenter {
         // Release context reference
         mContext = null;
         mView = null;
-        mSubscriptions.clear();
+        mDisposables.clear();
     }
 
     @Override
@@ -96,27 +96,28 @@ public class MusicPlayerPresenter implements MusicPlayerContract.Presenter {
 
     @Override
     public void setSongAsFavorite(Song song, boolean favorite) {
-        Subscription subscription = mRepository.setSongAsFavorite(song, favorite)
+        DisposableObserver disposableObserver = new DisposableObserver<Song>() {
+
+            @Override
+            public void onNext(Song song) {
+                mView.onSongSetAsFavorite(song);
+                RxBus.getInstance().post(new FavoriteChangeEvent(song));
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                mView.handleError(e);
+            }
+
+            @Override
+            public void onComplete() {
+            }
+        };
+        mRepository.setSongAsFavorite(song, favorite)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Song>() {
-                    @Override
-                    public void onCompleted() {
-                        // Empty
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        mView.handleError(e);
-                    }
-
-                    @Override
-                    public void onNext(Song song) {
-                        mView.onSongSetAsFavorite(song);
-                        RxBus.getInstance().post(new FavoriteChangeEvent(song));
-                    }
-                });
-        mSubscriptions.add(subscription);
+                .subscribe(disposableObserver);
+        mDisposables.add(disposableObserver);
     }
 
     @Override
