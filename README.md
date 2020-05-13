@@ -10,12 +10,16 @@
 
 ## TODO
 
+update androidstudio to 3.4.1
+
 - Lyric Support
 - Settings
 
 ## Acknowledgements
 
 Thanks to these projects and libraries:
+
+
 
 **Libraries**
 
